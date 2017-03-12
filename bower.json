@@ -1,0 +1,38 @@
+{
+  "name": "Unistats",
+  "authors": [
+    "avrodri9@asu.edu",
+    "melroy.dmello@asu.edu",
+    "tkang8@asu.edu"
+  ],
+  "description": "A data visualization project to help students select the best university, and also to compare institutions",
+  "main": "",
+  "keywords": [
+    "University",
+    "data",
+    "visualization"
+  ],
+  "license": "MIT",
+  "homepage": "index.html",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.6.3",
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.1.1",
+    "d3": "^4.7.2",
+    "angular-ui-router": "^0.4.2",
+    "fusioncharts": "^3.12.0",
+    "perfect-scrollbar": "^0.6.16",
+    "angularjs-slider": "^6.1.0",
+    "angular-sanitize": "^1.6.3",
+    "angular-perfect-scrollbar": "^0.0.4",
+    "ui-bootstrap": "^2.5.0",
+    "angularjs-typeahead-dropdown": "^1.0.2"
+  }
+}
