@@ -1,1 +1,25 @@
-<div ng-bind="homeCtrl.message"></div>
+<div class="jumbotron home-jumbo">
+    <h1>UniStats</h1>
+    <p>An online platform to help students select universities by viewing different characteristics of a university and comparing those with the characteristics of other universities</p>
+</div>
+
+<div class="row home-options">
+    <div class="col-xs-12 col-sm-1"></div>
+    <div class="col-sm-4 alert alert-success home-option">
+        <div class="text-center">
+            <img class="img-circle" src="images/university-icon.png" alt="Generic placeholder">
+            <h2>Search Universities</h2>
+            <p>Click here to explore a list of Universities in the US.</p>
+            <button type="button" class="btn btn-primary" ui-sref="university-search">Search Universities &raquo;</button>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-2"></div>
+    <div class="col-sm-4 alert alert-success home-option">
+        <div class="text-center">
+            <img class="img-circle" src="images/compare-icon.png" alt="Generic placeholder image">
+            <h2>Compare Universities</h2>
+            <p>Click here to compare characteristics of multiple universities</p>
+            <button type="button" class="btn btn-primary" ui-sref="university-compare">Compare Universities &raquo;</button>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,23 @@
-/* line 1, ../scss/style.scss */
+/* line 1, ../scss/_home.scss */
+.home-jumbo {
+  text-align: center;
+  padding: 30px;
+  margin-top: 70px;
+}
+
+/* line 6, ../scss/_home.scss */
+.home-options {
+  margin: 0px 0px;
+  color: black;
+}
+/* line 10, ../scss/_home.scss */
+.home-options .home-option .img-circle {
+  width: 140px;
+  height: 140px;
+}
+
+/*Common Application Level Styles*/
+/* line 5, ../scss/style.scss */
 .content-container {
-  margin-top: 50px;
+  margin: 50px 30px 0px;
 }
