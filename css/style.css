@@ -16,6 +16,11 @@
   height: 140px;
 }
 
+/* line 16, ../scss/_home.scss */
+.test {
+  color: red;
+}
+
 /*Common Application Level Styles*/
 /* line 5, ../scss/style.scss */
 .content-container {
