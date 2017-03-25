@@ -13,8 +13,13 @@
         vm.message = 'Hello from University Search page';
         vm.university = "";
         
-        UniversitySearchService.testAPI().then(function(data){
+        UniversitySearchService.fetchUnivData().then(function(data){
             vm.university = data.data.Item;
+            console.log(data);
+
+            if(vm.university.errorMessage){
+                alert(vm.university.errorMessage);
+            }
         })
     }
 })();

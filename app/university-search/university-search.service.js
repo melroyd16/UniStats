@@ -10,11 +10,14 @@
     /* @ngInject */
     function UniversitySearchService($http) {
         var vm = this;
-        vm.testAPI = testAPI;
+        vm.fetchUnivData = fetchUnivData;
 
-        function testAPI() {
+        //console.log(vm.fetchUnivData);
+
+        function fetchUnivData() {
             var payload = {
-                operation: "temp"
+                operation: "fetchUniversityData",
+                univId:"104151"
             }
             return $http.post(UNIVERSITY_DETAILS_API, payload).then(function (data) {
                 return data;
