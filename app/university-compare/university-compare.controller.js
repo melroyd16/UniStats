@@ -5,11 +5,15 @@
         .module('UnistatsApp.UniversityCompare', [])
         .controller('UniversityCompareCtrl', UniversityCompareCtrl);
 
-    UniversityCompareCtrl.$inject = [];
+    UniversityCompareCtrl.$inject = ['UniversityCompareService'];
 
     /* @ngInject */
-    function UniversityCompareCtrl() {
+    function UniversityCompareCtrl(UniversityCompareService) {
         var vm = this;
         vm.message = 'Hello from University Compare page';
+        
+        UniversityCompareService.fetchUnivData().then(function(data){
+            console.log(data);
+        })
     }
 })();
