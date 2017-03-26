@@ -14,6 +14,7 @@
         vm.compareList = [];
         vm.dataLoaded = false;
         vm.selectUniversity = selectUniversity;
+        vm.removeUniversity = removeUniversity;
 
         if (UNIVERSITY_LIST.length == 0) {
             $http.get('JSON/data.json').then(function (data) {
@@ -41,5 +42,9 @@
                 console.log(vm.compareList);
             })
         };
+        
+        function removeUniversity(index){
+            vm.compareList.splice(index, 1);
+        }
     }
 })();
