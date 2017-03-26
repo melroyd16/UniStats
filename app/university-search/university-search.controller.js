@@ -13,7 +13,7 @@
         vm.message = 'Hello from University Search page';
         vm.university = "";
         vm.name = "melroy";
-        
+
         //UniversitySearchService.fetchUnivData().then(function(data){
         //    vm.university = data.data.Item;
         //    //console.log(vm.university);
@@ -22,9 +22,9 @@
         //        alert(vm.university.errorMessage);
         //    }
         //
-        //    drawLineChart(vm.university);
+        //  //  drawLineChart(vm.university);
         //})
-        drawLineChart(vm.university);
+        //drawLineChart(vm.university);
 
         function drawLineChart(data) {
 
@@ -64,7 +64,7 @@
 
                 console.log(data);
 
-                x.domain(d3.extent(data, function(d) { return d.date; }));
+                x.domain(d3.extent(data, function(d) { return d.date}));
                 y.domain([1000, d3.max(data, function(d) { return d.frequency; })]);
 
                 g.append("g")
