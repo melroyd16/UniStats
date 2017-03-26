@@ -21,8 +21,31 @@
   color: red;
 }
 
+/* line 1, ../scss/_university-compare.scss */
+.universityCompareContainer {
+  margin-top: 75px;
+}
+/* line 3, ../scss/_university-compare.scss */
+.universityCompareContainer .univ-tag-container {
+  margin-top: 15px;
+}
+/* line 5, ../scss/_university-compare.scss */
+.universityCompareContainer .univ-tag-container .univ-tags {
+  display: inline;
+  margin-right: 15px;
+  margin-bottom: 15px;
+  padding: 8px;
+  float: left;
+  border-radius: 20px;
+}
+/* line 12, ../scss/_university-compare.scss */
+.universityCompareContainer .univ-tag-container .univ-tags .cross {
+  text-align: right;
+  margin-left: 5px;
+}
+
 /*Common Application Level Styles*/
-/* line 5, ../scss/style.scss */
+/* line 6, ../scss/style.scss */
 .content-container {
   margin: 50px 30px 0px;
 }

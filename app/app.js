@@ -1,6 +1,6 @@
 (function(){
     'use strict';
-    angular.module('UnistatsApp',['UnistatsApp.Home', 'UnistatsApp.UniversitySearch','UnistatsApp.UniversityCompare', 'UnistatsApp.UniversityDetails', 'rzModule', 'ngSanitize', 'apg.typeaheadDropdown', 'perfect_scrollbar','ui.router']);
+    angular.module('UnistatsApp',['UnistatsApp.Home', 'UnistatsApp.UniversitySearch','UnistatsApp.UniversityCompare', 'UnistatsApp.UniversityDetails', 'rzModule', 'ngSanitize', 'apg.typeaheadDropdown', 'perfect_scrollbar','ui.router', 'ui.bootstrap']);
     
     angular.module('UnistatsApp').config(config);
 
