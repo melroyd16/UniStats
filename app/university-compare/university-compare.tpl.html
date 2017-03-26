@@ -1,1 +1,8 @@
-<div ng-bind="univCCtrl.message"></div>
+<div ng-if="univCCtrl.dataLoaded">
+
+    <div class="well well-lg">
+        <input type="text" ng-model="univCCtrl.univSearch" uib-typeahead="university as university.universityName for university in univCCtrl.univList | filter:$viewValue | limitTo:8" typeahead-popup-template-url="bower_components/angular-bootstrap/template/typeahead/typeahead-popup.html" typeahead-template-url="bower_components/angular-bootstrap/template/typeahead/typeahead-match.html" typeahead-min-length="0"
+               typeahead-on-select="univCCtrl.selectUniversity($item, $model, $label)"class="form-control">
+    </div>
+
+</div>

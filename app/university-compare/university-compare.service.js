@@ -12,10 +12,10 @@
         var vm = this;
         vm.fetchUnivData = fetchUnivData;
 
-        function fetchUnivData() {
+        function fetchUnivData(university) {
             var payload = {
                 operation: "fetchUniversityData",
-                univId:"104151"
+                university: university
             }
             return $http.post(UNIVERSITY_DETAILS_API, payload).then(function (data) {
                 return data;
