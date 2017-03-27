@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4ecae0a2-9fe6-4bb6-bf9b-0c0dab830ff3" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/university-compare/university-compare.controller.js" afterPath="$PROJECT_DIR$/app/university-compare/university-compare.controller.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/university-compare/university-compare.tpl.html" afterPath="$PROJECT_DIR$/app/university-compare/university-compare.tpl.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/university-search/university-search.tpl.html" afterPath="$PROJECT_DIR$/app/university-search/university-search.tpl.html" />
     </list>
     <ignored path="UniStats.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -40,10 +37,11 @@
         <entry file="file://$PROJECT_DIR$/app/university-compare/university-compare.controller.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="13" column="28" selection-start-line="13" selection-start-column="28" selection-end-line="13" selection-end-column="28" />
+              <caret line="16" column="28" selection-start-line="16" selection-start-column="28" selection-end-line="16" selection-end-column="28" />
               <folding>
-                <element signature="e#1959#2412#0" expanded="false" />
-                <element signature="e#3210#5374#0" expanded="false" />
+                <element signature="e#7330#7783#0" expanded="false" />
+                <element signature="e#8581#10745#0" expanded="false" />
+                <marker date="1490650222725" expanded="true" signature="7280:7290" placeholder="{...}" />
               </folding>
             </state>
           </provider>
@@ -52,8 +50,8 @@
       <file leaf-file-name="university-compare.tpl.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/university-compare/university-compare.tpl.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6050847">
-              <caret line="21" column="36" selection-start-line="21" selection-start-column="36" selection-end-line="21" selection-end-column="36" />
+            <state vertical-scroll-proportion="0.76949155">
+              <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -75,9 +73,9 @@
         <option value="$PROJECT_DIR$/data.tsv" />
         <option value="$PROJECT_DIR$/app/university-search/university-search.controller.js" />
         <option value="$PROJECT_DIR$/app/university-search/university-search.tpl.html" />
-        <option value="$PROJECT_DIR$/app/university-compare/university-compare.tpl.html" />
         <option value="$PROJECT_DIR$/app/university-compare/university-compare.controller.js" />
         <option value="$PROJECT_DIR$/scss/_university-compare.scss" />
+        <option value="$PROJECT_DIR$/app/university-compare/university-compare.tpl.html" />
       </list>
     </option>
   </component>
@@ -294,7 +292,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="754" extended-state="7" />
+    <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2489019" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -362,8 +360,9 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="235" column="35" selection-start-line="235" selection-start-column="35" selection-end-line="235" selection-end-column="35" />
           <folding>
-            <element signature="e#1959#2412#0" expanded="false" />
-            <element signature="e#3210#5374#0" expanded="false" />
+            <element signature="e#7330#7783#0" expanded="false" />
+            <element signature="e#8581#10745#0" expanded="false" />
+            <marker date="1490650222725" expanded="true" signature="7280:7290" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -389,8 +388,9 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#1959#2412#0" expanded="false" />
-            <element signature="e#3210#5374#0" expanded="false" />
+            <element signature="e#7330#7783#0" expanded="false" />
+            <element signature="e#8581#10745#0" expanded="false" />
+            <marker date="1490650222725" expanded="true" signature="7280:7290" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -586,18 +586,19 @@
     <entry file="file://$PROJECT_DIR$/app/university-compare/university-compare.controller.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="13" column="28" selection-start-line="13" selection-start-column="28" selection-end-line="13" selection-end-column="28" />
+          <caret line="16" column="28" selection-start-line="16" selection-start-column="28" selection-end-line="16" selection-end-column="28" />
           <folding>
-            <element signature="e#1959#2412#0" expanded="false" />
-            <element signature="e#3210#5374#0" expanded="false" />
+            <element signature="e#7330#7783#0" expanded="false" />
+            <element signature="e#8581#10745#0" expanded="false" />
+            <marker date="1490650222725" expanded="true" signature="7280:7290" placeholder="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/university-compare/university-compare.tpl.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6050847">
-          <caret line="21" column="36" selection-start-line="21" selection-start-column="36" selection-end-line="21" selection-end-column="36" />
+        <state vertical-scroll-proportion="0.76949155">
+          <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
           <folding />
         </state>
       </provider>
