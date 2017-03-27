@@ -13,6 +13,7 @@
         vm.univList = [];
         vm.compareList = [];
         vm.dataLoaded = false;
+        vm.year=2012
         vm.selectUniversity = selectUniversity;
         vm.removeUniversity = removeUniversity;
 
@@ -41,12 +42,128 @@
                 vm.compareList.push(data.data.Item);
                 console.log(vm.compareList);
                 formatUnivData(vm.compareList[0]);
+                crimeDataVisualization(vm.compareList,vm.year)
             })
         };
         
         function removeUniversity(index){
             vm.compareList.splice(index, 1);
             d3.selectAll("svg > *").remove();
+        }
+        
+        function crimeDataVisualization(data,dataYear){
+            var renderAtVariable = "chart-container";
+            var dataSourceVariable = {
+                "chart": {
+                "showvalues": "0",
+                "caption": "Comparison of On Campus Crime Incidents",
+                "numberprefix": "",
+                "xaxisname": "Colleges",
+                "yaxisname": "No of crimes",
+                "showBorder": "0",
+                "paletteColors": "#0075c2,#1aaf5d,#f2c500,#9b59b6,#f1C40f,#c39bd3,#f5cba7,#73c6b6,#7fb3d5,#d35400,#196F3D",
+                "bgColor": "#ffffff",
+                "canvasBgColor": "#ffffff",
+                "captionFontSize": "14",
+                "subcaptionFontSize": "14",
+                "subcaptionFontBold": "0",
+                "divlineColor": "#999999",
+                "divLineIsDashed": "1",
+                "divLineDashLen": "1",
+                "divLineGapLen": "1",
+                "toolTipColor": "#ffffff",
+                "toolTipBorderThickness": "0",
+                "toolTipBgColor": "#000000",
+                "toolTipBgAlpha": "80",
+                "toolTipBorderRadius": "2",
+                "toolTipPadding": "5",
+                "legendBgColor": "#ffffff",
+                "legendBorderAlpha": '0',
+                "legendShadow": '0',
+                "legendItemFontSize": '10',
+                "legendItemFontColor": '#666666'
+                },
+                "categories": [
+                ],
+                "dataset": [
+                ]
+            }
+            
+            var category = [];
+            var drugViolations = [];
+            var aggravatedAssault = [];
+            var arson = [];
+            var burglary = [];
+            var illegalWeaponsPossession = [];
+            var liquorViolations = [];
+            var manslaughter = [];
+            var murder = [];
+            var robbery = [];
+            var sexOffenses = [];
+            var vehicleTheft = [];
+        
+            for(var i=0;i<data.length;i++){
+                var item=data[0];
+                console.log(item.universityName)
+                category.push({"label": item.universityName });
+                var crimeItem;
+                for(var j=0;j<item.crimeStats.length;j++){
+                    if(item.crimeStats[j].year==dataYear){
+                        crimeItem=item.crimeStats[j];   
+                    }
+                    
+                }
+                var crimeYearItem=crimeItem.crimeInfo;
+                drugViolations.push({"value": crimeYearItem.drugViolations});
+                aggravatedAssault.push({"value": crimeYearItem.aggravatedAssault});
+                arson.push({"value": crimeYearItem.arson});
+                burglary.push({"value": crimeYearItem.burglary});
+                illegalWeaponsPossession.push({"value": crimeYearItem.illegalWeaponsPossession});
+                liquorViolations.push({"value": crimeYearItem.liquorViolations});
+                manslaughter.push({"value": crimeYearItem.manslaughter});
+                murder.push({"value": crimeYearItem.murder});
+                robbery.push({"value": crimeYearItem.robbery});
+                sexOffenses.push({"value": crimeYearItem.sexOffenses});
+                vehicleTheft.push({"value": crimeYearItem.vehicleTheft});
+            }
+            dataSourceVariable.categories.push({category});
+            var data;
+            data=drugViolations;
+            dataSourceVariable.dataset.push({"seriesname": "Drug Violations",data});
+            data=aggravatedAssault;
+            dataSourceVariable.dataset.push({"seriesname": "Aggravated Assault",data});
+            data=arson;
+            dataSourceVariable.dataset.push({"seriesname": "Arson",data});
+            data=burglary;
+            dataSourceVariable.dataset.push({"seriesname": "Burglary",data});
+            data=illegalWeaponsPossession;
+            dataSourceVariable.dataset.push({"seriesname": "Illegal Weapons Possession",data});
+            data=liquorViolations;
+            dataSourceVariable.dataset.push({"seriesname": "Liquor Violations",data});
+            data=manslaughter;
+            dataSourceVariable.dataset.push({"seriesname": "Man slaughter",data});
+            data=murder;
+            dataSourceVariable.dataset.push({"seriesname": "murder",data});
+            data=murder;
+            dataSourceVariable.dataset.push({"seriesname": "murder",data});
+            data=robbery;
+            dataSourceVariable.dataset.push({"seriesname": "Robbery",data});
+            data=sexOffenses;
+            dataSourceVariable.dataset.push({"seriesname": "Sex Offenses",data});
+            data=vehicleTheft;
+            dataSourceVariable.dataset.push({"seriesname": "Vehicle Theft",data});
+            FusionCharts.ready(function () {
+            var analysisChart = new FusionCharts({
+        type: 'stackedColumn3DLine',
+        renderAt: 'chart-container',
+        width: '500',
+        height: '350',
+        dataFormat: 'json',
+        dataSource: dataSourceVariable
+    }).render(renderAtVariable);
+});
+
+            
         }
 
         function formatUnivData(data) {
@@ -82,14 +199,6 @@
             var line = d3.line()
                 .x(function(d) { return x(d.date); })
                 .y(function(d) { return y(d.frequency); });
-
-
-            //var data = {};
-            //
-            //data=[{'date': 2012, 'frequency': 26425},
-            //    {'date': 2013, 'frequency': 17465},
-            //    {'date': 2014, 'frequency': 19042},
-            //    {'date': 2015, 'frequency': 21042}];
 
 
             for(var i=0;i<4;i++){
