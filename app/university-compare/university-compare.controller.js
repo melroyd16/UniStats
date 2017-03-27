@@ -16,6 +16,8 @@
         vm.year=2012
         vm.selectUniversity = selectUniversity;
         vm.removeUniversity = removeUniversity;
+        vm.crimeDataCalling = crimeDataCalling;
+        vm.crimeDataVisualization = crimeDataVisualization;
 
         if (UNIVERSITY_LIST.length == 0) {
             $http.get('JSON/data.json').then(function (data) {
@@ -42,10 +44,13 @@
                 vm.compareList.push(data.data.Item);
                 console.log(vm.compareList);
                 formatUnivData(vm.compareList[0]);
-                crimeDataVisualization(vm.compareList,vm.year)
             })
         };
         
+        function crimeDataCalling(){
+            console.log("Alan");
+            crimeDataVisualization(vm.compareList,vm.year);
+        }
         function removeUniversity(index){
             vm.compareList.splice(index, 1);
             d3.selectAll("svg > *").remove();
@@ -103,7 +108,7 @@
             var vehicleTheft = [];
         
             for(var i=0;i<data.length;i++){
-                var item=data[0];
+                var item=data[i];
                 console.log(item.universityName)
                 category.push({"label": item.universityName });
                 var crimeItem;
