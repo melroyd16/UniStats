@@ -25,7 +25,13 @@
         </style>
 
         <svg width="960" height="500"></svg>
-
+    </div>
+    <div class="year selection" ng-if="univCCtrl.compareList.length>0">
+        YEAR:
+        <select ng-model="univCCtrl.year" ng-options="x.year as x.year for x in univCCtrl.compareList[0].crimeStats"></select>
+        <button ng-click="univCCtrl.crimeDataCalling()">GO</button>
+        <div id="chart-container"></div>
     </div>
 
+    
 </div>
