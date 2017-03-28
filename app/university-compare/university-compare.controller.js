@@ -55,6 +55,7 @@
             d3.selectAll("svg > *").remove();
             if(vm.compareList.length)
                 formatUnivDataMultiple(vm.compareList);
+                crimeDataVisualization(vm.compareList,vm.year);
         }
         
         function crimeDataVisualization(data,dataYear){
@@ -67,7 +68,7 @@
                 "xaxisname": "Colleges",
                 "yaxisname": "No of crimes",
                 "showBorder": "0",
-                "paletteColors": "#0075c2,#1aaf5d,#f2c500,#9b59b6,#f1C40f,#c39bd3,#f5cba7,#73c6b6,#7fb3d5,#d35400,#196F3D",
+                "paletteColors": "#0075c2,#f2c500,#d35400,#196F3D",
                 "bgColor": "#ffffff",
                 "canvasBgColor": "#ffffff",
                 "captionFontSize": "14",
@@ -97,16 +98,9 @@
             
             var category = [];
             var drugViolations = [];
-            var aggravatedAssault = [];
-            var arson = [];
+            var others = [];
             var burglary = [];
-            var illegalWeaponsPossession = [];
             var liquorViolations = [];
-            var manslaughter = [];
-            var murder = [];
-            var robbery = [];
-            var sexOffenses = [];
-            var vehicleTheft = [];
         
             for(var i=0;i<data.length;i++){
                 var item=data[i];
@@ -121,43 +115,20 @@
                 }
                 var crimeYearItem=crimeItem.crimeInfo;
                 drugViolations.push({"value": crimeYearItem.drugViolations});
-                aggravatedAssault.push({"value": crimeYearItem.aggravatedAssault});
-                arson.push({"value": crimeYearItem.arson});
                 burglary.push({"value": crimeYearItem.burglary});
-                illegalWeaponsPossession.push({"value": crimeYearItem.illegalWeaponsPossession});
                 liquorViolations.push({"value": crimeYearItem.liquorViolations});
-                manslaughter.push({"value": crimeYearItem.manslaughter});
-                murder.push({"value": crimeYearItem.murder});
-                robbery.push({"value": crimeYearItem.robbery});
-                sexOffenses.push({"value": crimeYearItem.sexOffenses});
-                vehicleTheft.push({"value": crimeYearItem.vehicleTheft});
+                others.push({"value": crimeYearItem.aggravatedAssault+crimeYearItem.arson+crimeYearItem.illegalWeaponsPossession+crimeYearItem.manslaughter+crimeYearItem.murder+crimeYearItem.robbery+crimeYearItem.sexOffenses+crimeYearItem.vehicleTheft});
             }
             dataSourceVariable.categories.push({category});
             var data;
             data=drugViolations;
             dataSourceVariable.dataset.push({"seriesname": "Drug Violations",data});
-            data=aggravatedAssault;
-            dataSourceVariable.dataset.push({"seriesname": "Aggravated Assault",data});
-            data=arson;
-            dataSourceVariable.dataset.push({"seriesname": "Arson",data});
             data=burglary;
             dataSourceVariable.dataset.push({"seriesname": "Burglary",data});
-            data=illegalWeaponsPossession;
-            dataSourceVariable.dataset.push({"seriesname": "Illegal Weapons Possession",data});
             data=liquorViolations;
             dataSourceVariable.dataset.push({"seriesname": "Liquor Violations",data});
-            data=manslaughter;
-            dataSourceVariable.dataset.push({"seriesname": "Man slaughter",data});
-            data=murder;
-            dataSourceVariable.dataset.push({"seriesname": "murder",data});
-            data=murder;
-            dataSourceVariable.dataset.push({"seriesname": "murder",data});
-            data=robbery;
-            dataSourceVariable.dataset.push({"seriesname": "Robbery",data});
-            data=sexOffenses;
-            dataSourceVariable.dataset.push({"seriesname": "Sex Offenses",data});
-            data=vehicleTheft;
-            dataSourceVariable.dataset.push({"seriesname": "Vehicle Theft",data});
+            data=others;
+            dataSourceVariable.dataset.push({"seriesname": "Other crimes",data});
             FusionCharts.ready(function () {
             var analysisChart = new FusionCharts({
         type: 'scrollstackedcolumn2d',
