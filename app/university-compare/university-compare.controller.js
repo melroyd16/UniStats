@@ -16,7 +16,6 @@
         vm.year=2012
         vm.selectUniversity = selectUniversity;
         vm.removeUniversity = removeUniversity;
-        vm.crimeDataCalling = crimeDataCalling;
         vm.crimeDataVisualization = crimeDataVisualization;
 
         if (UNIVERSITY_LIST.length == 0) {
@@ -46,13 +45,11 @@
                 //formatUnivData(vm.compareList[0]);
                 d3.selectAll("svg > *").remove();
                 formatUnivDataMultiple(vm.compareList);
+                crimeDataVisualization(vm.compareList,vm.year);
             })
         };
         
-        function crimeDataCalling(){
-            console.log("Alan");
-            crimeDataVisualization(vm.compareList,vm.year);
-        }
+        
         function removeUniversity(index){
             vm.compareList.splice(index, 1);
             d3.selectAll("svg > *").remove();
@@ -163,7 +160,7 @@
             dataSourceVariable.dataset.push({"seriesname": "Vehicle Theft",data});
             FusionCharts.ready(function () {
             var analysisChart = new FusionCharts({
-        type: 'stackedColumn3DLine',
+        type: 'scrollstackedcolumn2d',
         renderAt: 'chart-container',
         width: '500',
         height: '350',
