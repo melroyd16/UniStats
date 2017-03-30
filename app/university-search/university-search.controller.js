@@ -10,88 +10,156 @@
     /* @ngInject */
     function UniversitySearchCtrl($http, UniversitySearchService) {
         var vm = this;
-        vm.message = 'Hello from University Search page';
-        vm.university = "";
-        vm.name = "melroy";
+        FusionCharts.ready(function () {
+            var conversionChart = new FusionCharts({
+                type: 'bubble',
+                renderAt: 'chart-container',
+                width: '600',
+                height: '300',
+                dataFormat: 'json',
+                dataSource: {
+                    "chart": {
+                        "caption": "Sales Analysis of Shoe Brands",
+                        "subcaption": "Last Quarter",
+                        "xAxisMinValue": "0",
+                        "xAxisMaxValue": "100",
+                        "yAxisMinValue": "0",
+                        "yAxisMaxValue": "30000",
+                        "plotFillAlpha": "70",
+                        "plotFillHoverColor": "#6baa01",
+                        "showPlotBorder": "0",
+                        "xAxisName": "Average Price",
+                        "yAxisName": "Units Sold",
+                        "numDivlines": "2",
+                        "showValues":"1",
+                        "showTrendlineLabels": "0",
+                        "plotTooltext": "$name : Profit Contribution - $zvalue%",
+                        "drawQuadrant" : "1",
+                        "quadrantLineAlpha" : "80",
+                        "quadrantLineThickness" : "3",
+                        "quadrantXVal" : "50",
+                        "quadrantYVal": "15000",
+                        //Quadrant Labels
+                        "quadrantLabelTL": "Low Price / High Sale",
+                        "quadrantLabelTR": "High Price / High Sale",
+                        "quadrantLabelBL": "Low Price / Low Sale",
+                        "quadrantLabelBR": "High Price / Low Sale",
 
-        //UniversitySearchService.fetchUnivData().then(function(data){
-        //    vm.university = data.data.Item;
-        //    //console.log(vm.university);
-        //
-        //    if(vm.university.errorMessage){
-        //        alert(vm.university.errorMessage);
-        //    }
-        //
-        //  //  drawLineChart(vm.university);
-        //})
-        //drawLineChart(vm.university);
+                        //Cosmetics
+                        "baseFontColor" : "#333333",
+                        "baseFont" : "Helvetica Neue,Arial",
+                        "captionFontSize" : "14",
+                        "subcaptionFontSize" : "14",
+                        "subcaptionFontBold" : "0",
+                        "showBorder" : "0",
+                        "bgColor" : "#ffffff",
+                        "showShadow" : "0",
+                        "canvasBgColor" : "#ffffff",
+                        "canvasBorderAlpha" : "0",
+                        "divlineAlpha" : "100",
+                        "divlineColor" : "#999999",
+                        "divlineThickness" : "1",
+                        "divLineIsDashed" : "1",
+                        "divLineDashLen" : "1",
+                        "divLineGapLen" : "1",
+                        "use3dlighting" : "0",
+                        "showplotborder" : "0",
+                        "showYAxisLine" : "1",
+                        "yAxisLineThickness" : "1",
+                        "yAxisLineColor" : "#999999",
+                        "showXAxisLine" : "1",
+                        "xAxisLineThickness" : "1",
+                        "xAxisLineColor" : "#999999",
+                        "showAlternateHGridColor" : "0",
+                        "showAlternateVGridColor" : "0"
 
-        function drawLineChart(data) {
-
-
-            var svg = d3.select("svg"),
-                margin = {top: 20, right: 20, bottom: 30, left: 50},
-                width = +svg.attr("width") - margin.left - margin.right,
-                height = +svg.attr("height") - margin.top - margin.bottom,
-                g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-            var parseTime = d3.timeParse("%Y");
-
-            var x = d3.scaleTime()
-                .rangeRound([0, width]);
-
-            var y = d3.scaleLinear()
-                .rangeRound([height, 0]);
-
-            var line = d3.line()
-                .x(function(d) { return x(d.date); })
-                .y(function(d) { return y(d.frequency); });
-
-
-            var data = {};
-
-            data=[{'date': 2012, 'frequency': 26425},
-            {'date': 2013, 'frequency': 17465},
-            {'date': 2014, 'frequency': 19042},
-            {'date': 2015, 'frequency': 21042}];
-
-
-            for(var i=0;i<4;i++){
-
-                data[i].date=parseTime(data[i].date);
-                data[i].frequency = +data[i].frequency;
-            }
-
-                console.log(data);
-
-                x.domain(d3.extent(data, function(d) { return d.date}));
-                y.domain([1000, d3.max(data, function(d) { return d.frequency; })]);
-
-                g.append("g")
-                    .attr("transform", "translate(0," + height + ")")
-                    .call(d3.axisBottom(x))
-                    .select(".domain")
-
-
-                g.append("g")
-                    .call(d3.axisLeft(y))
-                    .append("text")
-                    .attr("fill", "#000")
-                    .attr("transform", "rotate(-90)")
-                    .attr("y", 6)
-                    .attr("dy", "1em")
-                    .attr("text-anchor", "end")
-                    .text("Admissions");
-
-                g.append("path")
-                    .datum(data)
-                    .attr("fill", "none")
-                    .attr("stroke", "steelblue")
-                    .attr("stroke-linejoin", "round")
-                    .attr("stroke-linecap", "round")
-                    .attr("stroke-width", 1.5)
-                    .attr("d", line);
-        }
-
+                    },
+                    "categories": [
+                        {
+                            "category": [
+                                {
+                                    "label": "$0",
+                                    "x": "0"
+                                }, 
+                                {
+                                    "label": "$20",
+                                    "x": "20",
+                                    "showverticalline": "1"
+                                }, 
+                                {
+                                    "label": "$40",
+                                    "x": "40",
+                                    "showverticalline": "1"
+                                }, 
+                                {
+                                    "label": "$60",
+                                    "x": "60",
+                                    "showverticalline": "1"
+                                }, 
+                                {
+                                    "label": "$80",
+                                    "x": "80",
+                                    "showverticalline": "1"
+                                }, {
+                                    "label": "$100",
+                                    "x": "100",
+                                    "showverticalline": "1"
+                                }
+                            ]
+                        }
+                    ],
+                    "dataset": [
+                        {
+                            "color":"#00aee4",
+                            "data": [
+                                {
+                                    "x": "80",
+                                    "y": "15000",
+                                    "z": "24",
+                                    "name": "Nike"
+                                }, 
+                                {
+                                    "x": "60",
+                                    "y": "18500",
+                                    "z": "26",
+                                    "name": "Adidas"
+                                }, 
+                                {
+                                    "x": "50",
+                                    "y": "19450",
+                                    "z": "19",
+                                    "name": "Puma"
+                                }, 
+                                {
+                                    "x": "65",
+                                    "y": "10500",
+                                    "z": "8",
+                                    "name": "Fila"
+                                }, 
+                                {
+                                    "x": "43",
+                                    "y": "8750",
+                                    "z": "5",
+                                    "name": "Lotto"
+                                }, 
+                                {
+                                    "x": "32",
+                                    "y": "22000",
+                                    "z": "10",
+                                    "name": "Reebok"
+                                }, 
+                                {
+                                    "x": "44",
+                                    "y": "13000",
+                                    "z": "9",
+                                    "name": "Woodland"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            });
+            conversionChart.render();
+        });
     }
 })();
