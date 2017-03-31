@@ -1,1 +1,52 @@
-<div id="chart-container">FusionCharts will render here</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Filter Results</h3>
+            </div>
+            <div class="panel-body filter-panel">
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingTwo" data-toggle="collapse" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                            <span class="col-md-10">Climate</span><span class="glyphicon glyphicon-minus"></span>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="panel-body">
+                                <div class="slider-filter">Minimum Temperature</div>
+                                <rzslider rz-slider-model="univSCtrl.minTempSlider.min" rz-slider-high="univSCtrl.minTempSlider.max" rz-slider-options="univSCtrl.minTempSlider.options"></rzslider>
+                                <div class="slider-filter">Maximum Temperature</div>
+                                <rzslider rz-slider-model="univSCtrl.maxTempSlider.min" rz-slider-high="univSCtrl.maxTempSlider.max" rz-slider-options="univSCtrl.maxTempSlider.options"></rzslider>
+                                <div class="slider-filter">Mean Temperature</div>
+                                <rzslider rz-slider-model="univSCtrl.meanTempSlider.min" rz-slider-high="univSCtrl.meanTempSlider.max" rz-slider-options="univSCtrl.meanTempSlider.options"></rzslider>
+                                <div class="slider-filter">Total Annual Rainfall</div>
+                                <rzslider rz-slider-model="univSCtrl.rainfallSlider.min" rz-slider-high="univSCtrl.rainfallSlider.max" rz-slider-options="univSCtrl.rainfallSlider.options"></rzslider>
+                                <div class="slider-filter">Total Annual Snowfall</div>
+                                <rzslider rz-slider-model="univSCtrl.snowfallSlider.min" rz-slider-high="univSCtrl.snowfallSlider.max" rz-slider-options="univSCtrl.snowfallSlider.options"></rzslider>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingThree" data-toggle="collapse" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                            <span class="col-md-10">Expenses</span> <span class="glyphicon glyphicon-minus"></span>
+                        </div>
+                        <div id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
+                            <div class="panel-body">
+                                <div class="slider-filter">In-State Expenses</div>
+                                <rzslider rz-slider-model="univSCtrl.inStateSlider.min" rz-slider-high="univSCtrl.inStateSlider.max" rz-slider-options="univSCtrl.inStateSlider.options"></rzslider>
+                                <div class="slider-filter">Out-Of-State Expenses</div>
+                                <rzslider rz-slider-model="univSCtrl.outStateSlider.min" rz-slider-high="univSCtrl.outStateSlider.max" rz-slider-options="univSCtrl.outStateSlider.options"></rzslider>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div id="map-chart-container">FusionCharts will render here</div>
+        <div id="bubble-chart-container">FusionCharts will render here</div>
+        
+    </div>
+</div>
+
+
