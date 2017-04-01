@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-2">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title">Filter Results</h3>
@@ -12,15 +12,15 @@
                         </div>
                         <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
                             <div class="panel-body">
-                                <div class="slider-filter">Minimum Temperature</div>
+                                <div class="slider-filter">Minimum Temp</div>
                                 <rzslider rz-slider-model="univSCtrl.minTempSlider.min" rz-slider-high="univSCtrl.minTempSlider.max" rz-slider-options="univSCtrl.minTempSlider.options"></rzslider>
-                                <div class="slider-filter">Maximum Temperature</div>
+                                <div class="slider-filter">Maximum Temp</div>
                                 <rzslider rz-slider-model="univSCtrl.maxTempSlider.min" rz-slider-high="univSCtrl.maxTempSlider.max" rz-slider-options="univSCtrl.maxTempSlider.options"></rzslider>
-                                <div class="slider-filter">Mean Temperature</div>
+                                <div class="slider-filter">Mean Temp</div>
                                 <rzslider rz-slider-model="univSCtrl.meanTempSlider.min" rz-slider-high="univSCtrl.meanTempSlider.max" rz-slider-options="univSCtrl.meanTempSlider.options"></rzslider>
-                                <div class="slider-filter">Total Annual Rainfall</div>
+                                <div class="slider-filter">Total Rainfall</div>
                                 <rzslider rz-slider-model="univSCtrl.rainfallSlider.min" rz-slider-high="univSCtrl.rainfallSlider.max" rz-slider-options="univSCtrl.rainfallSlider.options"></rzslider>
-                                <div class="slider-filter">Total Annual Snowfall</div>
+                                <div class="slider-filter">Total Snowfall</div>
                                 <rzslider rz-slider-model="univSCtrl.snowfallSlider.min" rz-slider-high="univSCtrl.snowfallSlider.max" rz-slider-options="univSCtrl.snowfallSlider.options"></rzslider>
                             </div>
                         </div>
@@ -42,10 +42,11 @@
             </div>
         </div>
     </div>
-    <div class="col-md-8">
-        <div id="map-chart-container">FusionCharts will render here</div>
-        <div id="bubble-chart-container">FusionCharts will render here</div>
-        
+    <div class="col-md-10">
+        <div class=row>
+            <div id="map-chart-container" class="col-xs-6">FusionCharts will render here</div>
+            <div id="bubble-chart-container" class="col-xs-6">FusionCharts will render here</div>
+        </div>      
     </div>
 </div>
 
