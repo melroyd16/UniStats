@@ -15,7 +15,9 @@
         vm.filterUniversities = filterUniversities;
         vm.initializeSliders = initializeSliders;
         vm.renderCharts = renderCharts;
+        vm.universityList = [];
         
+<<<<<<< HEAD
 /*        vm.renderSliders = function () {
             $timeout(function () {
                 $scope.$broadcast('rzSliderForceRender');
@@ -79,6 +81,8 @@
         
         
         
+=======
+>>>>>>> 0971755e0d6bb920a3e72f152f35b553e09d2b2c
         function initializeSliders() {
             vm.minTempSlider = {
                 min: 0,
@@ -107,7 +111,6 @@
                 }
             };
             vm.outStateSlider = angular.copy(vm.inStateSlider);
-            vm.filterUniversities();
         }
         
         function filterUniversities(){
@@ -530,11 +533,19 @@
         function init() {
             vm.initializeSliders();
             vm.renderCharts();
+            if(UniversitySearchService.cleanUniversityList.length > 0){
+                vm.universityList = UniversitySearchService.cleanUniversityList;
+            } else {
+                UniversitySearchService.fetchAllUniversities().then(function(data){
+                    vm.universityList = data;
+                })
+            }
             $('.collapse').on('shown.bs.collapse', function () {
                 $(this).parent().find(".glyphicon-plus").removeClass("glyphicon-plus").addClass("glyphicon-minus");
             }).on('hidden.bs.collapse', function () {
                 $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-plus");
             });
+<<<<<<< HEAD
         }
         
         
@@ -668,5 +679,8 @@
 
         }
         
+=======
+        }    
+>>>>>>> 0971755e0d6bb920a3e72f152f35b553e09d2b2c
     }
 })();
