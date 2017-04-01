@@ -7,6 +7,29 @@
             <div class="panel-body filter-panel">
                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                     <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingOne" data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            <span class="col-md-10">Year</span> <span class="glyphicon glyphicon-minus"></span>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body">
+                                <select class="form-control" ng-options="year for year in univSCtrl.yearOptions" ng-model="univSCtrl.yearFilter" ng-change="univSCtrl.renderCharts()"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingThree" data-toggle="collapse" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                            <span class="col-md-10">Expenses</span> <span class="glyphicon glyphicon-minus"></span>
+                        </div>
+                        <div id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
+                            <div class="panel-body">
+                                <div class="slider-filter">In-State Expenses</div>
+                                <rzslider rz-slider-model="univSCtrl.inStateSlider.min" rz-slider-high="univSCtrl.inStateSlider.max" rz-slider-options="univSCtrl.inStateSlider.options"></rzslider>
+                                <div class="slider-filter">Out-State Expenses</div>
+                                <rzslider rz-slider-model="univSCtrl.outStateSlider.min" rz-slider-high="univSCtrl.outStateSlider.max" rz-slider-options="univSCtrl.outStateSlider.options"></rzslider>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
                         <div class="panel-heading" role="tab" id="headingTwo" data-toggle="collapse" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                             <span class="col-md-10">Climate</span><span class="glyphicon glyphicon-minus"></span>
                         </div>
@@ -22,19 +45,6 @@
                                 <rzslider rz-slider-model="univSCtrl.rainfallSlider.min" rz-slider-high="univSCtrl.rainfallSlider.max" rz-slider-options="univSCtrl.rainfallSlider.options"></rzslider>
                                 <div class="slider-filter">Total Snowfall</div>
                                 <rzslider rz-slider-model="univSCtrl.snowfallSlider.min" rz-slider-high="univSCtrl.snowfallSlider.max" rz-slider-options="univSCtrl.snowfallSlider.options"></rzslider>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingThree" data-toggle="collapse" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
-                            <span class="col-md-10">Expenses</span> <span class="glyphicon glyphicon-minus"></span>
-                        </div>
-                        <div id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
-                            <div class="panel-body">
-                                <div class="slider-filter">In-State Expenses</div>
-                                <rzslider rz-slider-model="univSCtrl.inStateSlider.min" rz-slider-high="univSCtrl.inStateSlider.max" rz-slider-options="univSCtrl.inStateSlider.options"></rzslider>
-                                <div class="slider-filter">Out-Of-State Expenses</div>
-                                <rzslider rz-slider-model="univSCtrl.outStateSlider.min" rz-slider-high="univSCtrl.outStateSlider.max" rz-slider-options="univSCtrl.outStateSlider.options"></rzslider>
                             </div>
                         </div>
                     </div>

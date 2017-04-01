@@ -10,15 +10,17 @@
     /* @ngInject */
     function UniversitySearchCtrl($http, UniversitySearchService, $timeout) {
         var vm = this;
+        vm.yearFilter = "2015";
+        vm.yearOptions = ["2012", "2013", "2014", "2015"];
         vm.filterUniversities = filterUniversities;
         vm.initializeSliders = initializeSliders;
+        vm.renderCharts = renderCharts;
         
-
-        vm.renderSliders = function () {
+/*        vm.renderSliders = function () {
             $timeout(function () {
                 $scope.$broadcast('rzSliderForceRender');
             });
-        }
+        }*/
 
         function initializeSliders() {
             vm.minTempSlider = {
@@ -55,18 +57,8 @@
             console.log("hello");
         }
         
-        init();
-
-        function init() {
-            vm.initializeSliders();            
-            $('.collapse').on('shown.bs.collapse', function () {
-                $(this).parent().find(".glyphicon-plus").removeClass("glyphicon-plus").addClass("glyphicon-minus");
-            }).on('hidden.bs.collapse', function () {
-                $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-plus");
-            });
-        }
-
-        FusionCharts.ready(function () {
+        function renderCharts(){
+            FusionCharts.ready(function () {
             var conversionChart = new FusionCharts({
                 type: 'bubble',
                 renderAt: 'bubble-chart-container',
@@ -76,7 +68,7 @@
                 dataSource: {
                     "chart": {
                         "caption": "Analyis of universities in Arizona",
-                        "subcaption": "2012",
+                        "subcaption": vm.yearFilter,
                         "xAxisMinValue": "0",
                         "xAxisMaxValue": "100",
                         "yAxisMinValue": "0",
@@ -228,7 +220,7 @@
                 dataSource: {
                     "chart": {
                         "caption": "Statewise University count",
-                        "subcaption": "2012", 
+                        "subcaption": vm.yearFilter, 
                         "borderColor": "#DDDDDDD",
                         "showLabels": "1",               
 
@@ -458,5 +450,20 @@
             });
             salesMap.render();
         });
+        }
+        
+        init();
+
+        function init() {
+            vm.initializeSliders();
+            vm.renderCharts();
+            $('.collapse').on('shown.bs.collapse', function () {
+                $(this).parent().find(".glyphicon-plus").removeClass("glyphicon-plus").addClass("glyphicon-minus");
+            }).on('hidden.bs.collapse', function () {
+                $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-plus");
+            });
+        }
+
+        
     }
 })();
