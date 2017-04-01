@@ -16,6 +16,7 @@
         vm.initializeSliders = initializeSliders;
         vm.renderCharts = renderCharts;
         vm.universityList = [];
+        vm.universityData=[];
         
 
 /*        vm.renderSliders = function () {
@@ -24,61 +25,38 @@
             });
         }*/
         
-        var mapData=[],mapCategory = {};
-        var conversionChart; 
+        var mapData=[];
+        var conversionChart;
+        
+        // Loads data from json file
+        d3.json("/JSON/data.json", function(data){
+            vm.universityData = data;
+        });
+        
+        
         
         function fetchDataByStateCode(stateCode){
-            d3.json("/JSON/data.json", function(data){
-
-                    var j=0;
-                    for(var i=0;i<data.length;i++){
-                        if(data[i].stateCode==stateCode){
-                            console.log(data[i]);
+            
+                var year = vm.yearFilter + "Details";
+                console.log(year);
+                var j=0;
+                for(var i=0;i<vm.universityData.length;i++){
+                    if(vm.universityData[i].stateCode==stateCode){
+                        console.log(vm.universityData[i]);
                         
-                            mapData[j]={x: parseInt(data[i]["2012Details"].admissionsMen),
-                                y: parseInt(data[i]["2012Details"].admissionsWomen),
-                                size: parseInt(data[i]["2012Details"].admissionsTotal),
+                        mapData[j]={x: parseInt(vm.universityData[i][year].admissionsMen),
+                                y: parseInt(vm.universityData[i][year].admissionsWomen),
+                                size: parseInt(vm.universityData[i][year].admissionsTotal),
                                 c:i+1,
-                               name:data[i].universityName};
+                               name:vm.universityData[i].universityName};
                             
-                            j++;
-                        }
+                        j++;
                     }
-                
-                    bubbleChart(mapData);
-
-
-                });
-        }
-        
-        function fetchDataByState(state){
-            
-            mapData = []
-            
-            d3.json("/JSON/"+state+".json", function(data){
-            
-                console.log(data);
-                
-                for(var i=0;i<data.Item.length;i++){
-                    
-                    mapData[i]={x: parseInt(data.Item[i]["2012Details"].admissionsMen),
-                                y: parseInt(data.Item[i]["2012Details"].admissionsWomen),
-                                size: parseInt(data.Item[i]["2012Details"].admissionsTotal),
-                                c:i+1,
-                               name:data.Item[i].universityName};
-                    
                 }
-                                    
-                console.log(mapData);
-                bubbleChart(mapData);
                 
+                bubbleChart(mapData);
+      }
         
-            });
-        }
-        
-        
-        
-
         function initializeSliders() {
             vm.minTempSlider = {
                 min: 0,
@@ -114,161 +92,11 @@
         }
         
         function renderCharts(){
-//            FusionCharts.ready(function () {
-//                conversionChart = new FusionCharts({
-//                type: 'bubble',
-//                renderAt: 'bubble-chart-container',
-//                width: '600',
-//                height: '400',
-//                dataFormat: 'json',
-//                dataSource: {
-//                    "chart": {
-//                        "caption": "Analyis of universities in by State",
-//                        "subcaption": vm.yearFilter,
-//                        "xAxisMinValue": "0",
-//                        "xAxisMaxValue": "100",
-//                        "yAxisMinValue": "0",
-//                        "yAxisMaxValue": "30000",
-//                        "plotFillAlpha": "70",
-//                        "plotFillHoverColor": "#6baa01",
-//                        "showPlotBorder": "0",
-//                        "xAxisName": "Tuition amount",
-//                        "yAxisName": "No. Of Crimes",
-//                        "numDivlines": "2",
-//                        "showValues": "1",
-//                        "showTrendlineLabels": "0",
-//                        "plotTooltext": "$name : Profit Contribution - $zvalue%",
-//                        "drawQuadrant": "1",
-//                        "quadrantLineAlpha": "80",
-//                        "quadrantLineThickness": "3",
-//                        "quadrantXVal": "50",
-//                        "quadrantYVal": "15000",
-//                        //Quadrant Labels
-//                        "quadrantLabelTL": "Low Price / High Sale",
-//                        "quadrantLabelTR": "High Price / High Sale",
-//                        "quadrantLabelBL": "Low Price / Low Sale",
-//                        "quadrantLabelBR": "High Price / Low Sale",
-//
-//                        //Cosmetics
-//                        "baseFontColor": "#333333",
-//                        "baseFont": "Helvetica Neue,Arial",
-//                        "captionFontSize": "14",
-//                        "subcaptionFontSize": "14",
-//                        "subcaptionFontBold": "0",
-//                        "showBorder": "0",
-//                        "bgColor": "#ffffff",
-//                        "showShadow": "0",
-//                        "canvasBgColor": "#ffffff",
-//                        "canvasBorderAlpha": "0",
-//                        "divlineAlpha": "100",
-//                        "divlineColor": "#999999",
-//                        "divlineThickness": "1",
-//                        "divLineIsDashed": "1",
-//                        "divLineDashLen": "1",
-//                        "divLineGapLen": "1",
-//                        "use3dlighting": "0",
-//                        "showplotborder": "0",
-//                        "showYAxisLine": "1",
-//                        "yAxisLineThickness": "1",
-//                        "yAxisLineColor": "#999999",
-//                        "showXAxisLine": "1",
-//                        "xAxisLineThickness": "1",
-//                        "xAxisLineColor": "#999999",
-//                        "showAlternateHGridColor": "0",
-//                        "showAlternateVGridColor": "0"
-//
-//                    },
-//                    "categories": [
-//                        {
-//                              "category":mapCategory
-////                            "category": [
-////                                {
-////                                    "label": "$0",
-////                                    "x": "0"
-////                                },
-////                                {
-////                                    "label": "$20",
-////                                    "x": "20",
-////                                    "showverticalline": "1"
-////                                },
-////                                {
-////                                    "label": "$40",
-////                                    "x": "40",
-////                                    "showverticalline": "1"
-////                                },
-////                                {
-////                                    "label": "$60",
-////                                    "x": "60",
-////                                    "showverticalline": "1"
-////                                },
-////                                {
-////                                    "label": "$80",
-////                                    "x": "80",
-////                                    "showverticalline": "1"
-////                                }, {
-////                                    "label": "$100",
-////                                    "x": "100",
-////                                    "showverticalline": "1"
-////                                }
-////                            ]
-//                        }
-//                    ],
-//                    "dataset": [
-//                        {
-//                            "color": "#00aee4",
-//                            "data":mapData
-////                            "data": [
-////                                {
-////                                    "x": "80",
-////                                    "y": "15000",
-////                                    "z": "24",
-////                                    "name": "University Of Arizona"
-////                                },
-////                                {
-////                                    "x": "60",
-////                                    "y": "18500",
-////                                    "z": "26",
-////                                    "name": "University Of Phoenix"
-////                                },
-////                                {
-////                                    "x": "50",
-////                                    "y": "19450",
-////                                    "z": "19",
-////                                    "name": "Grand Canyon University"
-////                                },
-////                                {
-////                                    "x": "65",
-////                                    "y": "10500",
-////                                    "z": "8",
-////                                    "name": "Northern Arizona University"
-////                                },
-////                                {
-////                                    "x": "43",
-////                                    "y": "8750",
-////                                    "z": "5",
-////                                    "name": "Mid Western University"
-////                                },
-////                                {
-////                                    "x": "32",
-////                                    "y": "22000",
-////                                    "z": "10",
-////                                    "name": "Rio Salado COllege"
-////                                },
-////                                {
-////                                    "x": "44",
-////                                    "y": "13000",
-////                                    "z": "9",
-////                                    "name": "Central Arizona College"
-////                                }
-////                            ]
-//                        }
-//                    ]
-//                }
-//            });
-//            conversionChart.render();
-//        });
+            
+            d3.select('#chartID').remove();
+            
         
-        FusionCharts.ready(function () {
+            FusionCharts.ready(function () {
             var salesMap = new FusionCharts({
                 type: 'usa',
                 renderAt: 'map-chart-container',
@@ -513,7 +341,6 @@
                             mapData = [];
                             d3.select('#chartID').remove();
                         }
-                        //fetchDataByState(args.label);
                         fetchDataByStateCode((args.id).toUpperCase());
                         
                 }
@@ -545,7 +372,8 @@
         }
         
         
-        //// Buubble Chart//////////////
+        
+        /****************************** Bubble chart **********************************/
         
         function bubbleChart(data){
             var height = 400;
