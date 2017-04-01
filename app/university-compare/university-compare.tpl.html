@@ -1,4 +1,47 @@
 <div ng-if="univCCtrl.dataLoaded" class="universityCompareContainer">
+    
+    
+    <style>
+            path {  stroke: #fff; }
+            path:hover {  opacity:0.9; }
+            rect:hover {  fill:blue; }
+            .axis {  font: 10px sans-serif; }
+            .legend tr{    border-bottom:1px solid grey; }
+            .legend tr:first-child{    border-top:1px solid grey; }
+
+            .axis path,
+            .axis line {
+              fill: none;
+              stroke: #000;
+              shape-rendering: crispEdges;
+            }
+
+            .x.axis path {  display: none; }
+            .legend{
+                margin-bottom:76px;
+                display:inline-block;
+                border-collapse: collapse;
+                border-spacing: 0px;
+            }
+            .legend td{
+                padding:4px 5px;
+                vertical-align:bottom;
+            }
+            .legendFreq, .legendPerc{
+                align:right;
+                width:50px;
+            }
+         .axis--x path {
+                display: none;
+            }
+
+            .line {
+                fill: none;
+                stroke: steelblue;
+                stroke-width: 1.5px;
+            }
+
+    </style>
 
     <div class="well well-lg" ng-style="{ 'height' : (univCCtrl.compareList.length >0) ? '125px' : '85px' }">
         <input type="text" ng-model="univCCtrl.univSearch" uib-typeahead="university as university.universityName for university in univCCtrl.univList | filter:$viewValue | limitTo:8" typeahead-popup-template-url="bower_components/angular-bootstrap/template/typeahead/typeahead-popup.html" typeahead-template-url="bower_components/angular-bootstrap/template/typeahead/typeahead-match.html" typeahead-min-length="1" typeahead-on-select="univCCtrl.selectUniversity($item, $model, $label)" class="form-control" placeholder="Enter University Name ...">
@@ -10,13 +53,9 @@
             </div>
         </div>
     </div>
-    <div class="year selection" ng-if="univCCtrl.compareList.length>0">
-        YEAR:
-        <select ng-model="univCCtrl.year" ng-options="x.year as x.year for x in univCCtrl.compareList[0].crimeStats" ng-change="univCCtrl.crimeDataVisualization(univCCtrl.compareList,univCCtrl.year)"></select>
-        <div id="chart-container"></div>
-    </div>
-
+    
     <div class="row">
+<!--
         <style>
 
             .axis--x path {
@@ -30,9 +69,25 @@
             }
 
         </style>
+-->
 
         <svg width="960" height="500"></svg>
     </div>
+    
+    <div class="row">
+        
+        <div id='dashboard'>
+        </div>
+        
+    </div>
+    
+    <div class="year selection" ng-if="univCCtrl.compareList.length>0">
+        YEAR:
+        <select ng-model="univCCtrl.year" ng-options="x.year as x.year for x in univCCtrl.compareList[0].crimeStats" ng-change="univCCtrl.crimeDataVisualization(univCCtrl.compareList,univCCtrl.year)"></select>
+        <div id="chart-container"></div>
+    </div>
+
+    
 
     
 </div>
