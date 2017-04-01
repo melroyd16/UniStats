@@ -25,9 +25,31 @@
         }*/
         
         var mapData=[],mapCategory = {};
-        var conversionChart;
-        var xAxisMaxVal,yAxisMaxVal,xAxisMinVal,yAxisMinVal;
+        var conversionChart; 
         
+        function fetchDataByStateCode(stateCode){
+            d3.json("/JSON/data.json", function(data){
+
+                    var j=0;
+                    for(var i=0;i<data.length;i++){
+                        if(data[i].stateCode==stateCode){
+                            console.log(data[i]);
+                        
+                            mapData[j]={x: parseInt(data[i]["2012Details"].admissionsMen),
+                                y: parseInt(data[i]["2012Details"].admissionsWomen),
+                                size: parseInt(data[i]["2012Details"].admissionsTotal),
+                                c:i+1,
+                               name:data[i].universityName};
+                            
+                            j++;
+                        }
+                    }
+                
+                    bubbleChart(mapData);
+
+
+                });
+        }
         
         function fetchDataByState(state){
             
@@ -39,40 +61,15 @@
                 
                 for(var i=0;i<data.Item.length;i++){
                     
-                    if(i==0){
-                        xAxisMaxVal = data.Item[i]["2012Details"].admissionsMen;
-                        xAxisMinVal = data.Item[i]["2012Details"].admissionsMen;
-                        yAxisMaxVal = data.Item[i]["2012Details"].admissionsWomen;
-                        yAxisMinVal = data.Item[i]["2012Details"].admissionsWomen;
-                    }
-                    
-                    if(xAxisMaxVal < data.Item[i]["2012Details"].admissionsMen){
-                        xAxisMaxVal = data.Item[i]["2012Details"].admissionsMen;
-                    }
-                    if(xAxisMinVal > data.Item[i]["2012Details"].admissionsMen){
-                        xAxisMinVal = data.Item[i]["2012Details"].admissionsMen;
-                    }
-                    if(yAxisMaxVal < data.Item[i]["2012Details"].admissionsWomen){
-                        yAxisMaxVal = data.Item[i]["2012Details"].admissionsWomen;
-                    }
-                    if(yAxisMinVal > data.Item[i]["2012Details"].admissionsWomen){
-                        yAxisMinVal = data.Item[i]["2012Details"].admissionsWomen;
-                    }
                     mapData[i]={x: parseInt(data.Item[i]["2012Details"].admissionsMen),
                                 y: parseInt(data.Item[i]["2012Details"].admissionsWomen),
                                 size: parseInt(data.Item[i]["2012Details"].admissionsTotal),
                                 c:i+1,
                                name:data.Item[i].universityName};
                     
-                    mapCategory[i]={label: parseInt(data.Item[i]["2012Details"].admissionsMen),
-                                     x: parseInt(data.Item[i]["2012Details"].admissionsMen),
-                                     showverticalline: i};
                 }
                                     
                 console.log(mapData);
-                console.log(mapCategory);
-                //conversionChart.render();
-                
                 bubbleChart(mapData);
                 
         
@@ -511,12 +508,13 @@
                 
               events: {
                     entityClick: function (event, args) {
-                        console.log(args.label);
+                        console.log((args.id).toUpperCase());
                         if(mapData.length){
                             mapData = [];
                             d3.select('#chartID').remove();
                         }
-                        fetchDataByState(args.label);
+                        //fetchDataByState(args.label);
+                        fetchDataByStateCode((args.id).toUpperCase());
                         
                 }
             }
