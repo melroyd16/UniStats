@@ -21,7 +21,64 @@
                 $scope.$broadcast('rzSliderForceRender');
             });
         }*/
-
+        
+        var mapData=[],mapCategory = {};
+        var conversionChart;
+        var xAxisMaxVal,yAxisMaxVal,xAxisMinVal,yAxisMinVal;
+        
+        
+        function fetchDataByState(state){
+            
+            mapData = []
+            
+            d3.json("/JSON/"+state+".json", function(data){
+            
+                console.log(data);
+                
+                for(var i=0;i<data.Item.length;i++){
+                    
+                    if(i==0){
+                        xAxisMaxVal = data.Item[i]["2012Details"].admissionsMen;
+                        xAxisMinVal = data.Item[i]["2012Details"].admissionsMen;
+                        yAxisMaxVal = data.Item[i]["2012Details"].admissionsWomen;
+                        yAxisMinVal = data.Item[i]["2012Details"].admissionsWomen;
+                    }
+                    
+                    if(xAxisMaxVal < data.Item[i]["2012Details"].admissionsMen){
+                        xAxisMaxVal = data.Item[i]["2012Details"].admissionsMen;
+                    }
+                    if(xAxisMinVal > data.Item[i]["2012Details"].admissionsMen){
+                        xAxisMinVal = data.Item[i]["2012Details"].admissionsMen;
+                    }
+                    if(yAxisMaxVal < data.Item[i]["2012Details"].admissionsWomen){
+                        yAxisMaxVal = data.Item[i]["2012Details"].admissionsWomen;
+                    }
+                    if(yAxisMinVal > data.Item[i]["2012Details"].admissionsWomen){
+                        yAxisMinVal = data.Item[i]["2012Details"].admissionsWomen;
+                    }
+                    mapData[i]={x: parseInt(data.Item[i]["2012Details"].admissionsMen),
+                                y: parseInt(data.Item[i]["2012Details"].admissionsWomen),
+                                size: parseInt(data.Item[i]["2012Details"].admissionsTotal),
+                                c:i+1,
+                               name:data.Item[i].universityName};
+                    
+                    mapCategory[i]={label: parseInt(data.Item[i]["2012Details"].admissionsMen),
+                                     x: parseInt(data.Item[i]["2012Details"].admissionsMen),
+                                     showverticalline: i};
+                }
+                                    
+                console.log(mapData);
+                console.log(mapCategory);
+                //conversionChart.render();
+                
+                bubbleChart(mapData);
+                
+        
+            });
+        }
+        
+        
+        
         function initializeSliders() {
             vm.minTempSlider = {
                 min: 0,
@@ -58,157 +115,159 @@
         }
         
         function renderCharts(){
-            FusionCharts.ready(function () {
-            var conversionChart = new FusionCharts({
-                type: 'bubble',
-                renderAt: 'bubble-chart-container',
-                width: '600',
-                height: '400',
-                dataFormat: 'json',
-                dataSource: {
-                    "chart": {
-                        "caption": "Analyis of universities in Arizona",
-                        "subcaption": vm.yearFilter,
-                        "xAxisMinValue": "0",
-                        "xAxisMaxValue": "100",
-                        "yAxisMinValue": "0",
-                        "yAxisMaxValue": "30000",
-                        "plotFillAlpha": "70",
-                        "plotFillHoverColor": "#6baa01",
-                        "showPlotBorder": "0",
-                        "xAxisName": "Tuition amount",
-                        "yAxisName": "No. Of Crimes",
-                        "numDivlines": "2",
-                        "showValues": "1",
-                        "showTrendlineLabels": "0",
-                        "plotTooltext": "$name : Profit Contribution - $zvalue%",
-                        "drawQuadrant": "1",
-                        "quadrantLineAlpha": "80",
-                        "quadrantLineThickness": "3",
-                        "quadrantXVal": "50",
-                        "quadrantYVal": "15000",
-                        //Quadrant Labels
-                        "quadrantLabelTL": "Low Price / High Sale",
-                        "quadrantLabelTR": "High Price / High Sale",
-                        "quadrantLabelBL": "Low Price / Low Sale",
-                        "quadrantLabelBR": "High Price / Low Sale",
-
-                        //Cosmetics
-                        "baseFontColor": "#333333",
-                        "baseFont": "Helvetica Neue,Arial",
-                        "captionFontSize": "14",
-                        "subcaptionFontSize": "14",
-                        "subcaptionFontBold": "0",
-                        "showBorder": "0",
-                        "bgColor": "#ffffff",
-                        "showShadow": "0",
-                        "canvasBgColor": "#ffffff",
-                        "canvasBorderAlpha": "0",
-                        "divlineAlpha": "100",
-                        "divlineColor": "#999999",
-                        "divlineThickness": "1",
-                        "divLineIsDashed": "1",
-                        "divLineDashLen": "1",
-                        "divLineGapLen": "1",
-                        "use3dlighting": "0",
-                        "showplotborder": "0",
-                        "showYAxisLine": "1",
-                        "yAxisLineThickness": "1",
-                        "yAxisLineColor": "#999999",
-                        "showXAxisLine": "1",
-                        "xAxisLineThickness": "1",
-                        "xAxisLineColor": "#999999",
-                        "showAlternateHGridColor": "0",
-                        "showAlternateVGridColor": "0"
-
-                    },
-                    "categories": [
-                        {
-                            "category": [
-                                {
-                                    "label": "$0",
-                                    "x": "0"
-                                },
-                                {
-                                    "label": "$20",
-                                    "x": "20",
-                                    "showverticalline": "1"
-                                },
-                                {
-                                    "label": "$40",
-                                    "x": "40",
-                                    "showverticalline": "1"
-                                },
-                                {
-                                    "label": "$60",
-                                    "x": "60",
-                                    "showverticalline": "1"
-                                },
-                                {
-                                    "label": "$80",
-                                    "x": "80",
-                                    "showverticalline": "1"
-                                }, {
-                                    "label": "$100",
-                                    "x": "100",
-                                    "showverticalline": "1"
-                                }
-                            ]
-                        }
-                    ],
-                    "dataset": [
-                        {
-                            "color": "#00aee4",
-                            "data": [
-                                {
-                                    "x": "80",
-                                    "y": "15000",
-                                    "z": "24",
-                                    "name": "University Of Arizona"
-                                },
-                                {
-                                    "x": "60",
-                                    "y": "18500",
-                                    "z": "26",
-                                    "name": "University Of Phoenix"
-                                },
-                                {
-                                    "x": "50",
-                                    "y": "19450",
-                                    "z": "19",
-                                    "name": "Grand Canyon University"
-                                },
-                                {
-                                    "x": "65",
-                                    "y": "10500",
-                                    "z": "8",
-                                    "name": "Northern Arizona University"
-                                },
-                                {
-                                    "x": "43",
-                                    "y": "8750",
-                                    "z": "5",
-                                    "name": "Mid Western University"
-                                },
-                                {
-                                    "x": "32",
-                                    "y": "22000",
-                                    "z": "10",
-                                    "name": "Rio Salado COllege"
-                                },
-                                {
-                                    "x": "44",
-                                    "y": "13000",
-                                    "z": "9",
-                                    "name": "Central Arizona College"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            });
-            conversionChart.render();
-        });
+//            FusionCharts.ready(function () {
+//                conversionChart = new FusionCharts({
+//                type: 'bubble',
+//                renderAt: 'bubble-chart-container',
+//                width: '600',
+//                height: '400',
+//                dataFormat: 'json',
+//                dataSource: {
+//                    "chart": {
+//                        "caption": "Analyis of universities in by State",
+//                        "subcaption": vm.yearFilter,
+//                        "xAxisMinValue": "0",
+//                        "xAxisMaxValue": "100",
+//                        "yAxisMinValue": "0",
+//                        "yAxisMaxValue": "30000",
+//                        "plotFillAlpha": "70",
+//                        "plotFillHoverColor": "#6baa01",
+//                        "showPlotBorder": "0",
+//                        "xAxisName": "Tuition amount",
+//                        "yAxisName": "No. Of Crimes",
+//                        "numDivlines": "2",
+//                        "showValues": "1",
+//                        "showTrendlineLabels": "0",
+//                        "plotTooltext": "$name : Profit Contribution - $zvalue%",
+//                        "drawQuadrant": "1",
+//                        "quadrantLineAlpha": "80",
+//                        "quadrantLineThickness": "3",
+//                        "quadrantXVal": "50",
+//                        "quadrantYVal": "15000",
+//                        //Quadrant Labels
+//                        "quadrantLabelTL": "Low Price / High Sale",
+//                        "quadrantLabelTR": "High Price / High Sale",
+//                        "quadrantLabelBL": "Low Price / Low Sale",
+//                        "quadrantLabelBR": "High Price / Low Sale",
+//
+//                        //Cosmetics
+//                        "baseFontColor": "#333333",
+//                        "baseFont": "Helvetica Neue,Arial",
+//                        "captionFontSize": "14",
+//                        "subcaptionFontSize": "14",
+//                        "subcaptionFontBold": "0",
+//                        "showBorder": "0",
+//                        "bgColor": "#ffffff",
+//                        "showShadow": "0",
+//                        "canvasBgColor": "#ffffff",
+//                        "canvasBorderAlpha": "0",
+//                        "divlineAlpha": "100",
+//                        "divlineColor": "#999999",
+//                        "divlineThickness": "1",
+//                        "divLineIsDashed": "1",
+//                        "divLineDashLen": "1",
+//                        "divLineGapLen": "1",
+//                        "use3dlighting": "0",
+//                        "showplotborder": "0",
+//                        "showYAxisLine": "1",
+//                        "yAxisLineThickness": "1",
+//                        "yAxisLineColor": "#999999",
+//                        "showXAxisLine": "1",
+//                        "xAxisLineThickness": "1",
+//                        "xAxisLineColor": "#999999",
+//                        "showAlternateHGridColor": "0",
+//                        "showAlternateVGridColor": "0"
+//
+//                    },
+//                    "categories": [
+//                        {
+//                              "category":mapCategory
+////                            "category": [
+////                                {
+////                                    "label": "$0",
+////                                    "x": "0"
+////                                },
+////                                {
+////                                    "label": "$20",
+////                                    "x": "20",
+////                                    "showverticalline": "1"
+////                                },
+////                                {
+////                                    "label": "$40",
+////                                    "x": "40",
+////                                    "showverticalline": "1"
+////                                },
+////                                {
+////                                    "label": "$60",
+////                                    "x": "60",
+////                                    "showverticalline": "1"
+////                                },
+////                                {
+////                                    "label": "$80",
+////                                    "x": "80",
+////                                    "showverticalline": "1"
+////                                }, {
+////                                    "label": "$100",
+////                                    "x": "100",
+////                                    "showverticalline": "1"
+////                                }
+////                            ]
+//                        }
+//                    ],
+//                    "dataset": [
+//                        {
+//                            "color": "#00aee4",
+//                            "data":mapData
+////                            "data": [
+////                                {
+////                                    "x": "80",
+////                                    "y": "15000",
+////                                    "z": "24",
+////                                    "name": "University Of Arizona"
+////                                },
+////                                {
+////                                    "x": "60",
+////                                    "y": "18500",
+////                                    "z": "26",
+////                                    "name": "University Of Phoenix"
+////                                },
+////                                {
+////                                    "x": "50",
+////                                    "y": "19450",
+////                                    "z": "19",
+////                                    "name": "Grand Canyon University"
+////                                },
+////                                {
+////                                    "x": "65",
+////                                    "y": "10500",
+////                                    "z": "8",
+////                                    "name": "Northern Arizona University"
+////                                },
+////                                {
+////                                    "x": "43",
+////                                    "y": "8750",
+////                                    "z": "5",
+////                                    "name": "Mid Western University"
+////                                },
+////                                {
+////                                    "x": "32",
+////                                    "y": "22000",
+////                                    "z": "10",
+////                                    "name": "Rio Salado COllege"
+////                                },
+////                                {
+////                                    "x": "44",
+////                                    "y": "13000",
+////                                    "z": "9",
+////                                    "name": "Central Arizona College"
+////                                }
+////                            ]
+//                        }
+//                    ]
+//                }
+//            });
+//            conversionChart.render();
+//        });
         
         FusionCharts.ready(function () {
             var salesMap = new FusionCharts({
@@ -446,8 +505,22 @@
                             "value": "88234000"
                         }
                     ]
+                },
+                
+              events: {
+                    entityClick: function (event, args) {
+                        console.log(args.label);
+                        if(mapData.length){
+                            mapData = [];
+                            d3.select('#chartID').remove();
+                        }
+                        fetchDataByState(args.label);
+                        
                 }
+            }
             });
+            
+
             salesMap.render();
         });
         }
@@ -463,7 +536,137 @@
                 $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-plus");
             });
         }
+        
+        
+        //// Buubble Chart//////////////
+        
+        function bubbleChart(data){
+            var height = 400;
+            var width = 600;
+            var margin = 40;
+            
+            var data1=[];
+            for(var i = 0; i < 4; i++) {
+                data1.push({
+                    x: Math.random() * 4000,
+                    y: Math.random() * 1000,
+                    c: i,
+                    size: Math.random() * 2000,
+                    });
+            }
 
+            console.log(data.length);
+            console.log(data1);
+            var labelX = 'X';
+            var labelY = 'Y';
+            var svg = d3.select('.chart')
+                    .append('svg')
+                    .attr('class', 'chart')
+                    .attr("id","chartID")
+                    .attr("width", width + margin + margin)
+                    .attr("height", height + margin + margin)
+                    .append("g")
+                    .attr("transform", "translate(" + margin + "," + margin + ")");
+                    
+            var x = d3.scale.linear()
+					            .domain([d3.min(data, function (d) { return d.x; }), d3.max(data, function (d) { return d.x; })])
+					            .range([0, width]);
+
+            var y = d3.scale.linear()
+					            .domain([d3.min(data, function (d) { return d.y; }), d3.max(data, function (d) { return d.y; })])
+					            .range([height, 0]);
+
+            var scale = d3.scale.sqrt()
+					            .domain([d3.min(data, function (d) { return d.size; }), d3.max(data, function (d) { return d.size; })])
+					            .range([1, 20]);
+
+            var opacity = d3.scale.sqrt()
+					            .domain([d3.min(data, function (d) { return d.size; }), d3.max(data, function (d) { return d.size; })])
+					            .range([1, .5]);
+                                
+            var color = d3.scale.category10();
+            
+            
+            var xAxis = d3.svg.axis().scale(x);
+            var yAxis = d3.svg.axis().scale(y).orient("left");
+            console.log(xAxis);
+ 
+            var div = d3.select("body").append("div")	
+                    .attr("class", "tooltip")				
+                    .style("opacity", 0);
+            
+                          svg.append("g")
+					        .attr("class", "y axis")
+					        .call(yAxis)
+					        .append("text")
+						        .attr("transform", "rotate(-90)")
+						        .attr("x", 20)
+						        .attr("y", -margin)
+						        .attr("dy", ".71em")
+						        .style("text-anchor", "end")
+						        .text(labelY);
+                          // x axis and label
+                          svg.append("g")
+                              .attr("class", "x axis")
+                              .attr("transform", "translate(0," + height + ")")
+                              .call(xAxis)
+                              .append("text")
+                                  .attr("x", width + 20)
+                                  .attr("y", margin - 10)
+                                  .attr("dy", ".71em")
+                                  .style("text-anchor", "end")
+                                  .text(labelX);
+ 
+                          svg.selectAll("circle")
+                              .data(data)
+                              .enter()
+                              .insert("circle")
+                              .attr("cx", width / 2)
+                              .attr("cy", height / 2)
+                              .attr("opacity", function (d) { return opacity(d.size); })
+                              .attr("r", function (d) {console.log(d); return scale(d.size); })
+                              .style("fill", function (d) { return color(d.c); })
+                              .on('mouseover', function (d, i) {
+                                  fade(d.c, .1,d);
+                              })
+                             .on('mouseout', function (d, i) {
+                                 div.transition()		
+                                .duration(500)		
+                                .style("opacity", 0);	
+                                 fadeOut();
+                             })
+                            .transition()
+                            .delay(function (d, i) { return x(d.x) - y(d.y); })
+                            .duration(500)
+                            .attr("cx", function (d) { return x(d.x); })
+                            .attr("cy", function (d) { return y(d.y); })
+                            .ease("bounce");
+                             
+                             
+                            function fade(c, opacity,bubble) {
+                                console.log(bubble.name);
+                                div.transition()		
+                                .duration(200)		
+                                .style("opacity", .9);	
+                                div.html(bubble.name)	
+                                .style("left", (d3.event.pageX) + "px")		
+                                .style("top", (d3.event.pageY) + "px");	
+                              svg.selectAll("circle")
+                                  .filter(function (d) {
+                                      return d.c != c;
+                                  })
+                                .transition()
+                                
+                                 .style("opacity", opacity);
+                            }
+
+                            function fadeOut() {
+                              svg.selectAll("circle")
+                              .transition()
+                                 .style("opacity", function (d) { opacity(d.size); });
+                            }
+
+        }
         
     }
 })();

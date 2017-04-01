@@ -44,6 +44,7 @@
                 d3.selectAll('#dashboard svg').remove();
                 d3.selectAll('#dashboard table').remove();
                 
+                console.log(vm.compareList);
                 formatUnivDataMultiple(vm.compareList);
                 crimeDataVisualization(vm.compareList, vm.year);
             })
