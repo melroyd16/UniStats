@@ -17,7 +17,7 @@
         vm.renderCharts = renderCharts;
         vm.universityList = [];
         
-<<<<<<< HEAD
+
 /*        vm.renderSliders = function () {
             $timeout(function () {
                 $scope.$broadcast('rzSliderForceRender');
@@ -81,8 +81,7 @@
         
         
         
-=======
->>>>>>> 0971755e0d6bb920a3e72f152f35b553e09d2b2c
+
         function initializeSliders() {
             vm.minTempSlider = {
                 min: 0,
@@ -545,7 +544,6 @@
             }).on('hidden.bs.collapse', function () {
                 $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-plus");
             });
-<<<<<<< HEAD
         }
         
         
@@ -678,9 +676,6 @@
                             }
 
         }
-        
-=======
-        }    
->>>>>>> 0971755e0d6bb920a3e72f152f35b553e09d2b2c
+          
     }
 })();
