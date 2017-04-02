@@ -16,7 +16,7 @@
         vm.initializeSliders = initializeSliders;
         vm.renderCharts = renderCharts;
         vm.universityList = [];
-        vm.universityData=[];
+       
         
 
 /*        vm.renderSliders = function () {
@@ -25,37 +25,6 @@
             });
         }*/
         
-        var mapData=[];
-        var conversionChart;
-        
-        // Loads data from json file
-        d3.json("/JSON/data.json", function(data){
-            vm.universityData = data;
-        });
-        
-        
-        
-        function fetchDataByStateCode(stateCode){
-            
-                var year = vm.yearFilter + "Details";
-                console.log(year);
-                var j=0;
-                for(var i=0;i<vm.universityData.length;i++){
-                    if(vm.universityData[i].stateCode==stateCode){
-                        console.log(vm.universityData[i]);
-                        
-                        mapData[j]={x: parseInt(vm.universityData[i][year].admissionsMen),
-                                y: parseInt(vm.universityData[i][year].admissionsWomen),
-                                size: parseInt(vm.universityData[i][year].admissionsTotal),
-                                c:i+1,
-                               name:vm.universityData[i].universityName};
-                            
-                        j++;
-                    }
-                }
-                
-                bubbleChart(mapData);
-      }
         
         function initializeSliders() {
             vm.minTempSlider = {
@@ -374,6 +343,39 @@
         
         
         /****************************** Bubble chart **********************************/
+        
+         vm.universityData=[];
+         var mapData=[];
+        var conversionChart;
+        
+        // Loads data from json file
+        d3.json("/JSON/data.json", function(data){
+            vm.universityData = data;
+        });
+        
+        
+        
+        function fetchDataByStateCode(stateCode){
+            
+                var year = vm.yearFilter + "Details";
+                console.log(year);
+                var j=0;
+                for(var i=0;i<vm.universityData.length;i++){
+                    if(vm.universityData[i].stateCode==stateCode){
+                        console.log(vm.universityData[i]);
+                        
+                        mapData[j]={x: parseInt(vm.universityData[i][year].admissionsMen),
+                                y: parseInt(vm.universityData[i][year].admissionsWomen),
+                                size: parseInt(vm.universityData[i][year].admissionsTotal),
+                                c:i+1,
+                               name:vm.universityData[i].universityName};
+                            
+                        j++;
+                    }
+                }
+                
+                bubbleChart(mapData);
+      }
         
         function bubbleChart(data){
             var height = 400;
