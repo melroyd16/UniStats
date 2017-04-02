@@ -15,6 +15,7 @@
         vm.filterUniversities = filterUniversities;
         vm.initializeSliders = initializeSliders;
         vm.renderCharts = renderCharts;
+        vm.renderBubbleChart = renderBubbleChart;
         vm.universityList = [];
         vm.filteredUniversities = [];
         vm.stateUnivCountData = {};
@@ -55,6 +56,7 @@
 
         function filterUniversities() {
             vm.filteredUniversities = [];
+            var mapData=[],j=0;
             vm.maxUniversityCount = 0;
             var detailsParameter = vm.yearFilter + "Details";
             for (var i = 0; i < vm.universityList.length; i++) {
@@ -64,11 +66,30 @@
                     parseInt(vm.universityList[i][detailsParameter].priceOutStateOnCampus) <= vm.outStateSlider.max) {
                     vm.filteredUniversities.push(vm.universityList[i]);
                 }
-                if (i == vm.universityList.length - 1) {
+                
+                 if (i == vm.universityList.length - 1) {
                     formChoroplethData();
+                    
                 }
+                
+                
             }
-        }
+            for(var i=0;i<vm.filteredUniversities.length;i++){
+                    //if(vm.filteredUniversities[i].stateCode==stateCode){
+                        //console.log(vm.filteredUniversities[i]);
+                        
+                        mapData[j]={x: parseInt(vm.filteredUniversities[i][detailsParameter].admissionsMen),
+                                y: parseInt(vm.filteredUniversities[i][detailsParameter].admissionsWomen),
+                                size: parseInt(vm.filteredUniversities[i][detailsParameter].admissionsTotal),
+                                c:i+1,
+                               name:vm.filteredUniversities[i].universityName};
+                            
+                        j++;
+                    //}
+                }
+                vm.renderBubbleChart(mapData);
+               
+            }
 
         function formChoroplethData() {
             vm.stateUnivCountData = d3.nest()
@@ -100,7 +121,7 @@
 
         function renderCharts() {
     
-            d3.select('#chartID').remove();
+            //vm.renderBubbleChart();
             
             FusionCharts.ready(function () {
                 var salesMap = new FusionCharts({
@@ -174,6 +195,7 @@
                 
         function fetchDataByStateCode(stateCode){
             
+                mapData=[];
                 var year = vm.yearFilter + "Details";
                 console.log(year);
                 var j=0;
@@ -191,28 +213,20 @@
                     }
                 }
                 
-                bubbleChart(mapData);
+                vm.renderBubbleChart(mapData);
       }
         
-        function bubbleChart(data){
+        function renderBubbleChart(data){
+            
+            d3.select('#chartID').remove();
+             
+            console.log(data.length);
             var height = 400;
             var width = 600;
-            var margin = 40;
-            
-            var data1=[];
-            for(var i = 0; i < 4; i++) {
-                data1.push({
-                    x: Math.random() * 4000,
-                    y: Math.random() * 1000,
-                    c: i,
-                    size: Math.random() * 2000,
-                    });
-            }
-
-            console.log(data.length);
-            console.log(data1);
+            var margin = 40; 
             var labelX = 'X';
             var labelY = 'Y';
+            
             var svg = d3.select('.chart')
                     .append('svg')
                     .attr('class', 'chart')
@@ -278,7 +292,7 @@
                               .attr("cx", width / 2)
                               .attr("cy", height / 2)
                               .attr("opacity", function (d) { return opacity(d.size); })
-                              .attr("r", function (d) {console.log(d); return scale(d.size); })
+                              .attr("r", function (d) { return scale(d.size); })
                               .style("fill", function (d) { return color(d.c); })
                               .on('mouseover', function (d, i) {
                                   fade(d.c, .1,d);
