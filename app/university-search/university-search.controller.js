@@ -172,6 +172,13 @@
                                 bubbleData = [];
                                 d3.select('#chartID').remove();
                             }
+                            for(var i = 0; i < vm.selectedStateArray.length; i++){
+                                if(vm.selectedStateArray[i] == (args.id).toUpperCase()){
+                                    vm.selectedStateArray.splice(i,1);
+                                    vm.filterUniversities();
+                                    return;
+                                }
+                            }
                             vm.selectedStateArray.push((args.id).toUpperCase());
                             vm.filterUniversities();
                         }
