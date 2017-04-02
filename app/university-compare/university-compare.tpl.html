@@ -63,14 +63,27 @@
         
         <div id='dashboard'>
         </div>
-        
-    </div>
     
     <div class="year selection" ng-if="univCCtrl.compareList.length>0">
         YEAR:
         <select ng-model="univCCtrl.year" ng-options="x.year as x.year for x in univCCtrl.compareList[0].crimeStats" ng-change="univCCtrl.crimeDataVisualization(univCCtrl.compareList,univCCtrl.year)"></select>
         <div id="chart-container"></div>
+        <table>
+        <tr>        
+        <td><div id="weather-container"></div></td>
+        <td><div id="snowfall-container"></div></td>
+        </tr>  
+        <tr>        
+        <td><div id="rainfall-container"></div></td>
+        <td><div id="wind-container"></div></td>
+        </tr>    
+        </table>    
     </div>
+        
+    
+    </div>
+    
+    
 
     
 
