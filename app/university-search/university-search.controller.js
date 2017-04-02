@@ -12,6 +12,10 @@
         var vm = this;
         vm.yearFilter = "2015";
         vm.yearOptions = ["2012", "2013", "2014", "2015"];
+        vm.xAxisFilter = "admissionsMen";
+        vm.xAxisOptions = [];
+        vm.yAxisFilter = "admissionsWomen";
+        vm.yAxisOptions = [];
         vm.filterUniversities = filterUniversities;
         vm.initializeSliders = initializeSliders;
         vm.renderCharts = renderCharts;
@@ -77,20 +81,33 @@
                 
                 
             }
+            
+            
+            for (var key in vm.filteredUniversities[0][detailsParameter]) {
+
+                if (vm.filteredUniversities[0][detailsParameter].hasOwnProperty(key)) {
+                    
+                    vm.xAxisOptions.push(key);
+                    vm.yAxisOptions.push(key);
+                }
+            }
+            console.log(vm.xAxisOptions);
+            console.log(vm.yAxisOptions);
+
+            
             for(var i=0;i<vm.filteredUniversities.length;i++){
-                    //if(vm.filteredUniversities[i].stateCode==stateCode){
-                        //console.log(vm.filteredUniversities[i]);
-                        
-                        mapData[j]={x: parseInt(vm.filteredUniversities[i][detailsParameter].admissionsMen),
-                                y: parseInt(vm.filteredUniversities[i][detailsParameter].admissionsWomen),
-                                size: parseInt(vm.filteredUniversities[i][detailsParameter].admissionsTotal),
+                   
+                        mapData[j]={x: parseInt(vm.filteredUniversities[i][detailsParameter][vm.xAxisFilter]),
+                                y: parseInt(vm.filteredUniversities[i][detailsParameter][vm.yAxisFilter]),
+                                size: parseInt(vm.filteredUniversities[i][detailsParameter].totalEnrollment),
                                 c:i+1,
                                name:vm.filteredUniversities[i].universityName};
                             
                         j++;
-                    //}
                 }
-                //vm.renderBubbleChart(mapData);
+                console.log(vm.filteredUniversities.length);
+                console.log(mapData.length);
+
                
             }
 
@@ -243,9 +260,8 @@
             var height = 360;
             var width = 450;
             var margin = 40;
-            var labelX = 'X';
-            var labelY = 'Y';
-            
+            var labelX = vm.xAxisFilter;
+            var labelY = vm.yAxisFilter;
             var svg = d3.select('.chart')
                 .append('svg')
                 .attr('class', 'chart')
