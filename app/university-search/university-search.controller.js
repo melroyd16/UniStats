@@ -12,9 +12,9 @@
         var vm = this;
         vm.yearFilter = "2015";
         vm.yearOptions = ["2012", "2013", "2014", "2015"];
-        vm.xAxisFilter = "admissionsMen";
+        vm.xAxisFilter = "priceInStateOnCampus";
         vm.xAxisOptions = [];
-        vm.yAxisFilter = "admissionsWomen";
+        vm.yAxisFilter = "sfr";
         vm.yAxisOptions = [];
         vm.filterUniversities = filterUniversities;
         vm.initializeSliders = initializeSliders;
@@ -91,25 +91,8 @@
                     vm.yAxisOptions.push(key);
                 }
             }
-            console.log(vm.xAxisOptions);
-            console.log(vm.yAxisOptions);
-
-            
-            for(var i=0;i<vm.filteredUniversities.length;i++){
-                   
-                        mapData[j]={x: parseInt(vm.filteredUniversities[i][detailsParameter][vm.xAxisFilter]),
-                                y: parseInt(vm.filteredUniversities[i][detailsParameter][vm.yAxisFilter]),
-                                size: parseInt(vm.filteredUniversities[i][detailsParameter].totalEnrollment),
-                                c:i+1,
-                               name:vm.filteredUniversities[i].universityName};
-                            
-                        j++;
-                }
-                console.log(vm.filteredUniversities.length);
-                console.log(mapData.length);
-
                
-            }
+        }
 
         function satisfiesState(stateCode){
             if(vm.selectedStateArray.length == 0){
@@ -222,11 +205,9 @@
             var year = vm.yearFilter + "Details";
             for (var i = 0; i < vm.popularUnivList.length; i++) {
                 
-                
-                
                 bubbleData[i] = {
-                    x: parseInt(vm.popularUnivList[i][year].priceInStateOnCampus),
-                    y: parseInt(vm.popularUnivList[i][year].sfr),
+                    x: parseInt(vm.popularUnivList[i][year][vm.xAxisFilter]),
+                    y: parseInt(vm.popularUnivList[i][year][vm.yAxisFilter]),
                     size: parseInt(vm.popularUnivList[i][year].admissionsTotal),
                     c: i + 1,
                     name: vm.popularUnivList[i].universityName,
@@ -293,7 +274,11 @@
             var x = d3.scale.linear()
                 .domain([d3.min(data, function (d) {
                     return d.x;
-                }), d3.max(data, function (d) {
+                })-((d3.max(data, function (d) {
+                    return d.x;
+                })-d3.min(data, function (d) {
+                    return d.x;
+                }))/width), d3.max(data, function (d) {
                     return d.x;
                 })])
                 .range([0, width]);
@@ -301,10 +286,14 @@
             var y = d3.scale.linear()
                 .domain([d3.min(data, function (d) {
                     return d.y;
-                }), d3.max(data, function (d) {
+                })-((d3.max(data, function (d) {
+                    return d.y;
+                })-d3.min(data, function (d) {
+                    return d.y;
+                }))/10), d3.max(data, function (d) {
                     return d.y;
                 })])
-                .range([height, 0]);
+                .range([height, 20]);
 
             var scale = d3.scale.sqrt()
                 .domain([d3.min(data, function (d) {
@@ -312,7 +301,7 @@
                 }), d3.max(data, function (d) {
                     return d.size;
                 })])
-                .range([1, 20]);
+                .range([1, 50]);
 
             var opacity = d3.scale.sqrt()
                 .domain([d3.min(data, function (d) {
