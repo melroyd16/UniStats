@@ -221,13 +221,32 @@
             d3.select('#chartID').remove();
             var year = vm.yearFilter + "Details";
             for (var i = 0; i < vm.popularUnivList.length; i++) {
+                
+                
+                
                 bubbleData[i] = {
                     x: parseInt(vm.popularUnivList[i][year].priceInStateOnCampus),
                     y: parseInt(vm.popularUnivList[i][year].sfr),
                     size: parseInt(vm.popularUnivList[i][year].admissionsTotal),
                     c: i + 1,
-                    name: vm.popularUnivList[i].universityName
+                    name: vm.popularUnivList[i].universityName,
+                    alias:vm.popularUnivList[i].alias
+                        
                 };
+                if(bubbleData[i].alias=="NA"){
+                    bubbleData[i].alias = bubbleData[i].universityName;
+                }else{
+                    var shortName=[]
+                    var minLength;
+                    shortName=bubbleData[i].alias.split("|");
+                    shortName = shortName.filter(function(str) {return /\S/.test(str);});
+                    shortName.map(Function.prototype.call, String.prototype.trim);
+                    console.log(shortName);
+                    minLength=(Math.min.apply(Math, shortName.map(function(str) { return str.length; })));
+                    console.log(shortName.slice().sort((a, b) => b.length - a.length).pop()); 
+                    
+                    bubbleData[i].alias = shortName.slice().sort((a, b) => b.length - a.length).pop();
+                }
             }
             renderBubbleChart(bubbleData);
         }
@@ -331,11 +350,16 @@
                 .attr("dy", ".71em")
                 .style("text-anchor", "end")
                 .text(labelX);
-
-            svg.selectAll("circle")
-                .data(data)
-                .enter()
-                .insert("circle")
+            
+            var node = svg.append("g")
+                       .attr("class", "node")
+                       .selectAll("circle")
+                       .data(data)
+                       .enter()
+                       // Add one g element for each data node here.
+                       .append("g");
+            
+            node.append("circle")
                 .attr("cx", width / 2)
                 .attr("cy", height / 2)
                 .attr("opacity", function (d) {
@@ -357,19 +381,21 @@
                     fadeOut();
                 })
                 .transition()
-                .delay(function (d, i) {
-                    return x(d.x) - y(d.y);
-                })
+                .delay(function (d, i) {return x(d.x) - y(d.y);})
                 .duration(500)
-                .attr("cx", function (d) {
-                    return x(d.x);
-                })
-                .attr("cy", function (d) {
-                    return y(d.y);
-                })
+                .attr("cx", function (d) {return x(d.x);})
+                .attr("cy", function (d) {return y(d.y);})
                 .ease("bounce");
-
-
+            
+            
+         node.append("text")
+             .attr("text-anchor", "middle")
+             .attr("dx", function (d) { return x(d.x); })
+             .attr("dy", function (d) { return y(d.y); })
+             .text(function(d) {return d.alias;});
+            
+            
+            
             function fade(c, opacity, bubble) {
                 div.transition()
                     .duration(200)
