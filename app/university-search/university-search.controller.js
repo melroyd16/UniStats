@@ -16,16 +16,13 @@
         vm.initializeSliders = initializeSliders;
         vm.renderCharts = renderCharts;
         vm.universityList = [];
-       
-        
+        vm.filteredUniversities = [];
+        vm.stateUnivCountData = {};
+        vm.maxUniversityCount = 0;
+        vm.universityData=[];
+        var mapData=[];
+        var conversionChart;
 
-/*        vm.renderSliders = function () {
-            $timeout(function () {
-                $scope.$broadcast('rzSliderForceRender');
-            });
-        }*/
-        
-        
         function initializeSliders() {
             vm.minTempSlider = {
                 min: 0,
@@ -55,255 +52,83 @@
             };
             vm.outStateSlider = angular.copy(vm.inStateSlider);
         }
-        
-        function filterUniversities(){
-            console.log("hello");
+
+        function filterUniversities() {
+            vm.filteredUniversities = [];
+            vm.maxUniversityCount = 0;
+            var detailsParameter = vm.yearFilter + "Details";
+            for (var i = 0; i < vm.universityList.length; i++) {
+                if (parseInt(vm.universityList[i][detailsParameter].priceInStateOffCampus) >= vm.inStateSlider.min &&
+                    parseInt(vm.universityList[i][detailsParameter].priceInStateOffCampus) <= vm.inStateSlider.max &&
+                    parseInt(vm.universityList[i][detailsParameter].priceOutStateOnCampus) >= vm.outStateSlider.min &&
+                    parseInt(vm.universityList[i][detailsParameter].priceOutStateOnCampus) <= vm.outStateSlider.max) {
+                    vm.filteredUniversities.push(vm.universityList[i]);
+                }
+                if (i == vm.universityList.length - 1) {
+                    formChoroplethData();
+                }
+            }
         }
-        
-        function renderCharts(){
+
+        function formChoroplethData() {
+            vm.stateUnivCountData = d3.nest()
+                .key(function (d) {
+                    return d.stateCode;
+                })
+                .rollup(function (v) {
+                    return v.length;
+                })
+                .entries(vm.filteredUniversities);
             
+            console.log(vm.stateUnivCountData);
+            for (var i = 0; i < vm.stateUnivCountData.length; i++) {
+                console.log(vm.stateUnivCountData[i]["id"]);
+                vm.stateUnivCountData[i]["id"] = vm.stateUnivCountData[i]["key"];
+                delete vm.stateUnivCountData[i]["key"];
+                if (vm.stateUnivCountData[i].value > vm.maxUniversityCount) {
+                    vm.maxUniversityCount = vm.stateUnivCountData[i].value
+                }
+                
+                if (i == vm.stateUnivCountData.length - 1) {
+                    vm.renderCharts();
+                }
+            }
+        }
+
+        function renderCharts() {
+    
             d3.select('#chartID').remove();
             
-        
             FusionCharts.ready(function () {
-            var salesMap = new FusionCharts({
-                type: 'usa',
-                renderAt: 'map-chart-container',
-                width: '600',
-                height: '400',
-                dataFormat: 'json',
-                dataSource: {
-                    "chart": {
-                        "caption": "Statewise University count",
-                        "subcaption": vm.yearFilter, 
-                        "borderColor": "#DDDDDDD",
-                        "showLabels": "1",               
-
-                        "numberScaleValue": "1,1000,1000",
-                        "numberScaleUnit": "K,M,B",
-                        "numberPrefix": "$",
-                        "entityFillHoverColor": "#d35400",
-                        "entityFillHoverAlpha": "30",
-                        //Theme
-                        "theme" : "fint"
-                    },
-                    "colorrange": {
-                        "gradient": "1",
-                        "startLabel": "Low",
-                        "endLabel": "High",
-                        "code": "#9999ff",
-                        "minvalue": "920000",
-                        "maxValue": "97400000" 
-                    },
-                    "data": [
-                        {
-                            "id": "HI",
-                            "value": "3189000"
+                var salesMap = new FusionCharts({
+                    type: 'usa',
+                    renderAt: 'map-chart-container',
+                    width: '600',
+                    height: '400',
+                    dataFormat: 'json',
+                    dataSource: {
+                        "chart": {
+                            "caption": "Statewise University count",
+                            "subcaption": vm.yearFilter,
+                            "borderColor": "#DDDDDDD",
+                            "showLabels": "1",
+                            "entityFillHoverColor": "#d35400",
+                            "entityFillHoverAlpha": "30",
+                            //Theme
+                            "theme": "fint"
                         },
-                        {
-                            "id": "DC",
-                            "value": "2879000"
+                        "colorrange": {
+                            "startlabel": "Low",
+                            "endlabel": "High",
+                            "code": "#ccccff",
+                            "gradient": "1",
+                            "color": [{
+                                "maxvalue": vm.maxUniversityCount,
+                                "code": "#000066"
+                            }]
                         },
-                        {
-                            "id": "MD",
-                            "value": "33592000"
-                        },
-                        {
-                            "id": "DE",
-                            "value": "4607000"
-                        },
-                        {
-                            "id": "RI",
-                            "value": "4890000"
-                        },
-                        {
-                            "id": "WA",
-                            "value": "34927000"
-                        },
-                        {
-                            "id": "OR",
-                            "value": "65798000"
-                        },
-                        {
-                            "id": "CA",
-                            "value": "61861000"
-                        },
-                        {
-                            "id": "AK",
-                            "value": "58911000"
-                        },
-                        {
-                            "id": "ID",
-                            "value": "42662000"
-                        },
-                        {
-                            "id": "NV",
-                            "value": "78041000"
-                        },
-                        {
-                            "id": "AZ",
-                            "value": "41558000"
-                        },
-                        {
-                            "id": "MT",
-                            "value": "62942000"
-                        },
-                        {
-                            "id": "WY",
-                            "value": "78834000"
-                        },
-                        {
-                            "id": "UT",
-                            "value": "50512000"
-                        },
-                        {
-                            "id": "CO",
-                            "value": "73026000"
-                        },
-                        {
-                            "id": "NM",
-                            "value": "78865000"
-                        },
-                        {
-                            "id": "ND",
-                            "value": "50554000"
-                        },
-                        {
-                            "id": "SD",
-                            "value": "35922000"
-                        },
-                        {
-                            "id": "NE",
-                            "value": "43736000"
-                        },
-                        {
-                            "id": "KS",
-                            "value": "32681000"
-                        },
-                        {
-                            "id": "OK",
-                            "value": "79038000"
-                        },
-                        {
-                            "id": "TX",
-                             "value": "97344000"
-                        },
-                        {
-                            "id": "MN",
-                            "value": "43485000"
-                        },
-                        {
-                            "id": "IA",
-                            "value": "46515000"
-                        },
-                        {
-                            "id": "MO",
-                            "value": "63715000"
-                        },
-                        {
-                            "id": "AR",
-                            "value": "34497000"
-                        },
-                        {
-                            "id": "LA",
-                            "value": "70706000"
-                        },
-                        {
-                            "id": "WI",
-                            "value": "42382000"
-                        },
-                        {
-                            "id": "IL",
-                            "value": "73202000" 
-                        },
-                        {
-                            "id": "KY",
-                            "value": "79118000"
-                        },
-                        {
-                            "id": "TN",
-                            "value": "44657000"
-                        },
-                        {
-                            "id": "MS",
-                            "value": "66205000"
-                        },
-                        {
-                            "id": "AL",
-                            "value": "75873000"
-                        },
-                        {
-                            "id": "GA",
-                            "value": "76895000"
-                        },
-                        {
-                            "id": "MI",
-                            "value": "67695000"
-                        },
-                        {
-                            "id": "IN",
-                            "value": "920000"
-                        },
-                        {
-                            "id": "OH",
-                            "value": "32960000"
-                        },
-                        {
-                            "id": "PA",
-                            "value": "54346000"
-                        },
-                        {
-                            "id": "NY",
-                            "value": "42828000"
-                        },
-                        {
-                            "id": "VT",
-                            "value": "77411000"
-                        },
-                        {
-                            "id": "NH",
-                            "value": "51403000"
-                        },
-                        {
-                            "id": "ME",
-                            "value": "64636000"
-                        },
-                        {
-                            "id": "MA",
-                            "value": "51767000"
-                        },
-                        {
-                            "id": "CT",
-                            "value": "57353000"
-                        },
-                        {
-                            "id": "NJ",
-                            "value": "80788000"
-                        },
-                        {
-                            "id": "WV",
-                            "value": "95890000"
-                        },
-                        {
-                            "id": "VA",
-                            "value": "83140000"
-                        },
-                        {
-                            "id": "NC",
-                            "value": "75425000"
-                        },
-                        {
-                            "id": "SC",
-                            "value": "88234000"
-                        },
-                        {
-                            "id": "FL",
-                            "value": "88234000"
-                        }
-                    ]
-                },
-                
-              events: {
+                        "data": vm.stateUnivCountData
+                    }, events: {
                     entityClick: function (event, args) {
                         console.log((args.id).toUpperCase());
                         if(mapData.length){
@@ -314,23 +139,23 @@
                         
                 }
             }
+                });
+                salesMap.render();
             });
-            
 
-            salesMap.render();
-        });
         }
-        
+
         init();
 
         function init() {
             vm.initializeSliders();
-            vm.renderCharts();
-            if(UniversitySearchService.cleanUniversityList.length > 0){
+            if (UniversitySearchService.cleanUniversityList.length > 0) {
                 vm.universityList = UniversitySearchService.cleanUniversityList;
+                vm.renderCharts();
             } else {
-                UniversitySearchService.fetchAllUniversities().then(function(data){
+                UniversitySearchService.fetchAllUniversities().then(function (data) {
                     vm.universityList = data;
+                    filterUniversities();
                 })
             }
             $('.collapse').on('shown.bs.collapse', function () {
@@ -339,14 +164,11 @@
                 $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-plus");
             });
         }
-        
+
         
         
         /****************************** Bubble chart **********************************/
         
-         vm.universityData=[];
-         var mapData=[];
-        var conversionChart;
         
         // Loads data from json file
         d3.json("/JSON/data.json", function(data){
