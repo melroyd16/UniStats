@@ -43,10 +43,10 @@
                 d3.selectAll("svg > *").remove();
                 d3.selectAll('#dashboard svg').remove();
                 d3.selectAll('#dashboard table').remove();
-                
                 console.log(vm.compareList);
-                formatUnivDataMultiple(vm.compareList);
+                //formatUnivDataMultiple(vm.compareList);
                 crimeDataVisualization(vm.compareList, vm.year);
+                weatherDataVisuzalization(vm.compareList, vm.year);
             })
         };
 
@@ -56,11 +56,267 @@
             d3.selectAll('#dashboard svg').remove();
             d3.selectAll('#dashboard table').remove();
             if(vm.compareList.length){
-               formatUnivDataMultiple(vm.compareList);
+                //formatUnivDataMultiple(vm.compareList);
                 crimeDataVisualization(vm.compareList, vm.year); 
+                weatherDataVisuzalization(vm.compareList, vm.year);
             }   
         }
+        
+        function weatherDataVisuzalization(data, dataYear){
+            console.log("Alan");
+            var maxTemp = [];
+            var minTemp = [];
+            var meanTemp = [];
+            var avgSnowfall = [];
+            var avgRainfall= [];
+            var avgWind = [];
+    
+            maxTemp.push({"value": data[0].climateData.fall.maxTemp});
+            maxTemp.push({"value": data[0].climateData.winter.maxTemp});
+            maxTemp.push({"value": data[0].climateData.spring.maxTemp});
+            maxTemp.push({"value": data[0].climateData.summer.maxTemp});
+            minTemp.push({"value": data[0].climateData.fall.minTemp});
+            minTemp.push({"value": data[0].climateData.winter.minTemp});
+            minTemp.push({"value": data[0].climateData.spring.minTemp});
+            minTemp.push({"value": data[0].climateData.summer.minTemp});
+            meanTemp.push({"value": data[0].climateData.fall.meanTemp});
+            meanTemp.push({"value": data[0].climateData.winter.meanTemp});
+            meanTemp.push({"value": data[0].climateData.spring.meanTemp});
+            meanTemp.push({"value": data[0].climateData.summer.meanTemp});
+            avgSnowfall.push({"value": data[0].climateData.fall.avgSnowfall});
+            avgSnowfall.push({"value": data[0].climateData.winter.avgSnowfall});
+            avgSnowfall.push({"value": data[0].climateData.spring.avgSnowfall});
+            avgSnowfall.push({"value": data[0].climateData.summer.avgSnowfall});
+            avgRainfall.push({"value": data[0].climateData.fall.avgRainfall});
+            avgRainfall.push({"value": data[0].climateData.winter.avgRainfall});
+            avgRainfall.push({"value": data[0].climateData.spring.avgRainfall});
+            avgRainfall.push({"value": data[0].climateData.summer.avgRainfall});
+            avgWind.push({"value": data[0].climateData.fall.avgWind});
+            avgWind.push({"value": data[0].climateData.winter.avgWind});
+            avgWind.push({"value": data[0].climateData.spring.avgWind});
+            avgWind.push({"value": data[0].climateData.summer.avgWind});
+            
+            var dataSourceVariable={
+                "chart": {
+                    "caption": "Seasonal Temperatures",
+                    "subcaption": "in Fahrenheits",
+                    "yaxismaxvalue": "150",
+                    "decimals": "0",
+                    "numberprefix": "",
+                    "numbersuffix": "F",
+                    "placevaluesinside": "1",
+                    "rotatevalues": "0",
+                    "divlinealpha": "50",
+                    "plotfillalpha": "80",
+                    "drawCrossLine": "1",
+                    "crossLineColor": "#cc3300",
+                    "crossLineAlpha": "100",
+                    "paletteColors": "#0075c2,#f26544,#9ca089",
+                    "theme": "zune"
+                },
+                "categories": [{
+                    "category": [{
+                        "label": "Fall"
+                    },
+                    {
+                        "label": "Winter"
+                    },
+                    {
+                        "label": "Spring"
+                    },
+                    {
+                        "label": "Summer"
+                    }
+                    ]
+                }],
+                "dataset": [
+                ]
+            }
+            var data;
+            data = minTemp;
+            dataSourceVariable.dataset.push({
+                "seriesname": "Min Temp",
+                data
+            });
+            data = meanTemp;
+            dataSourceVariable.dataset.push({
+                "seriesname": "Mean Temp",
+                data
+            });
+            data = maxTemp;
+            dataSourceVariable.dataset.push({
+                "seriesname": "Max Temp",
+                data
+            });
 
+            FusionCharts.ready(function () {
+                var salesChart = new FusionCharts({
+                type: 'MSColumn2D',
+                renderAt: 'weather-container',
+                width: '600',
+                height: '400',
+                dataFormat: 'json',
+                dataSource: dataSourceVariable
+})
+    .render();              
+});
+        var dataSourceVariable2={
+                "chart": {
+                    "caption": "Average Snowfall",
+                    "subcaption": "in Inches",
+                    "yaxismaxvalue": "20",
+                    "decimals": "0",
+                    "numberprefix": "",
+                    "numbersuffix": "",
+                    "placevaluesinside": "1",
+                    "rotatevalues": "0",
+                    "divlinealpha": "50",
+                    "plotfillalpha": "80",
+                    "drawCrossLine": "1",
+                    "crossLineColor": "#cc3300",
+                    "crossLineAlpha": "100",
+                    "paletteColors": "#0075c2",
+                    "theme": "zune"
+                },
+                "categories": [{
+                    "category": [{
+                        "label": "Fall"
+                    },
+                    {
+                        "label": "Winter"
+                    },
+                    {
+                        "label": "Spring"
+                    },
+                    {
+                        "label": "Summer"
+                    }
+                    ]
+                }],
+                "dataset": [
+                ]
+            }
+            data = avgSnowfall;
+            dataSourceVariable2.dataset.push({
+                "seriesname": "Average Snowfall",
+                data
+            });
+            FusionCharts.ready(function () {
+                var salesChart = new FusionCharts({
+                type: 'MSColumn2D',
+                renderAt: 'snowfall-container',
+                width: '600',
+                height: '400',
+                dataFormat: 'json',
+                dataSource: dataSourceVariable2
+})
+    .render();              
+});
+            var dataSourceVariable3={
+                "chart": {
+                    "caption": "Average Rainfall",
+                    "subcaption": "in Inches",
+                    "yaxismaxvalue": "20",
+                    "decimals": "0",
+                    "numberprefix": "",
+                    "numbersuffix": "",
+                    "placevaluesinside": "1",
+                    "rotatevalues": "0",
+                    "divlinealpha": "50",
+                    "plotfillalpha": "80",
+                    "drawCrossLine": "1",
+                    "crossLineColor": "#cc3300",
+                    "crossLineAlpha": "100",
+                    "paletteColors": "#0075c2",
+                    "theme": "zune"
+                },
+                "categories": [{
+                    "category": [{
+                        "label": "Fall"
+                    },
+                    {
+                        "label": "Winter"
+                    },
+                    {
+                        "label": "Spring"
+                    },
+                    {
+                        "label": "Summer"
+                    }
+                    ]
+                }],
+                "dataset": [
+                ]
+            }
+            data = avgRainfall;
+            dataSourceVariable3.dataset.push({
+                "seriesname": "Average Snowfall",
+                data
+            });
+            FusionCharts.ready(function () {
+                var salesChart = new FusionCharts({
+                type: 'MSColumn2D',
+                renderAt: 'rainfall-container',
+                width: '600',
+                height: '400',
+                dataFormat: 'json',
+                dataSource: dataSourceVariable3
+})
+    .render();              
+});
+            var dataSourceVariable4={
+                "chart": {
+                    "caption": "Average Wind",
+                    "subcaption": "in Inches",
+                    "yaxismaxvalue": "20",
+                    "decimals": "0",
+                    "numberprefix": "",
+                    "numbersuffix": "",
+                    "placevaluesinside": "1",
+                    "rotatevalues": "0",
+                    "divlinealpha": "50",
+                    "plotfillalpha": "80",
+                    "drawCrossLine": "1",
+                    "crossLineColor": "#cc3300",
+                    "crossLineAlpha": "100",
+                    "paletteColors": "#0075c2",
+                    "theme": "zune"
+                },
+                "categories": [{
+                    "category": [{
+                        "label": "Fall"
+                    },
+                    {
+                        "label": "Winter"
+                    },
+                    {
+                        "label": "Spring"
+                    },
+                    {
+                        "label": "Summer"
+                    }
+                    ]
+                }],
+                "dataset": [
+                ]
+            }
+            data = avgWind;
+            dataSourceVariable4.dataset.push({
+                "seriesname": "Average Wind",
+                data
+            });
+            FusionCharts.ready(function () {
+                var salesChart = new FusionCharts({
+                type: 'MSColumn2D',
+                renderAt: 'wind-container',
+                width: '600',
+                height: '400',
+                dataFormat: 'json',
+                dataSource: dataSourceVariable4
+})
+    .render();              
+});
+        }
         function crimeDataVisualization(data, dataYear) {
             var renderAtVariable = "chart-container";
             var dataSourceVariable = {
