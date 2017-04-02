@@ -4,7 +4,21 @@
 
 /*Common Application Level Styles*/
 
-.content-container{
-    margin: 50px 30px 0px;
+.content-container {
+    margin: 70px 30px 0px;
 }
-
+.tag-container {
+    margin-top: 15px;
+    .tags {
+        display: inline;
+        margin-right: 15px;
+        margin-bottom: 15px;
+        padding: 8px;
+        float: left;
+        border-radius: 20px;
+        .cross {
+            text-align: right;
+            margin-left: 5px;
+        }
+    }
+}

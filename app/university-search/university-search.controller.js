@@ -5,10 +5,10 @@
         .module('UnistatsApp.UniversitySearch', [])
         .controller('UniversitySearchCtrl', UniversitySearchCtrl);
 
-    UniversitySearchCtrl.$inject = ['$http', 'UniversitySearchService', '$timeout', '$filter'];
+    UniversitySearchCtrl.$inject = ['$http', 'UniversitySearchService', '$timeout', '$filter', '$scope'];
 
     /* @ngInject */
-    function UniversitySearchCtrl($http, UniversitySearchService, $timeout, $filter) {
+    function UniversitySearchCtrl($http, UniversitySearchService, $timeout, $filter, $scope) {
         var vm = this;
         vm.yearFilter = "2015";
         vm.yearOptions = ["2012", "2013", "2014", "2015"];
@@ -20,6 +20,7 @@
         vm.initializeSliders = initializeSliders;
         vm.renderCharts = renderCharts;
         vm.renderBubbleChart = renderBubbleChart;
+        vm.removeState = removeState;
         vm.universityList = [];
         vm.filteredUniversities = [];
         vm.stateUnivCountData = {};
@@ -70,7 +71,7 @@
                     parseInt(vm.universityList[i][detailsParameter].priceInStateOffCampus) <= vm.inStateSlider.max &&
                     parseInt(vm.universityList[i][detailsParameter].priceOutStateOnCampus) >= vm.outStateSlider.min &&
                     parseInt(vm.universityList[i][detailsParameter].priceOutStateOnCampus) <= vm.outStateSlider.max &&
-                    satisfiesState(vm.universityList[i].stateCode)){
+                    satisfiesState(vm.universityList[i].stateCode)) {
                     vm.filteredUniversities.push(vm.universityList[i]);
                 }
                 
@@ -94,22 +95,27 @@
                
         }
 
-        function satisfiesState(stateCode){
-            if(vm.selectedStateArray.length == 0){
+        function removeState(index) {
+            vm.selectedStateArray.splice(index, 1);
+            filterUniversities();
+        }
+
+        function satisfiesState(stateCode) {
+            if (vm.selectedStateArray.length == 0) {
                 return true;
-            } else{
-                for(var i = 0; i < vm.selectedStateArray.length; i++){
-                    if(stateCode == vm.selectedStateArray[i]){
+            } else {
+                for (var i = 0; i < vm.selectedStateArray.length; i++) {
+                    if (stateCode == vm.selectedStateArray[i].code) {
                         return true;
-                    } else{
-                        if(i == vm.selectedStateArray.length -1){
+                    } else {
+                        if (i == vm.selectedStateArray.length - 1) {
                             return false;
                         }
                     }
                 }
             }
         }
-        
+
         function formChoroplethData() {
             vm.stateUnivCountData = d3.nest()
                 .key(function (d) {
@@ -193,8 +199,22 @@
                                 bubbleData = [];
                                 d3.select('#chartID').remove();
                             }
-                            vm.selectedStateArray.push((args.id).toUpperCase());
-                            vm.filterUniversities();
+                            for (var i = 0; i < vm.selectedStateArray.length; i++) {
+                                if (vm.selectedStateArray[i].code == (args.id).toUpperCase()) {
+                                    vm.selectedStateArray.splice(i, 1);
+                                    vm.filterUniversities();
+                                    $scope.$apply();
+                                    return;
+                                }
+                            }
+                            for (var i = 0; i < STATE_ARRAY.length; i++) {
+                                if ((args.id).toUpperCase() == STATE_ARRAY[i].code) {
+                                    vm.selectedStateArray.push(STATE_ARRAY[i]);
+                                    vm.filterUniversities();
+                                    $scope.$apply();
+                                    break;
+                                }
+                            }
                         }
                     }
                 });
@@ -375,16 +395,13 @@
                 .attr("cx", function (d) {return x(d.x);})
                 .attr("cy", function (d) {return y(d.y);})
                 .ease("bounce");
-            
-            
+
          node.append("text")
              .attr("text-anchor", "middle")
              .attr("dx", function (d) { return x(d.x); })
              .attr("dy", function (d) { return y(d.y); })
              .text(function(d) {return d.alias;});
-            
-            
-            
+
             function fade(c, opacity, bubble) {
                 div.transition()
                     .duration(200)
