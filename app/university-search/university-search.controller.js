@@ -18,6 +18,7 @@
         vm.universityList = [];
         vm.filteredUniversities = [];
         vm.stateUnivCountData = {};
+        vm.maxUniversityCount = 0;
 
         function initializeSliders() {
             vm.minTempSlider = {
@@ -51,6 +52,7 @@
 
         function filterUniversities() {
             vm.filteredUniversities = [];
+            vm.maxUniversityCount = 0;
             var detailsParameter = vm.yearFilter + "Details";
             for (var i = 0; i < vm.universityList.length; i++) {
                 if (parseInt(vm.universityList[i][detailsParameter].priceInStateOffCampus) >= vm.inStateSlider.min &&
@@ -61,7 +63,6 @@
                 }
                 if (i == vm.universityList.length - 1) {
                     formChoroplethData();
-                    vm.renderCharts();
                 }
             }
         }
@@ -75,9 +76,15 @@
                     return v.length;
                 })
                 .entries(vm.filteredUniversities);
-            for(var i = 0; i < vm.stateUnivCountData.length; i++){
+            for (var i = 0; i < vm.stateUnivCountData.length; i++) {
                 vm.stateUnivCountData[i]["id"] = vm.stateUnivCountData[i]["key"];
                 delete vm.stateUnivCountData[i]["key"];
+                if (vm.stateUnivCountData[i].value > vm.maxUniversityCount) {
+                    vm.maxUniversityCount = vm.stateUnivCountData[i].value
+                }
+                if (i == vm.stateUnivCountData.length - 1) {
+                    vm.renderCharts();
+                }
             }
         }
 
@@ -253,12 +260,14 @@
                             "theme": "fint"
                         },
                         "colorrange": {
+                            "startlabel": "Low",
+                            "endlabel": "High",
+                            "code": "#ccccff",
                             "gradient": "1",
-                            "startLabel": "Low",
-                            "endLabel": "High",
-                            "code": "#1a8cff",
-                            "minvalue": "0",
-                            "maxValue": "100"
+                            "color": [{
+                                "maxvalue": vm.maxUniversityCount,
+                                "code": "#000066"
+                            }]
                         },
                         "data": vm.stateUnivCountData
                     }
