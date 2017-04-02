@@ -5,10 +5,10 @@
         .module('UnistatsApp.UniversitySearch', [])
         .controller('UniversitySearchCtrl', UniversitySearchCtrl);
 
-    UniversitySearchCtrl.$inject = ['$http', 'UniversitySearchService', '$timeout'];
+    UniversitySearchCtrl.$inject = ['$http', 'UniversitySearchService', '$timeout', '$filter'];
 
     /* @ngInject */
-    function UniversitySearchCtrl($http, UniversitySearchService, $timeout) {
+    function UniversitySearchCtrl($http, UniversitySearchService, $timeout, $filter) {
         var vm = this;
         vm.yearFilter = "2015";
         vm.yearOptions = ["2012", "2013", "2014", "2015"];
@@ -19,8 +19,10 @@
         vm.filteredUniversities = [];
         vm.stateUnivCountData = {};
         vm.maxUniversityCount = 0;
-        vm.filteredUniversities=[];
-        var mapData=[];
+        vm.filteredUniversities = [];
+        vm.popularUnivList = [];
+        vm.selectedStateArray = [];
+        var bubbleData = [];
         var conversionChart;
 
         function initializeSliders() {
@@ -61,7 +63,8 @@
                 if (parseInt(vm.universityList[i][detailsParameter].priceInStateOffCampus) >= vm.inStateSlider.min &&
                     parseInt(vm.universityList[i][detailsParameter].priceInStateOffCampus) <= vm.inStateSlider.max &&
                     parseInt(vm.universityList[i][detailsParameter].priceOutStateOnCampus) >= vm.outStateSlider.min &&
-                    parseInt(vm.universityList[i][detailsParameter].priceOutStateOnCampus) <= vm.outStateSlider.max) {
+                    parseInt(vm.universityList[i][detailsParameter].priceOutStateOnCampus) <= vm.outStateSlider.max &&
+                    satisfiesState(vm.universityList[i].stateCode)){
                     vm.filteredUniversities.push(vm.universityList[i]);
                 }
                 if (i == vm.universityList.length - 1) {
@@ -70,6 +73,22 @@
             }
         }
 
+        function satisfiesState(stateCode){
+            if(vm.selectedStateArray.length == 0){
+                return true;
+            } else{
+                for(var i = 0; i < vm.selectedStateArray.length; i++){
+                    if(stateCode == vm.selectedStateArray[i]){
+                        return true;
+                    } else{
+                        if(i == vm.selectedStateArray.length -1){
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        
         function formChoroplethData() {
             vm.stateUnivCountData = d3.nest()
                 .key(function (d) {
@@ -79,34 +98,49 @@
                     return v.length;
                 })
                 .entries(vm.filteredUniversities);
-            
-            console.log(vm.stateUnivCountData);
             for (var i = 0; i < vm.stateUnivCountData.length; i++) {
-                console.log(vm.stateUnivCountData[i]["id"]);
                 vm.stateUnivCountData[i]["id"] = vm.stateUnivCountData[i]["key"];
                 delete vm.stateUnivCountData[i]["key"];
-                if(vm.stateUnivCountData[i].hasOwnProperty("values")){
+                if (vm.stateUnivCountData[i].hasOwnProperty("values")) {
                     vm.stateUnivCountData[i].value = vm.stateUnivCountData[i].values;
                 }
                 if (vm.stateUnivCountData[i].value > vm.maxUniversityCount) {
                     vm.maxUniversityCount = vm.stateUnivCountData[i].values
                 }
-                
                 if (i == vm.stateUnivCountData.length - 1) {
+                    formUniversitiesForComparison();
                     vm.renderCharts();
                 }
             }
         }
 
+        function SortByEnrollment(a, b) {
+            var parameter1 = a[vm.yearFilter + "Details"]["enrolledTotal"];
+            var parameter2 = b[vm.yearFilter + "Details"]["enrolledTotal"];
+
+            if (parameter1 == "NA" && parameter2 == "NA") {
+                return 0;
+            } else if (parameter1 == "NA" && parameter2 !== "NA") {
+                return 1;
+            } else if (parameter1 !== "NA" && parameter2 == "NA") {
+                return -1;
+            } else {
+                return ((parseInt(parameter1) < parseInt(parameter2)) ? 1 : ((parseInt(parameter1) > parseInt(parameter2)) ? -1 : 0))
+            }
+        }
+
+        function formUniversitiesForComparison() {
+            vm.filteredUniversities.sort(SortByEnrollment);
+            vm.popularUnivList = $filter('limitTo')(vm.filteredUniversities, 20);
+        }
+
         function renderCharts() {
-    
-            d3.select('#chartID').remove();
-            
+
             FusionCharts.ready(function () {
                 var salesMap = new FusionCharts({
                     type: 'usa',
                     renderAt: 'map-chart-container',
-                    width: '600',
+                    width: '450',
                     height: '400',
                     dataFormat: 'json',
                     dataSource: {
@@ -131,21 +165,33 @@
                             }]
                         },
                         "data": vm.stateUnivCountData
-                    }, events: {
-                    entityClick: function (event, args) {
-                        console.log((args.id).toUpperCase());
-                        if(mapData.length){
-                            mapData = [];
-                            d3.select('#chartID').remove();
+                    },
+                    events: {
+                        entityClick: function (event, args) {
+                            if (bubbleData.length) {
+                                bubbleData = [];
+                                d3.select('#chartID').remove();
+                            }
+                            vm.selectedStateArray.push((args.id).toUpperCase());
+                            vm.filterUniversities();
                         }
-                        fetchDataByStateCode((args.id).toUpperCase());
-                        
-                }
-            }
+                    }
                 });
                 salesMap.render();
             });
 
+            d3.select('#chartID').remove();
+            var year = vm.yearFilter + "Details";
+            for (var i = 0; i < vm.popularUnivList.length; i++) {
+                bubbleData[i] = {
+                    x: parseInt(vm.popularUnivList[i][year].priceInStateOnCampus),
+                    y: parseInt(vm.popularUnivList[i][year].sfr),
+                    size: parseInt(vm.popularUnivList[i][year].admissionsTotal),
+                    c: i + 1,
+                    name: vm.popularUnivList[i].universityName
+                };
+            }
+            renderBubbleChart(bubbleData);
         }
 
         init();
@@ -168,159 +214,149 @@
             });
         }
 
-        
-        
-        /****************************** Bubble chart **********************************/
-                
-        function fetchDataByStateCode(stateCode){
-            
-                var year = vm.yearFilter + "Details";
-                console.log(year);
-                var j=0;
-                for(var i=0;i<vm.filteredUniversities.length;i++){
-                    if(vm.filteredUniversities[i].stateCode==stateCode){
-                        console.log(vm.filteredUniversities[i]);
-                        
-                        mapData[j]={x: parseInt(vm.filteredUniversities[i][year].admissionsMen),
-                                y: parseInt(vm.filteredUniversities[i][year].admissionsWomen),
-                                size: parseInt(vm.filteredUniversities[i][year].admissionsTotal),
-                                c:i+1,
-                               name:vm.filteredUniversities[i].universityName};
-                            
-                        j++;
-                    }
-                }
-                
-                bubbleChart(mapData);
-      }
-        
-        function bubbleChart(data){
-            var height = 400;
-            var width = 600;
-            var margin = 40;
-            
-            var data1=[];
-            for(var i = 0; i < 4; i++) {
-                data1.push({
-                    x: Math.random() * 4000,
-                    y: Math.random() * 1000,
-                    c: i,
-                    size: Math.random() * 2000,
-                    });
-            }
 
-            console.log(data.length);
-            console.log(data1);
+
+        /****************************** Bubble chart **********************************/
+
+
+        function renderBubbleChart(data) {
+            var height = 360;
+            var width = 450;
+            var margin = 40;
             var labelX = 'X';
             var labelY = 'Y';
             var svg = d3.select('.chart')
-                    .append('svg')
-                    .attr('class', 'chart')
-                    .attr("id","chartID")
-                    .attr("width", width + margin + margin)
-                    .attr("height", height + margin + margin)
-                    .append("g")
-                    .attr("transform", "translate(" + margin + "," + margin + ")");
-                    
+                .append('svg')
+                .attr('class', 'chart')
+                .attr("id", "chartID")
+                .attr("width", width + margin + margin)
+                .attr("height", height + margin + margin)
+                .append("g")
+                .attr("transform", "translate(" + margin + "," + margin + ")");
+
             var x = d3.scale.linear()
-					            .domain([d3.min(data, function (d) { return d.x; }), d3.max(data, function (d) { return d.x; })])
-					            .range([0, width]);
+                .domain([d3.min(data, function (d) {
+                    return d.x;
+                }), d3.max(data, function (d) {
+                    return d.x;
+                })])
+                .range([0, width]);
 
             var y = d3.scale.linear()
-					            .domain([d3.min(data, function (d) { return d.y; }), d3.max(data, function (d) { return d.y; })])
-					            .range([height, 0]);
+                .domain([d3.min(data, function (d) {
+                    return d.y;
+                }), d3.max(data, function (d) {
+                    return d.y;
+                })])
+                .range([height, 0]);
 
             var scale = d3.scale.sqrt()
-					            .domain([d3.min(data, function (d) { return d.size; }), d3.max(data, function (d) { return d.size; })])
-					            .range([1, 20]);
+                .domain([d3.min(data, function (d) {
+                    return d.size;
+                }), d3.max(data, function (d) {
+                    return d.size;
+                })])
+                .range([1, 20]);
 
             var opacity = d3.scale.sqrt()
-					            .domain([d3.min(data, function (d) { return d.size; }), d3.max(data, function (d) { return d.size; })])
-					            .range([1, .5]);
-                                
+                .domain([d3.min(data, function (d) {
+                    return d.size;
+                }), d3.max(data, function (d) {
+                    return d.size;
+                })])
+                .range([1, .5]);
+
             var color = d3.scale.category10();
-            
-            
+
+
             var xAxis = d3.svg.axis().scale(x);
             var yAxis = d3.svg.axis().scale(y).orient("left");
-            console.log(xAxis);
- 
-            var div = d3.select("body").append("div")	
-                    .attr("class", "tooltip")				
-                    .style("opacity", 0);
-            
-                          svg.append("g")
-					        .attr("class", "y axis")
-					        .call(yAxis)
-					        .append("text")
-						        .attr("transform", "rotate(-90)")
-						        .attr("x", 20)
-						        .attr("y", -margin)
-						        .attr("dy", ".71em")
-						        .style("text-anchor", "end")
-						        .text(labelY);
-                          // x axis and label
-                          svg.append("g")
-                              .attr("class", "x axis")
-                              .attr("transform", "translate(0," + height + ")")
-                              .call(xAxis)
-                              .append("text")
-                                  .attr("x", width + 20)
-                                  .attr("y", margin - 10)
-                                  .attr("dy", ".71em")
-                                  .style("text-anchor", "end")
-                                  .text(labelX);
- 
-                          svg.selectAll("circle")
-                              .data(data)
-                              .enter()
-                              .insert("circle")
-                              .attr("cx", width / 2)
-                              .attr("cy", height / 2)
-                              .attr("opacity", function (d) { return opacity(d.size); })
-                              .attr("r", function (d) {console.log(d); return scale(d.size); })
-                              .style("fill", function (d) { return color(d.c); })
-                              .on('mouseover', function (d, i) {
-                                  fade(d.c, .1,d);
-                              })
-                             .on('mouseout', function (d, i) {
-                                 div.transition()		
-                                .duration(500)		
-                                .style("opacity", 0);	
-                                 fadeOut();
-                             })
-                            .transition()
-                            .delay(function (d, i) { return x(d.x) - y(d.y); })
-                            .duration(500)
-                            .attr("cx", function (d) { return x(d.x); })
-                            .attr("cy", function (d) { return y(d.y); })
-                            .ease("bounce");
-                             
-                             
-                            function fade(c, opacity,bubble) {
-                                console.log(bubble.name);
-                                div.transition()		
-                                .duration(200)		
-                                .style("opacity", .9);	
-                                div.html(bubble.name)	
-                                .style("left", (d3.event.pageX) + "px")		
-                                .style("top", (d3.event.pageY) + "px");	
-                              svg.selectAll("circle")
-                                  .filter(function (d) {
-                                      return d.c != c;
-                                  })
-                                .transition()
-                                
-                                 .style("opacity", opacity);
-                            }
 
-                            function fadeOut() {
-                              svg.selectAll("circle")
-                              .transition()
-                                 .style("opacity", function (d) { opacity(d.size); });
-                            }
+            var div = d3.select("body").append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0);
 
+            svg.append("g")
+                .attr("class", "y axis")
+                .call(yAxis)
+                .append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("x", 20)
+                .attr("y", -margin)
+                .attr("dy", ".71em")
+                .style("text-anchor", "end")
+                .text(labelY);
+            // x axis and label
+            svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis)
+                .append("text")
+                .attr("x", width + 20)
+                .attr("y", margin - 10)
+                .attr("dy", ".71em")
+                .style("text-anchor", "end")
+                .text(labelX);
+
+            svg.selectAll("circle")
+                .data(data)
+                .enter()
+                .insert("circle")
+                .attr("cx", width / 2)
+                .attr("cy", height / 2)
+                .attr("opacity", function (d) {
+                    return opacity(d.size);
+                })
+                .attr("r", function (d) {
+                    return scale(d.size);
+                })
+                .style("fill", function (d) {
+                    return color(d.c);
+                })
+                .on('mouseover', function (d, i) {
+                    fade(d.c, .1, d);
+                })
+                .on('mouseout', function (d, i) {
+                    div.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                    fadeOut();
+                })
+                .transition()
+                .delay(function (d, i) {
+                    return x(d.x) - y(d.y);
+                })
+                .duration(500)
+                .attr("cx", function (d) {
+                    return x(d.x);
+                })
+                .attr("cy", function (d) {
+                    return y(d.y);
+                })
+                .ease("bounce");
+
+
+            function fade(c, opacity, bubble) {
+                div.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                div.html(bubble.name)
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY) + "px");
+                svg.selectAll("circle")
+                    .filter(function (d) {
+                        return d.c != c;
+                    })
+                    .transition()
+
+                .style("opacity", opacity);
+            }
+
+            function fadeOut() {
+                svg.selectAll("circle").transition().style("opacity", function (d) {
+                    opacity(d.size);
+                });
+            }
         }
-          
     }
 })();
