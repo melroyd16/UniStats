@@ -282,8 +282,7 @@
             var div = d3.select("body").append("div")
                 .attr("class", "tooltip")
                 .style("opacity", 0);
-<<<<<<< HEAD
-
+            
             svg.append("g")
                 .attr("class", "y axis")
                 .call(yAxis)
@@ -342,71 +341,7 @@
                     return y(d.y);
                 })
                 .ease("bounce");
-
-
-=======
-
-            svg.append("g")
-                .attr("class", "y axis")
-                .call(yAxis)
-                .append("text")
-                .attr("transform", "rotate(-90)")
-                .attr("x", 20)
-                .attr("y", -margin)
-                .attr("dy", ".71em")
-                .style("text-anchor", "end")
-                .text(labelY);
-            // x axis and label
-            svg.append("g")
-                .attr("class", "x axis")
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis)
-                .append("text")
-                .attr("x", width + 20)
-                .attr("y", margin - 10)
-                .attr("dy", ".71em")
-                .style("text-anchor", "end")
-                .text(labelX);
-
-            svg.selectAll("circle")
-                .data(data)
-                .enter()
-                .insert("circle")
-                .attr("cx", width / 2)
-                .attr("cy", height / 2)
-                .attr("opacity", function (d) {
-                    return opacity(d.size);
-                })
-                .attr("r", function (d) {
-                    return scale(d.size);
-                })
-                .style("fill", function (d) {
-                    return color(d.c);
-                })
-                .on('mouseover', function (d, i) {
-                    fade(d.c, .1, d);
-                })
-                .on('mouseout', function (d, i) {
-                    div.transition()
-                        .duration(500)
-                        .style("opacity", 0);
-                    fadeOut();
-                })
-                .transition()
-                .delay(function (d, i) {
-                    return x(d.x) - y(d.y);
-                })
-                .duration(500)
-                .attr("cx", function (d) {
-                    return x(d.x);
-                })
-                .attr("cy", function (d) {
-                    return y(d.y);
-                })
-                .ease("bounce");
-
-
->>>>>>> master
+            
             function fade(c, opacity, bubble) {
                 div.transition()
                     .duration(200)
