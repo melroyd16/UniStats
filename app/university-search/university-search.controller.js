@@ -19,7 +19,7 @@
         vm.filteredUniversities = [];
         vm.stateUnivCountData = {};
         vm.maxUniversityCount = 0;
-        vm.universityData=[];
+        vm.filteredUniversities=[];
         var mapData=[];
         var conversionChart;
 
@@ -85,8 +85,11 @@
                 console.log(vm.stateUnivCountData[i]["id"]);
                 vm.stateUnivCountData[i]["id"] = vm.stateUnivCountData[i]["key"];
                 delete vm.stateUnivCountData[i]["key"];
+                if(vm.stateUnivCountData[i].hasOwnProperty("values")){
+                    vm.stateUnivCountData[i].value = vm.stateUnivCountData[i].values;
+                }
                 if (vm.stateUnivCountData[i].value > vm.maxUniversityCount) {
-                    vm.maxUniversityCount = vm.stateUnivCountData[i].value
+                    vm.maxUniversityCount = vm.stateUnivCountData[i].values
                 }
                 
                 if (i == vm.stateUnivCountData.length - 1) {
@@ -168,29 +171,21 @@
         
         
         /****************************** Bubble chart **********************************/
-        
-        
-        // Loads data from json file
-        d3.json("/JSON/data.json", function(data){
-            vm.universityData = data;
-        });
-        
-        
-        
+                
         function fetchDataByStateCode(stateCode){
             
                 var year = vm.yearFilter + "Details";
                 console.log(year);
                 var j=0;
-                for(var i=0;i<vm.universityData.length;i++){
-                    if(vm.universityData[i].stateCode==stateCode){
-                        console.log(vm.universityData[i]);
+                for(var i=0;i<vm.filteredUniversities.length;i++){
+                    if(vm.filteredUniversities[i].stateCode==stateCode){
+                        console.log(vm.filteredUniversities[i]);
                         
-                        mapData[j]={x: parseInt(vm.universityData[i][year].admissionsMen),
-                                y: parseInt(vm.universityData[i][year].admissionsWomen),
-                                size: parseInt(vm.universityData[i][year].admissionsTotal),
+                        mapData[j]={x: parseInt(vm.filteredUniversities[i][year].admissionsMen),
+                                y: parseInt(vm.filteredUniversities[i][year].admissionsWomen),
+                                size: parseInt(vm.filteredUniversities[i][year].admissionsTotal),
                                 c:i+1,
-                               name:vm.universityData[i].universityName};
+                               name:vm.filteredUniversities[i].universityName};
                             
                         j++;
                     }
