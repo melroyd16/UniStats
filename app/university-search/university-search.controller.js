@@ -234,20 +234,22 @@
                     alias:vm.popularUnivList[i].alias
                         
                 };
-                if(bubbleData[i].alias=="NA"){
-                    bubbleData[i].alias = bubbleData[i].universityName;
+                if(bubbleData[i].alias==undefined || bubbleData[i].alias=="NA"){
+                    bubbleData[i].alias = bubbleData[i].name;
                 }else{
                     var shortName=[]
                     var minLength;
                     shortName=bubbleData[i].alias.split("|");
                     shortName = shortName.filter(function(str) {return /\S/.test(str);});
                     shortName.map(Function.prototype.call, String.prototype.trim);
-                    console.log(shortName);
+                    //console.log(shortName);
                     minLength=(Math.min.apply(Math, shortName.map(function(str) { return str.length; })));
-                    console.log(shortName.slice().sort((a, b) => b.length - a.length).pop()); 
+                    //console.log(shortName.slice().sort((a, b) => b.length - a.length).pop()); 
                     
                     bubbleData[i].alias = shortName.slice().sort((a, b) => b.length - a.length).pop();
                 }
+                //console.log(bubbleData[i].alias==undefined)
+                
             }
             renderBubbleChart(bubbleData);
         }
@@ -400,7 +402,7 @@
              .attr("text-anchor", "middle")
              .attr("dx", function (d) { return x(d.x); })
              .attr("dy", function (d) { return y(d.y); })
-             .text(function(d) {return d.alias;});
+             .text(function(d) {console.log(d.alias);return d.alias;});
 
             function fade(c, opacity, bubble) {
                 div.transition()
