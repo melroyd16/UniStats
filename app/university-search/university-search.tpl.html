@@ -64,31 +64,25 @@
                             </div>
                         </div>
                     </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingThree" data-toggle="collapse" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
-                            <span class="col-md-10">X Axis</span> <span class="glyphicon glyphicon-minus"></span>
-                        </div>
-                        <div id="collapseFour" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
-                            <div class="panel-body">
-                                <select class="form-control" ng-options="axis for axis in univSCtrl.xAxisOptions" ng-model="univSCtrl.xAxisFilter" ng-change="univSCtrl.filterUniversities()"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingFour" data-toggle="collapse" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
-                            <span class="col-md-10">Y Axis</span> <span class="glyphicon glyphicon-minus"></span>
-                        </div>
-                        <div id="collapseFive" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFour">
-                            <div class="panel-body">
-                                <select class="form-control" ng-options="axis for axis in univSCtrl.yAxisOptions" ng-model="univSCtrl.yAxisFilter" ng-change="univSCtrl.filterUniversities()"/>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-md-10">
+        <div class="row" style="margin-top:20px">
+                    
+                <form class="form-inline col-xs-offset-6">
+                        
+                      <div class="form-group">
+                        <label style="margin-left:20px">X</label>
+                        <select style="width:200px" class="form-control" ng-options="axis for axis in univSCtrl.xAxisOptions" ng-model="univSCtrl.xAxisFilter" ng-change="univSCtrl.filterUniversities()"/>
+                        <label style="margin-left:10px">Y</label>
+                        <select style="width:200px" class="form-control" ng-options="axis for axis in univSCtrl.yAxisOptions" ng-model="univSCtrl.yAxisFilter" ng-change="univSCtrl.filterUniversities()"/>
+                    </div>
+                    
+                </form>
+        </div>
+        
         <div class=row>
             <div class="col-xs-6">
                 <div class="tag-container row">
@@ -99,7 +93,8 @@
                 <div id="map-chart-container">FusionCharts will render here</div>
             </div>
             
-            <div class="chart col-xs-6"></div>
+            <div class="chart col-xs-6">
+            </div>
         </div>      
     </div>
 </div>
