@@ -411,8 +411,9 @@
                 div.html(bubble.name)
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY) + "px");
-                svg.selectAll("circle")
+                svg.selectAll("circle,text")
                     .filter(function (d) {
+                    if(d!=undefined)
                         return d.c != c;
                     })
                     .transition()
@@ -421,8 +422,9 @@
             }
 
             function fadeOut() {
-                svg.selectAll("circle").transition().style("opacity", function (d) {
-                    opacity(d.size);
+                svg.selectAll("circle,text").transition().style("opacity", function (d) {
+                    if(d!=undefined)
+                        opacity(d.size);
                 });
             }
         }
