@@ -192,6 +192,7 @@
                             "subcaption": vm.yearFilter,
                             "borderColor": "#DDDDDDD",
                             "showLabels": "1",
+                            "showMarkerLabels": "1",
                             "entityFillHoverColor": "#d35400",
                             "entityFillHoverAlpha": "30",
                             //Theme
@@ -323,45 +324,77 @@
                 .append("g")
                 .attr("transform", "translate(" + margin + "," + margin + ")");
 
-            var x = d3.scale.linear()
-                .domain([d3.min(data, function (d) {
-                    return d.x;
-                })-((d3.max(data, function (d) {
-                    return d.x;
-                })-d3.min(data, function (d) {
-                    return d.x;
-                }))/width), d3.max(data, function (d) {
-                    return d.x;
-                })])
-                .range([0, width]);
+            if(data.length==1){
+               
+                var x = d3.scale.linear()
+                    .domain([d3.max(data, function (d) {
+                        return d.x;
+                    })-100, d3.max(data, function (d) {
+                        return d.x;
+                    })*.5])
+                    .range([0, width]);
 
-            var y = d3.scale.linear()
-                .domain([d3.min(data, function (d) {
-                    return d.y;
-                })-((d3.max(data, function (d) {
-                    return d.y;
-                })-d3.min(data, function (d) {
-                    return d.y;
-                }))/10), d3.max(data, function (d) {
-                    return d.y;
-                })])
-                .range([height, 20]);
+                var y = d3.scale.linear()
+                    .domain([d3.max(data, function (d) {
+                        return d.y;
+                    })-10, d3.max(data, function (d) {
+                        return d.y;
+                    })])
+                    .range([height, 20]);
 
-            var scale = d3.scale.sqrt()
-                .domain([d3.min(data, function (d) {
-                    return d.size;
-                }), d3.max(data, function (d) {
-                    return d.size;
-                })])
-                .range([1, 50]);
+                var scale = d3.scale.sqrt()
+                    .domain([0, d3.max(data, function (d) {
+                        return d.size;
+                    })])
+                    .range([1, 50]);
 
-            var opacity = d3.scale.sqrt()
-                .domain([d3.min(data, function (d) {
-                    return d.size;
-                }), d3.max(data, function (d) {
-                    return d.size;
-                })])
-                .range([1, .5]);
+                var opacity = d3.scale.sqrt()
+                    .domain([0, d3.max(data, function (d) {
+                        return d.size;
+                    })])
+                    .range([1, .5]);
+               } 
+            else{
+                var x = d3.scale.linear()
+                    .domain([d3.min(data, function (d) {
+                        return d.x;
+                    })-((d3.max(data, function (d) {
+                        return d.x;
+                    })-d3.min(data, function (d) {
+                        return d.x;
+                    }))/width), d3.max(data, function (d) {
+                        return d.x;
+                    })])
+                    .range([0, width]);
+
+                var y = d3.scale.linear()
+                    .domain([d3.min(data, function (d) {
+                        return d.y;
+                    })-((d3.max(data, function (d) {
+                        return d.y;
+                    })-d3.min(data, function (d) {
+                        return d.y;
+                    }))/10), d3.max(data, function (d) {
+                        return d.y;
+                    })])
+                    .range([height, 20]);
+
+                var scale = d3.scale.sqrt()
+                    .domain([d3.min(data, function (d) {
+                        return d.size;
+                    }), d3.max(data, function (d) {
+                        return d.size;
+                    })])
+                    .range([1, 50]);
+
+                var opacity = d3.scale.sqrt()
+                    .domain([d3.min(data, function (d) {
+                        return d.size;
+                    }), d3.max(data, function (d) {
+                        return d.size;
+                    })])
+                    .range([1, .5]);
+            }
 
             var color = d3.scale.category10();
             var xAxis = d3.svg.axis().scale(x);
