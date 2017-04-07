@@ -30,6 +30,11 @@
         vm.selectedStateArray = [];
         var bubbleData = [];
         var conversionChart;
+        vm.compareList = [];
+        vm.univList = [];
+        vm.dataLoaded = false;
+        vm.selectUniversity = selectUniversity;
+        vm.removeUniversity = removeUniversity;
 
         function initializeSliders() {
             vm.minTempSlider = {
@@ -428,5 +433,51 @@
                 });
             }
         }
+        
+        
+        /****** Code for search bar *******/
+        
+        if (UNIVERSITY_LIST.length == 0) {
+            $http.get('JSON/data.json').then(function (data) {
+                for (var i = 0; i < data.data.length; i++) {
+                    UNIVERSITY_LIST.push({
+                        unitId: data.data[i].unitId,
+                        universityName: data.data[i].universityName
+                    })
+                    if (i == data.data.length - 1) {
+                        vm.univList = UNIVERSITY_LIST;
+                        vm.dataLoaded = true;
+                    }
+                }
+
+            })
+        } else {
+            vm.univList = UNIVERSITY_LIST;
+            vm.dataLoaded = true;
+        }
+        
+        
+        function selectUniversity($item, $model, $label) {
+            UniversitySearchService.fetchUnivData($item).then(function (data) {
+                vm.compareList.push(data.data.Item);
+                d3.selectAll("svg > *").remove();
+                console.log(vm.compareList);
+                //formatUnivDataMultiple(vm.compareList);
+            })
+//            if(vm.popularUnivList.length)
+//                vm.renderCharts();
+        };
+
+        function removeUniversity(index) {
+            vm.compareList.splice(index, 1);
+            d3.selectAll("svg > *").remove();
+            console.log(vm.compareList);
+//            if(vm.compareList.length){
+//                //formatUnivDataMultiple(vm.compareList);
+//            } 
+//            if(vm.popularUnivList.length)
+//                vm.renderCharts();
+        }
+        
     }
 })();

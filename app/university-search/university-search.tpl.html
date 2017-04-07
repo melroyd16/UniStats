@@ -15,6 +15,18 @@
             shape-rendering: crispEdges;
         }
     </style>
+    <div class="row">
+        <div class="well well-lg" ng-style="{ 'height' : (univSCtrl.compareList.length >0) ? '125px' : '85px' }">
+        <input type="text" ng-model="univSCtrl.univSearch" uib-typeahead="university as university.universityName for university in univSCtrl.univList | filter:$viewValue | limitTo:8" typeahead-popup-template-url="bower_components/angular-bootstrap/template/typeahead/typeahead-popup.html" typeahead-template-url="bower_components/angular-bootstrap/template/typeahead/typeahead-match.html" typeahead-min-length="1" typeahead-on-select="univSCtrl.selectUniversity($item, $model, $label)" class="form-control" placeholder="Enter University Name ...">
+        <div>
+            <div class="tag-container">
+                <div class="alert alert-info tags" ng-repeat="univ in univSCtrl.compareList">
+                    {{univ.universityName}}<span style="text-align:right" class="glyphicon glyphicon-remove cross" ng-click="univSCtrl.removeUniversity($index)"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
     <div class="col-md-2">
         <div class="panel panel-primary">
             <div class="panel-heading">
