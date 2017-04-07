@@ -35,6 +35,7 @@
         vm.dataLoaded = false;
         vm.selectUniversity = selectUniversity;
         vm.removeUniversity = removeUniversity;
+        vm.manualSearch = false;
 
         function initializeSliders() {
             vm.minTempSlider = {
@@ -67,19 +68,21 @@
         }
 
         function filterUniversities() {
+            console.log(vm.universityList);
             vm.filteredUniversities = [];
             var mapData=[],j=0;
             vm.maxUniversityCount = 0;
             var detailsParameter = vm.yearFilter + "Details";
             for (var i = 0; i < vm.universityList.length; i++) {
-                if (parseInt(vm.universityList[i][detailsParameter].priceInStateOffCampus) >= vm.inStateSlider.min &&
+                if ((parseInt(vm.universityList[i][detailsParameter].priceInStateOffCampus) >= vm.inStateSlider.min &&
                     parseInt(vm.universityList[i][detailsParameter].priceInStateOffCampus) <= vm.inStateSlider.max &&
                     parseInt(vm.universityList[i][detailsParameter].priceOutStateOnCampus) >= vm.outStateSlider.min &&
                     parseInt(vm.universityList[i][detailsParameter].priceOutStateOnCampus) <= vm.outStateSlider.max &&
-                    satisfiesState(vm.universityList[i].stateCode)) {
+                    satisfiesState(vm.universityList[i].stateCode)) || vm.manualSearch ) {
                     vm.filteredUniversities.push(vm.universityList[i]);
                 }
                 
+                //console.log(vm.universityList.length - 1)
                  if (i == vm.universityList.length - 1) {
                     formChoroplethData();
                     
@@ -88,7 +91,7 @@
                 
             }
             
-            
+            //console.log(vm.filteredUniversities);
             for (var key in vm.filteredUniversities[0][detailsParameter]) {
 
                 if (vm.filteredUniversities[0][detailsParameter].hasOwnProperty(key)) {
@@ -162,8 +165,16 @@
         }
 
         function formUniversitiesForComparison() {
-            vm.filteredUniversities.sort(SortByEnrollment);
-            vm.popularUnivList = $filter('limitTo')(vm.filteredUniversities, 20);
+            console.log(vm.manualSearch)
+            if(!vm.manualSearch){
+                vm.filteredUniversities.sort(SortByEnrollment);
+                vm.popularUnivList = $filter('limitTo')(vm.filteredUniversities, 20);
+            }
+            else{
+                d3.select('#chartID').remove();
+                vm.popularUnivList = vm.universityList;
+                console.log(vm.popularUnivList )
+            }
         }
 
         function renderCharts() {
@@ -228,6 +239,8 @@
 
             d3.select('#chartID').remove();
             var year = vm.yearFilter + "Details";
+            console.log(vm.popularUnivList);
+            bubbleData = [];
             for (var i = 0; i < vm.popularUnivList.length; i++) {
                 
                 bubbleData[i] = {
@@ -256,15 +269,27 @@
                 //console.log(bubbleData[i].alias==undefined)
                 
             }
+            console.log(bubbleData);
             renderBubbleChart(bubbleData);
         }
 
         init();
 
         function init() {
+            console.log(UniversitySearchService.cleanUniversityList);
+            console.log(vm.universityList);
             vm.initializeSliders();
+            
+            if(!vm.manualSearch){
+                UniversitySearchService.fetchAllUniversities().then(function (data) {
+                    vm.universityList = data;
+                    filterUniversities();
+                })
+            }
+            
             if (UniversitySearchService.cleanUniversityList.length > 0) {
                 vm.universityList = UniversitySearchService.cleanUniversityList;
+                console.log(vm.universityList);
                 vm.renderCharts();
             } else {
                 UniversitySearchService.fetchAllUniversities().then(function (data) {
@@ -460,23 +485,36 @@
         function selectUniversity($item, $model, $label) {
             UniversitySearchService.fetchUnivData($item).then(function (data) {
                 vm.compareList.push(data.data.Item);
-                d3.selectAll("svg > *").remove();
-                console.log(vm.compareList);
-                //formatUnivDataMultiple(vm.compareList);
+                vm.universityList = vm.compareList;
+                console.log(vm.universityList);
+                if(vm.compareList.length>0){
+                    vm.manualSearch = true;
+                    filterUniversities();
+                }
+                else{
+                    vm.universityList=[];
+                    vm.manualSearch = false;
+                    init();
+                }
+
             })
-//            if(vm.popularUnivList.length)
-//                vm.renderCharts();
         };
 
         function removeUniversity(index) {
             vm.compareList.splice(index, 1);
-            d3.selectAll("svg > *").remove();
-            console.log(vm.compareList);
-//            if(vm.compareList.length){
-//                //formatUnivDataMultiple(vm.compareList);
-//            } 
-//            if(vm.popularUnivList.length)
-//                vm.renderCharts();
+            vm.universityList = vm.compareList;
+            console.log(vm.universityList);
+            if(vm.compareList.length>0){    
+                vm.manualSearch = true;
+                filterUniversities();
+            }
+             else{
+                    console.log("here")
+                    vm.universityList=[];
+                    vm.manualSearch = false;
+                    init();
+            }
+                        
         }
         
     }
