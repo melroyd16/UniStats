@@ -102,7 +102,7 @@
             
             var dataSourceVariable={
                 "chart": {
-                    "caption": "Seasonal Temperatures",
+                    "caption": "Mean Temperature",
                     "subcaption": "in Fahrenheits",
                     "yaxismaxvalue": "150",
                     "decimals": "0",
