@@ -62,43 +62,47 @@
             }   
         }
         
-        function weatherDataVisuzalization(data, dataYear){
+        function weatherDataVisuzalization(compareData, dataYear){
             console.log("Alan");
             var maxTemp = [];
             var minTemp = [];
             var meanTemp = [];
-            var avgSnowfall = [];
-            var avgRainfall= [];
-            var avgWind = [];
+            var collegesSnowfall = [];
+            var collegesRainfall= [];
+            var collegesWind = [];
+            var collegesTemp = [];
+            
+            var item;
+            
+            for (var i = 0; i < compareData.length; i++) {
+                item = compareData[i];
+                collegesTemp[i]=[];
+                collegesSnowfall[i]=[];
+                collegesRainfall[i]=[];
+                collegesWind[i]=[];
+                collegesTemp[i].push({"value": item.climateData.fall.meanTemp});
+                collegesTemp[i].push({"value": item.climateData.winter.meanTemp});
+                collegesTemp[i].push({"value": item.climateData.spring.meanTemp});
+                collegesTemp[i].push({"value": item.climateData.summer.meanTemp});
+                collegesSnowfall[i].push({"value": item.climateData.fall.avgSnowfall});
+                collegesSnowfall[i].push({"value": item.climateData.winter.avgSnowfall});
+                collegesSnowfall[i].push({"value": item.climateData.spring.avgSnowfall});
+                collegesSnowfall[i].push({"value": item.climateData.summer.avgSnowfall});
+                collegesRainfall[i].push({"value": item.climateData.fall.avgRainfall});
+                collegesRainfall[i].push({"value": item.climateData.winter.avgRainfall});
+                collegesRainfall[i].push({"value": item.climateData.spring.avgRainfall});
+                collegesRainfall[i].push({"value": item.climateData.summer.avgRainfall});
+                collegesWind[i].push({"value": item.climateData.fall.avgWind});
+                collegesWind[i].push({"value": item.climateData.winter.avgWind});
+                collegesWind[i].push({"value": item.climateData.spring.avgWind});
+                collegesWind[i].push({"value": item.climateData.summer.avgWind});
+             }
     
-            maxTemp.push({"value": data[0].climateData.fall.maxTemp});
-            maxTemp.push({"value": data[0].climateData.winter.maxTemp});
-            maxTemp.push({"value": data[0].climateData.spring.maxTemp});
-            maxTemp.push({"value": data[0].climateData.summer.maxTemp});
-            minTemp.push({"value": data[0].climateData.fall.minTemp});
-            minTemp.push({"value": data[0].climateData.winter.minTemp});
-            minTemp.push({"value": data[0].climateData.spring.minTemp});
-            minTemp.push({"value": data[0].climateData.summer.minTemp});
-            meanTemp.push({"value": data[0].climateData.fall.meanTemp});
-            meanTemp.push({"value": data[0].climateData.winter.meanTemp});
-            meanTemp.push({"value": data[0].climateData.spring.meanTemp});
-            meanTemp.push({"value": data[0].climateData.summer.meanTemp});
-            avgSnowfall.push({"value": data[0].climateData.fall.avgSnowfall});
-            avgSnowfall.push({"value": data[0].climateData.winter.avgSnowfall});
-            avgSnowfall.push({"value": data[0].climateData.spring.avgSnowfall});
-            avgSnowfall.push({"value": data[0].climateData.summer.avgSnowfall});
-            avgRainfall.push({"value": data[0].climateData.fall.avgRainfall});
-            avgRainfall.push({"value": data[0].climateData.winter.avgRainfall});
-            avgRainfall.push({"value": data[0].climateData.spring.avgRainfall});
-            avgRainfall.push({"value": data[0].climateData.summer.avgRainfall});
-            avgWind.push({"value": data[0].climateData.fall.avgWind});
-            avgWind.push({"value": data[0].climateData.winter.avgWind});
-            avgWind.push({"value": data[0].climateData.spring.avgWind});
-            avgWind.push({"value": data[0].climateData.summer.avgWind});
+            
             
             var dataSourceVariable={
                 "chart": {
-                    "caption": "Seasonal Temperatures",
+                    "caption": "Mean Temperature",
                     "subcaption": "in Fahrenheits",
                     "yaxismaxvalue": "150",
                     "decimals": "0",
@@ -133,21 +137,15 @@
                 ]
             }
             var data;
-            data = minTemp;
-            dataSourceVariable.dataset.push({
-                "seriesname": "Min Temp",
-                data
+            for (var i = 0; i < compareData.length; i++) {
+                data = collegesTemp[i];
+                item = compareData[i];
+                dataSourceVariable.dataset.push({
+                    "seriesname": item.universityName,
+                    data
             });
-            data = meanTemp;
-            dataSourceVariable.dataset.push({
-                "seriesname": "Mean Temp",
-                data
-            });
-            data = maxTemp;
-            dataSourceVariable.dataset.push({
-                "seriesname": "Max Temp",
-                data
-            });
+            }
+            
 
             FusionCharts.ready(function () {
                 var salesChart = new FusionCharts({
@@ -175,7 +173,7 @@
                     "drawCrossLine": "1",
                     "crossLineColor": "#cc3300",
                     "crossLineAlpha": "100",
-                    "paletteColors": "#0075c2",
+                    "paletteColors": "#0075c2,#f26544,#9ca089",
                     "theme": "zune"
                 },
                 "categories": [{
@@ -196,11 +194,15 @@
                 "dataset": [
                 ]
             }
-            data = avgSnowfall;
-            dataSourceVariable2.dataset.push({
-                "seriesname": "Average Snowfall",
-                data
+            for (var i = 0; i < compareData.length; i++) {
+                data = collegesSnowfall[i];
+                item = compareData[i];
+                dataSourceVariable2.dataset.push({
+                    "seriesname": item.universityName,
+                    data
             });
+            }
+            
             FusionCharts.ready(function () {
                 var salesChart = new FusionCharts({
                 type: 'MSColumn2D',
@@ -227,7 +229,7 @@
                     "drawCrossLine": "1",
                     "crossLineColor": "#cc3300",
                     "crossLineAlpha": "100",
-                    "paletteColors": "#0075c2",
+                    "paletteColors": "#0075c2,#f26544,#9ca089",
                     "theme": "zune"
                 },
                 "categories": [{
@@ -248,11 +250,14 @@
                 "dataset": [
                 ]
             }
-            data = avgRainfall;
-            dataSourceVariable3.dataset.push({
-                "seriesname": "Average Snowfall",
-                data
+            for (var i = 0; i < compareData.length; i++) {
+                data = collegesRainfall[i];
+                item = compareData[i];
+                dataSourceVariable3.dataset.push({
+                    "seriesname": item.universityName,
+                    data
             });
+            }
             FusionCharts.ready(function () {
                 var salesChart = new FusionCharts({
                 type: 'MSColumn2D',
@@ -279,7 +284,7 @@
                     "drawCrossLine": "1",
                     "crossLineColor": "#cc3300",
                     "crossLineAlpha": "100",
-                    "paletteColors": "#0075c2",
+                    "paletteColors": "#0075c2,#f26544,#9ca089",
                     "theme": "zune"
                 },
                 "categories": [{
@@ -300,11 +305,14 @@
                 "dataset": [
                 ]
             }
-            data = avgWind;
-            dataSourceVariable4.dataset.push({
-                "seriesname": "Average Wind",
-                data
+            for (var i = 0; i < compareData.length; i++) {
+                data = collegesWind[i];
+                item = compareData[i];
+                dataSourceVariable4.dataset.push({
+                    "seriesname": item.universityName,
+                    data
             });
+            }
             FusionCharts.ready(function () {
                 var salesChart = new FusionCharts({
                 type: 'MSColumn2D',
