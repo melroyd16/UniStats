@@ -110,6 +110,12 @@
             </div>
         </div>
     </div>
+        <table>
+        <tr>        
+        <td><div id="crime-container"></div></td>
+        <td><select ng-model="univSCtrl.weatherParameter" ng-options="x for x in univSCtrl.weatherParameters" ng-change="univSCtrl.weatherDataVisuzalization(univSCtrl.comparisonList,univSCtrl.yearFilter,univSCtrl.weatherParameter)"></select><div id="weather-container"></div></td>
+        </tr>
+        </table>    
         <div id="crime-container"></div>
         <table>
         <tr>        
