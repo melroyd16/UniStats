@@ -157,14 +157,6 @@
         }
 
         function formUniversitiesForComparison() {
-            /*if(!vm.manualSearch){
-                vm.filteredUniversities.sort(SortByEnrollment);
-                vm.popularUnivList = $filter('limitTo')(vm.filteredUniversities, 20);
-            }
-            else{
-                d3.select('#chartID').remove();
-                vm.popularUnivList = vm.universityList;
-            }*/
             d3.select('#chartID').remove();
             vm.filteredUniversities.sort(SortByEnrollment);
             vm.popularUnivList = $filter('limitTo')(vm.filteredUniversities, 10);
@@ -279,6 +271,7 @@
 
 
         }
+        
         function weatherDataVisuzalization(compareData, dataYear){
             console.log("Alan");
             var maxTemp = [];
@@ -631,10 +624,8 @@
                 }
                 
             }
-            if(vm.compareList.length>0){
-                crimeDataVisualization(vm.compareList, vm.yearFilter);
-                weatherDataVisuzalization(vm.compareList, vm.yearFilter);
-            }
+            crimeDataVisualization(vm.comparisonList, vm.yearFilter);
+            weatherDataVisuzalization(vm.comparisonList, vm.yearFilter);
             renderBubbleChart(bubbleData);
             
         }
