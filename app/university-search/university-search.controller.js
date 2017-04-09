@@ -30,6 +30,12 @@
         vm.selectedStateArray = [];
         var bubbleData = [];
         var conversionChart;
+        vm.compareList = [];
+        vm.univList = [];
+        vm.dataLoaded = false;
+        vm.selectUniversity = selectUniversity;
+        vm.removeUniversity = removeUniversity;
+        vm.manualSearch = false;
 
         function initializeSliders() {
             vm.minTempSlider = {
@@ -67,27 +73,21 @@
             vm.maxUniversityCount = 0;
             var detailsParameter = vm.yearFilter + "Details";
             for (var i = 0; i < vm.universityList.length; i++) {
-                if (parseInt(vm.universityList[i][detailsParameter].priceInStateOffCampus) >= vm.inStateSlider.min &&
+                if ((parseInt(vm.universityList[i][detailsParameter].priceInStateOffCampus) >= vm.inStateSlider.min &&
                     parseInt(vm.universityList[i][detailsParameter].priceInStateOffCampus) <= vm.inStateSlider.max &&
                     parseInt(vm.universityList[i][detailsParameter].priceOutStateOnCampus) >= vm.outStateSlider.min &&
                     parseInt(vm.universityList[i][detailsParameter].priceOutStateOnCampus) <= vm.outStateSlider.max &&
-                    satisfiesState(vm.universityList[i].stateCode)) {
+                    satisfiesState(vm.universityList[i].stateCode)) || vm.manualSearch ) {
                     vm.filteredUniversities.push(vm.universityList[i]);
                 }
                 
                  if (i == vm.universityList.length - 1) {
-                    formChoroplethData();
-                    
-                }
-                
-                
+                    formChoroplethData(); 
+                }   
             }
             
-            
             for (var key in vm.filteredUniversities[0][detailsParameter]) {
-
                 if (vm.filteredUniversities[0][detailsParameter].hasOwnProperty(key)) {
-                    
                     vm.xAxisOptions.push(key);
                     vm.yAxisOptions.push(key);
                 }
@@ -116,6 +116,7 @@
             }
         }
 
+        
         function formChoroplethData() {
             vm.stateUnivCountData = d3.nest()
                 .key(function (d) {
@@ -136,7 +137,6 @@
                 }
                 if (i == vm.stateUnivCountData.length - 1) {
                     formUniversitiesForComparison();
-                    vm.renderCharts();
                 }
             }
         }
@@ -157,8 +157,383 @@
         }
 
         function formUniversitiesForComparison() {
+            d3.select('#chartID').remove();
             vm.filteredUniversities.sort(SortByEnrollment);
-            vm.popularUnivList = $filter('limitTo')(vm.filteredUniversities, 20);
+            vm.popularUnivList = $filter('limitTo')(vm.filteredUniversities, 10);
+            vm.comparisonList = $filter('limitTo')(vm.filteredUniversities, 3);
+            vm.renderCharts();
+        }
+
+        function crimeDataVisualization(data, dataYear) {
+            var renderAtVariable = "crime-container";
+            var dataSourceVariable = {
+                "chart": {
+                    "showvalues": "0",
+                    "caption": "Comparison of On Campus Crime Incidents",
+                    "numberprefix": "",
+                    "xaxisname": "Colleges",
+                    "yaxisname": "No of crimes",
+                    "showBorder": "0",
+                    "paletteColors": "#0075c2,#f2c500,#d35400,#196F3D",
+                    "bgColor": "#ffffff",
+                    "canvasBgColor": "#ffffff",
+                    "captionFontSize": "14",
+                    "subcaptionFontSize": "14",
+                    "subcaptionFontBold": "0",
+                    "divlineColor": "#999999",
+                    "divLineIsDashed": "1",
+                    "divLineDashLen": "1",
+                    "divLineGapLen": "1",
+                    "toolTipColor": "#ffffff",
+                    "toolTipBorderThickness": "0",
+                    "toolTipBgColor": "#000000",
+                    "toolTipBgAlpha": "80",
+                    "toolTipBorderRadius": "2",
+                    "toolTipPadding": "5",
+                    "legendBgColor": "#ffffff",
+                    "legendBorderAlpha": '0',
+                    "legendShadow": '0',
+                    "legendItemFontSize": '10',
+                    "legendItemFontColor": '#666666'
+                },
+                "categories": [
+                ],
+                "dataset": [
+                ]
+            }
+
+            var category = [];
+            var drugViolations = [];
+            var others = [];
+            var burglary = [];
+            var liquorViolations = [];
+
+            for (var i = 0; i < data.length; i++) {
+                var item = data[i];
+                category.push({
+                    "label": item.universityName
+                });
+                var crimeItem;
+                for (var j = 0; j < item.crimeStats.length; j++) {
+                    if (item.crimeStats[j].year == dataYear) {
+                        crimeItem = item.crimeStats[j];
+                    }
+
+                }
+                var crimeYearItem = crimeItem.crimeInfo;
+                drugViolations.push({
+                    "value": crimeYearItem.drugViolations
+                });
+                burglary.push({
+                    "value": crimeYearItem.burglary
+                });
+                liquorViolations.push({
+                    "value": crimeYearItem.liquorViolations
+                });
+                others.push({
+                    "value": crimeYearItem.aggravatedAssault + crimeYearItem.arson + crimeYearItem.illegalWeaponsPossession + crimeYearItem.manslaughter + crimeYearItem.murder + crimeYearItem.robbery + crimeYearItem.sexOffenses + crimeYearItem.vehicleTheft
+                });
+            }
+            dataSourceVariable.categories.push({
+                category
+            });
+            var data;
+            data = drugViolations;
+            dataSourceVariable.dataset.push({
+                "seriesname": "Drug Violations",
+                data
+            });
+            data = burglary;
+            dataSourceVariable.dataset.push({
+                "seriesname": "Burglary",
+                data
+            });
+            data = liquorViolations;
+            dataSourceVariable.dataset.push({
+                "seriesname": "Liquor Violations",
+                data
+            });
+            data = others;
+            dataSourceVariable.dataset.push({
+                "seriesname": "Other crimes",
+                data
+            });
+            FusionCharts.ready(function () {
+                var analysisChart = new FusionCharts({
+                    type: 'scrollstackedcolumn2d',
+                    renderAt: 'crime-container',
+                    width: '500',
+                    height: '350',
+                    dataFormat: 'json',
+                    dataSource: dataSourceVariable
+                }).render(renderAtVariable);
+            });
+
+
+        }
+        
+        function weatherDataVisuzalization(compareData, dataYear){
+            console.log("Alan");
+            var maxTemp = [];
+            var minTemp = [];
+            var meanTemp = [];
+            var collegesSnowfall = [];
+            var collegesRainfall= [];
+            var collegesWind = [];
+            var collegesTemp = [];
+            
+            var item;
+            
+            for (var i = 0; i < compareData.length; i++) {
+                item = compareData[i];
+                collegesTemp[i]=[];
+                collegesSnowfall[i]=[];
+                collegesRainfall[i]=[];
+                collegesWind[i]=[];
+                collegesTemp[i].push({"value": item.climateData.fall.meanTemp});
+                collegesTemp[i].push({"value": item.climateData.winter.meanTemp});
+                collegesTemp[i].push({"value": item.climateData.spring.meanTemp});
+                collegesTemp[i].push({"value": item.climateData.summer.meanTemp});
+                collegesSnowfall[i].push({"value": item.climateData.fall.avgSnowfall});
+                collegesSnowfall[i].push({"value": item.climateData.winter.avgSnowfall});
+                collegesSnowfall[i].push({"value": item.climateData.spring.avgSnowfall});
+                collegesSnowfall[i].push({"value": item.climateData.summer.avgSnowfall});
+                collegesRainfall[i].push({"value": item.climateData.fall.avgRainfall});
+                collegesRainfall[i].push({"value": item.climateData.winter.avgRainfall});
+                collegesRainfall[i].push({"value": item.climateData.spring.avgRainfall});
+                collegesRainfall[i].push({"value": item.climateData.summer.avgRainfall});
+                collegesWind[i].push({"value": item.climateData.fall.avgWind});
+                collegesWind[i].push({"value": item.climateData.winter.avgWind});
+                collegesWind[i].push({"value": item.climateData.spring.avgWind});
+                collegesWind[i].push({"value": item.climateData.summer.avgWind});
+             }
+    
+            
+            
+            var dataSourceVariable={
+                "chart": {
+                    "caption": "Mean Temperature",
+                    "subcaption": "in Fahrenheits",
+                    "yaxismaxvalue": "150",
+                    "decimals": "0",
+                    "numberprefix": "",
+                    "numbersuffix": "F",
+                    "placevaluesinside": "1",
+                    "rotatevalues": "0",
+                    "divlinealpha": "50",
+                    "plotfillalpha": "80",
+                    "drawCrossLine": "1",
+                    "crossLineColor": "#cc3300",
+                    "crossLineAlpha": "100",
+                    "paletteColors": "#0075c2,#f26544,#9ca089",
+                    "theme": "zune"
+                },
+                "categories": [{
+                    "category": [{
+                        "label": "Fall"
+                    },
+                    {
+                        "label": "Winter"
+                    },
+                    {
+                        "label": "Spring"
+                    },
+                    {
+                        "label": "Summer"
+                    }
+                    ]
+                }],
+                "dataset": [
+                ]
+            }
+            var data;
+            for (var i = 0; i < compareData.length; i++) {
+                data = collegesTemp[i];
+                item = compareData[i];
+                dataSourceVariable.dataset.push({
+                    "seriesname": item.universityName,
+                    data
+            });
+            }
+            
+
+            FusionCharts.ready(function () {
+                var salesChart = new FusionCharts({
+                type: 'MSColumn2D',
+                renderAt: 'weather-container',
+                width: '600',
+                height: '400',
+                dataFormat: 'json',
+                dataSource: dataSourceVariable
+})
+    .render();              
+});
+        var dataSourceVariable2={
+                "chart": {
+                    "caption": "Average Snowfall",
+                    "subcaption": "in Inches",
+                    "yaxismaxvalue": "20",
+                    "decimals": "0",
+                    "numberprefix": "",
+                    "numbersuffix": "",
+                    "placevaluesinside": "1",
+                    "rotatevalues": "0",
+                    "divlinealpha": "50",
+                    "plotfillalpha": "80",
+                    "drawCrossLine": "1",
+                    "crossLineColor": "#cc3300",
+                    "crossLineAlpha": "100",
+                    "paletteColors": "#0075c2,#f26544,#9ca089",
+                    "theme": "zune"
+                },
+                "categories": [{
+                    "category": [{
+                        "label": "Fall"
+                    },
+                    {
+                        "label": "Winter"
+                    },
+                    {
+                        "label": "Spring"
+                    },
+                    {
+                        "label": "Summer"
+                    }
+                    ]
+                }],
+                "dataset": [
+                ]
+            }
+            for (var i = 0; i < compareData.length; i++) {
+                data = collegesSnowfall[i];
+                item = compareData[i];
+                dataSourceVariable2.dataset.push({
+                    "seriesname": item.universityName,
+                    data
+            });
+            }
+            
+            FusionCharts.ready(function () {
+                var salesChart = new FusionCharts({
+                type: 'MSColumn2D',
+                renderAt: 'snowfall-container',
+                width: '600',
+                height: '400',
+                dataFormat: 'json',
+                dataSource: dataSourceVariable2
+})
+    .render();              
+});
+            var dataSourceVariable3={
+                "chart": {
+                    "caption": "Average Rainfall",
+                    "subcaption": "in Inches",
+                    "yaxismaxvalue": "20",
+                    "decimals": "0",
+                    "numberprefix": "",
+                    "numbersuffix": "",
+                    "placevaluesinside": "1",
+                    "rotatevalues": "0",
+                    "divlinealpha": "50",
+                    "plotfillalpha": "80",
+                    "drawCrossLine": "1",
+                    "crossLineColor": "#cc3300",
+                    "crossLineAlpha": "100",
+                    "paletteColors": "#0075c2,#f26544,#9ca089",
+                    "theme": "zune"
+                },
+                "categories": [{
+                    "category": [{
+                        "label": "Fall"
+                    },
+                    {
+                        "label": "Winter"
+                    },
+                    {
+                        "label": "Spring"
+                    },
+                    {
+                        "label": "Summer"
+                    }
+                    ]
+                }],
+                "dataset": [
+                ]
+            }
+            for (var i = 0; i < compareData.length; i++) {
+                data = collegesRainfall[i];
+                item = compareData[i];
+                dataSourceVariable3.dataset.push({
+                    "seriesname": item.universityName,
+                    data
+            });
+            }
+            FusionCharts.ready(function () {
+                var salesChart = new FusionCharts({
+                type: 'MSColumn2D',
+                renderAt: 'rainfall-container',
+                width: '600',
+                height: '400',
+                dataFormat: 'json',
+                dataSource: dataSourceVariable3
+})
+    .render();              
+});
+            var dataSourceVariable4={
+                "chart": {
+                    "caption": "Average Wind",
+                    "subcaption": "in Inches",
+                    "yaxismaxvalue": "20",
+                    "decimals": "0",
+                    "numberprefix": "",
+                    "numbersuffix": "",
+                    "placevaluesinside": "1",
+                    "rotatevalues": "0",
+                    "divlinealpha": "50",
+                    "plotfillalpha": "80",
+                    "drawCrossLine": "1",
+                    "crossLineColor": "#cc3300",
+                    "crossLineAlpha": "100",
+                    "paletteColors": "#0075c2,#f26544,#9ca089",
+                    "theme": "zune"
+                },
+                "categories": [{
+                    "category": [{
+                        "label": "Fall"
+                    },
+                    {
+                        "label": "Winter"
+                    },
+                    {
+                        "label": "Spring"
+                    },
+                    {
+                        "label": "Summer"
+                    }
+                    ]
+                }],
+                "dataset": [
+                ]
+            }
+            for (var i = 0; i < compareData.length; i++) {
+                data = collegesWind[i];
+                item = compareData[i];
+                dataSourceVariable4.dataset.push({
+                    "seriesname": item.universityName,
+                    data
+            });
+            }
+            FusionCharts.ready(function () {
+                var salesChart = new FusionCharts({
+                type: 'MSColumn2D',
+                renderAt: 'wind-container',
+                width: '600',
+                height: '400',
+                dataFormat: 'json',
+                dataSource: dataSourceVariable4
+})
+    .render();              
+});
         }
 
         function renderCharts() {
@@ -176,6 +551,7 @@
                             "subcaption": vm.yearFilter,
                             "borderColor": "#DDDDDDD",
                             "showLabels": "1",
+                            "showMarkerLabels": "1",
                             "entityFillHoverColor": "#d35400",
                             "entityFillHoverAlpha": "30",
                             //Theme
@@ -223,8 +599,8 @@
 
             d3.select('#chartID').remove();
             var year = vm.yearFilter + "Details";
+            bubbleData = [];
             for (var i = 0; i < vm.popularUnivList.length; i++) {
-                
                 bubbleData[i] = {
                     x: parseInt(vm.popularUnivList[i][year][vm.xAxisFilter]),
                     y: parseInt(vm.popularUnivList[i][year][vm.yAxisFilter]),
@@ -242,28 +618,31 @@
                     shortName=bubbleData[i].alias.split("|");
                     shortName = shortName.filter(function(str) {return /\S/.test(str);});
                     shortName.map(Function.prototype.call, String.prototype.trim);
-                    //console.log(shortName);
                     minLength=(Math.min.apply(Math, shortName.map(function(str) { return str.length; })));
-                    //console.log(shortName.slice().sort((a, b) => b.length - a.length).pop()); 
                     
                     bubbleData[i].alias = shortName.slice().sort((a, b) => b.length - a.length).pop();
                 }
-                //console.log(bubbleData[i].alias==undefined)
                 
             }
+            crimeDataVisualization(vm.comparisonList, vm.yearFilter);
+            weatherDataVisuzalization(vm.comparisonList, vm.yearFilter);
             renderBubbleChart(bubbleData);
+            
         }
 
         init();
 
         function init() {
             vm.initializeSliders();
+                        
             if (UniversitySearchService.cleanUniversityList.length > 0) {
                 vm.universityList = UniversitySearchService.cleanUniversityList;
-                vm.renderCharts();
+                formUnivNameList();
+                filterUniversities();
             } else {
                 UniversitySearchService.fetchAllUniversities().then(function (data) {
                     vm.universityList = data;
+                    formUnivNameList();
                     filterUniversities();
                 })
             }
@@ -293,45 +672,77 @@
                 .append("g")
                 .attr("transform", "translate(" + margin + "," + margin + ")");
 
-            var x = d3.scale.linear()
-                .domain([d3.min(data, function (d) {
-                    return d.x;
-                })-((d3.max(data, function (d) {
-                    return d.x;
-                })-d3.min(data, function (d) {
-                    return d.x;
-                }))/width), d3.max(data, function (d) {
-                    return d.x;
-                })])
-                .range([0, width]);
+            if(data.length==1){
+               
+                var x = d3.scale.linear()
+                    .domain([d3.max(data, function (d) {
+                        return d.x;
+                    })-100, d3.max(data, function (d) {
+                        return d.x;
+                    })*.5])
+                    .range([0, width]);
 
-            var y = d3.scale.linear()
-                .domain([d3.min(data, function (d) {
-                    return d.y;
-                })-((d3.max(data, function (d) {
-                    return d.y;
-                })-d3.min(data, function (d) {
-                    return d.y;
-                }))/10), d3.max(data, function (d) {
-                    return d.y;
-                })])
-                .range([height, 20]);
+                var y = d3.scale.linear()
+                    .domain([d3.max(data, function (d) {
+                        return d.y;
+                    })-10, d3.max(data, function (d) {
+                        return d.y;
+                    })])
+                    .range([height, 20]);
 
-            var scale = d3.scale.sqrt()
-                .domain([d3.min(data, function (d) {
-                    return d.size;
-                }), d3.max(data, function (d) {
-                    return d.size;
-                })])
-                .range([1, 50]);
+                var scale = d3.scale.sqrt()
+                    .domain([0, d3.max(data, function (d) {
+                        return d.size;
+                    })])
+                    .range([1, 50]);
 
-            var opacity = d3.scale.sqrt()
-                .domain([d3.min(data, function (d) {
-                    return d.size;
-                }), d3.max(data, function (d) {
-                    return d.size;
-                })])
-                .range([1, .5]);
+                var opacity = d3.scale.sqrt()
+                    .domain([0, d3.max(data, function (d) {
+                        return d.size;
+                    })])
+                    .range([1, .5]);
+               } 
+            else{
+                var x = d3.scale.linear()
+                    .domain([d3.min(data, function (d) {
+                        return d.x;
+                    })-((d3.max(data, function (d) {
+                        return d.x;
+                    })-d3.min(data, function (d) {
+                        return d.x;
+                    }))/width), d3.max(data, function (d) {
+                        return d.x;
+                    })])
+                    .range([0, width]);
+
+                var y = d3.scale.linear()
+                    .domain([d3.min(data, function (d) {
+                        return d.y;
+                    })-((d3.max(data, function (d) {
+                        return d.y;
+                    })-d3.min(data, function (d) {
+                        return d.y;
+                    }))/10), d3.max(data, function (d) {
+                        return d.y;
+                    })])
+                    .range([height, 20]);
+
+                var scale = d3.scale.sqrt()
+                    .domain([d3.min(data, function (d) {
+                        return d.size;
+                    }), d3.max(data, function (d) {
+                        return d.size;
+                    })])
+                    .range([1, 50]);
+
+                var opacity = d3.scale.sqrt()
+                    .domain([d3.min(data, function (d) {
+                        return d.size;
+                    }), d3.max(data, function (d) {
+                        return d.size;
+                    })])
+                    .range([1, .5]);
+            }
 
             var color = d3.scale.category10();
             var xAxis = d3.svg.axis().scale(x);
@@ -402,7 +813,7 @@
              .attr("text-anchor", "middle")
              .attr("dx", function (d) { return x(d.x); })
              .attr("dy", function (d) { return y(d.y); })
-             .text(function(d) {console.log(d.alias);return d.alias;});
+             .text(function(d) {return d.alias;});
 
             function fade(c, opacity, bubble) {
                 div.transition()
@@ -428,5 +839,59 @@
                 });
             }
         }
+        
+        
+        /****** Code for search bar *******/
+        
+        function formUnivNameList(){
+            for(var i = 0; i < vm.universityList.length; i++){
+                vm.univList.push({
+                    unitId : vm.universityList[i].unitId,
+                    universityName : vm.universityList[i].universityName
+                })
+            }
+        }
+        
+        /*if (UNIVERSITY_LIST.length == 0) {
+            $http.get('JSON/data.json').then(function (data) {
+                for (var i = 0; i < data.data.length; i++) {
+                    UNIVERSITY_LIST.push({
+                        unitId: data.data[i].unitId,
+                        universityName: data.data[i].universityName
+                    })
+                    if (i == data.data.length - 1) {
+                        vm.univList = UNIVERSITY_LIST;
+                        vm.dataLoaded = true;
+                    }
+                }
+
+            })
+        } else {
+            vm.univList = UNIVERSITY_LIST;
+            vm.dataLoaded = true;
+        }*/
+        
+        
+        function selectUniversity($item, $model, $label) {
+            UniversitySearchService.fetchUnivData($item).then(function (data) {
+                vm.compareList.push(data.data.Item);
+                vm.universityList = vm.compareList;
+                vm.manualSearch = true;
+                filterUniversities();
+            })
+        };
+
+        function removeUniversity(index) {
+            vm.compareList.splice(index, 1);
+            vm.universityList = vm.compareList;
+            if(vm.compareList.length>0){    
+                vm.manualSearch = true;
+                filterUniversities();
+            }else{
+                vm.universityList = [];
+                vm.manualSearch = false;
+                init();
+            }               
+        } 
     }
 })();
