@@ -25,12 +25,19 @@
 .universityCompareContainer {
   margin-top: 75px;
 }
-/* line 3, ../scss/_university-compare.scss */
-.universityCompareContainer .univ-tag-container {
+
+/*Common Application Level Styles*/
+/* line 7, ../scss/style.scss */
+.content-container {
+  margin: 70px 30px 0px;
+}
+
+/* line 10, ../scss/style.scss */
+.tag-container {
   margin-top: 15px;
 }
-/* line 5, ../scss/_university-compare.scss */
-.universityCompareContainer .univ-tag-container .univ-tags {
+/* line 12, ../scss/style.scss */
+.tag-container .tags {
   display: inline;
   margin-right: 15px;
   margin-bottom: 15px;
@@ -38,10 +45,60 @@
   float: left;
   border-radius: 20px;
 }
-/* line 12, ../scss/_university-compare.scss */
-.universityCompareContainer .univ-tag-container .univ-tags .cross {
+/* line 19, ../scss/style.scss */
+.tag-container .tags .cross {
   text-align: right;
   margin-left: 5px;
+}
+<<<<<<< HEAD
+
+/* line 2, ../scss/_university-search.scss */
+.universitySearchContainer .chart rect {
+  fill: steelblue;
+}
+/* line 6, ../scss/_university-search.scss */
+.universitySearchContainer .chart rect:hover {
+  fill: turquoise;
+}
+/* line 10, ../scss/_university-search.scss */
+.universitySearchContainer .chart .rectM {
+  stroke: green;
+  stroke-width: 1;
+  fill: green;
+  fill-opacity: .2;
+}
+/* line 17, ../scss/_university-search.scss */
+.universitySearchContainer .chart .rectM:hover {
+  fill: green;
+  fill-opacity: .5;
+}
+/* line 22, ../scss/_university-search.scss */
+.universitySearchContainer .chart text {
+  font: 10px sans-serif;
+}
+/* line 26, ../scss/_university-search.scss */
+.universitySearchContainer .chart .title {
+  font: 15px sans-serif;
+}
+/* line 30, ../scss/_university-search.scss */
+.universitySearchContainer .axis path,
+.universitySearchContainer .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+/* line 36, ../scss/_university-search.scss */
+.universitySearchContainer div.tooltip {
+  position: absolute;
+  text-align: center;
+  width: 200px;
+  height: 28px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: white;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
 }
 
 /*Common Application Level Styles*/
@@ -49,3 +106,5 @@
 .content-container {
   margin: 50px 30px 0px;
 }
+=======
+>>>>>>> origin/master
