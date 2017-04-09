@@ -82,17 +82,12 @@
                 }
                 
                  if (i == vm.universityList.length - 1) {
-                    formChoroplethData();
-                    
-                }
-                
-                
+                    formChoroplethData(); 
+                }   
             }
             
             for (var key in vm.filteredUniversities[0][detailsParameter]) {
-
                 if (vm.filteredUniversities[0][detailsParameter].hasOwnProperty(key)) {
-                    
                     vm.xAxisOptions.push(key);
                     vm.yAxisOptions.push(key);
                 }
@@ -142,7 +137,6 @@
                 }
                 if (i == vm.stateUnivCountData.length - 1) {
                     formUniversitiesForComparison();
-                    vm.renderCharts();
                 }
             }
         }
@@ -163,14 +157,19 @@
         }
 
         function formUniversitiesForComparison() {
-            if(!vm.manualSearch){
+            /*if(!vm.manualSearch){
                 vm.filteredUniversities.sort(SortByEnrollment);
                 vm.popularUnivList = $filter('limitTo')(vm.filteredUniversities, 20);
             }
             else{
                 d3.select('#chartID').remove();
                 vm.popularUnivList = vm.universityList;
-            }
+            }*/
+            d3.select('#chartID').remove();
+            vm.filteredUniversities.sort(SortByEnrollment);
+            vm.popularUnivList = $filter('limitTo')(vm.filteredUniversities, 10);
+            vm.comparisonList = $filter('limitTo')(vm.filteredUniversities, 3);
+            vm.renderCharts();
         }
 
         function crimeDataVisualization(data, dataYear) {
@@ -609,7 +608,6 @@
             var year = vm.yearFilter + "Details";
             bubbleData = [];
             for (var i = 0; i < vm.popularUnivList.length; i++) {
-                
                 bubbleData[i] = {
                     x: parseInt(vm.popularUnivList[i][year][vm.xAxisFilter]),
                     y: parseInt(vm.popularUnivList[i][year][vm.yAxisFilter]),
@@ -627,13 +625,10 @@
                     shortName=bubbleData[i].alias.split("|");
                     shortName = shortName.filter(function(str) {return /\S/.test(str);});
                     shortName.map(Function.prototype.call, String.prototype.trim);
-                    //console.log(shortName);
                     minLength=(Math.min.apply(Math, shortName.map(function(str) { return str.length; })));
-                    //console.log(shortName.slice().sort((a, b) => b.length - a.length).pop()); 
                     
                     bubbleData[i].alias = shortName.slice().sort((a, b) => b.length - a.length).pop();
                 }
-                //console.log(bubbleData[i].alias==undefined)
                 
             }
             if(vm.compareList.length>0){
@@ -648,20 +643,15 @@
 
         function init() {
             vm.initializeSliders();
-            
-            if(!vm.manualSearch){
-                UniversitySearchService.fetchAllUniversities().then(function (data) {
-                    vm.universityList = data;
-                    filterUniversities();
-                })
-            }
-            
+                        
             if (UniversitySearchService.cleanUniversityList.length > 0) {
                 vm.universityList = UniversitySearchService.cleanUniversityList;
-                vm.renderCharts();
+                formUnivNameList();
+                filterUniversities();
             } else {
                 UniversitySearchService.fetchAllUniversities().then(function (data) {
                     vm.universityList = data;
+                    formUnivNameList();
                     filterUniversities();
                 })
             }
@@ -862,7 +852,16 @@
         
         /****** Code for search bar *******/
         
-        if (UNIVERSITY_LIST.length == 0) {
+        function formUnivNameList(){
+            for(var i = 0; i < vm.universityList.length; i++){
+                vm.univList.push({
+                    unitId : vm.universityList[i].unitId,
+                    universityName : vm.universityList[i].universityName
+                })
+            }
+        }
+        
+        /*if (UNIVERSITY_LIST.length == 0) {
             $http.get('JSON/data.json').then(function (data) {
                 for (var i = 0; i < data.data.length; i++) {
                     UNIVERSITY_LIST.push({
@@ -879,23 +878,15 @@
         } else {
             vm.univList = UNIVERSITY_LIST;
             vm.dataLoaded = true;
-        }
+        }*/
         
         
         function selectUniversity($item, $model, $label) {
             UniversitySearchService.fetchUnivData($item).then(function (data) {
                 vm.compareList.push(data.data.Item);
                 vm.universityList = vm.compareList;
-                if(vm.compareList.length>0){
-                    vm.manualSearch = true;
-                    filterUniversities();
-                }
-                else{
-                    vm.universityList=[];
-                    vm.manualSearch = false;
-                    init();
-                }
-
+                vm.manualSearch = true;
+                filterUniversities();
             })
         };
 
@@ -905,14 +896,11 @@
             if(vm.compareList.length>0){    
                 vm.manualSearch = true;
                 filterUniversities();
-            }
-             else{
-                    vm.universityList=[];
-                    vm.manualSearch = false;
-                    init();
-            }
-                        
-        }
-        
+            }else{
+                vm.universityList = [];
+                vm.manualSearch = false;
+                init();
+            }               
+        } 
     }
 })();
