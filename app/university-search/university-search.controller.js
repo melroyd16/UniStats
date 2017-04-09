@@ -69,30 +69,31 @@
 
         function filterUniversities() {
             vm.filteredUniversities = [];
-            var mapData=[],j=0;
+            var mapData = [],
+                j = 0;
             vm.maxUniversityCount = 0;
             var detailsParameter = vm.yearFilter + "Details";
             for (var i = 0; i < vm.universityList.length; i++) {
                 if ((parseInt(vm.universityList[i][detailsParameter].priceInStateOffCampus) >= vm.inStateSlider.min &&
-                    parseInt(vm.universityList[i][detailsParameter].priceInStateOffCampus) <= vm.inStateSlider.max &&
-                    parseInt(vm.universityList[i][detailsParameter].priceOutStateOnCampus) >= vm.outStateSlider.min &&
-                    parseInt(vm.universityList[i][detailsParameter].priceOutStateOnCampus) <= vm.outStateSlider.max &&
-                    satisfiesState(vm.universityList[i].stateCode)) || vm.manualSearch ) {
+                        parseInt(vm.universityList[i][detailsParameter].priceInStateOffCampus) <= vm.inStateSlider.max &&
+                        parseInt(vm.universityList[i][detailsParameter].priceOutStateOnCampus) >= vm.outStateSlider.min &&
+                        parseInt(vm.universityList[i][detailsParameter].priceOutStateOnCampus) <= vm.outStateSlider.max &&
+                        satisfiesState(vm.universityList[i].stateCode)) || vm.manualSearch) {
                     vm.filteredUniversities.push(vm.universityList[i]);
                 }
-                
-                 if (i == vm.universityList.length - 1) {
-                    formChoroplethData(); 
-                }   
+
+                if (i == vm.universityList.length - 1) {
+                    formChoroplethData();
+                }
             }
-            
+
             for (var key in vm.filteredUniversities[0][detailsParameter]) {
                 if (vm.filteredUniversities[0][detailsParameter].hasOwnProperty(key)) {
                     vm.xAxisOptions.push(key);
                     vm.yAxisOptions.push(key);
                 }
             }
-               
+
         }
 
         function removeState(index) {
@@ -116,7 +117,6 @@
             }
         }
 
-        
         function formChoroplethData() {
             vm.stateUnivCountData = d3.nest()
                 .key(function (d) {
@@ -271,46 +271,78 @@
 
 
         }
-        
-        function weatherDataVisuzalization(compareData, dataYear){
+
+        function weatherDataVisuzalization(compareData, dataYear) {
             console.log("Alan");
             var maxTemp = [];
             var minTemp = [];
             var meanTemp = [];
             var collegesSnowfall = [];
-            var collegesRainfall= [];
+            var collegesRainfall = [];
             var collegesWind = [];
             var collegesTemp = [];
-            
+
             var item;
-            
+
             for (var i = 0; i < compareData.length; i++) {
                 item = compareData[i];
-                collegesTemp[i]=[];
-                collegesSnowfall[i]=[];
-                collegesRainfall[i]=[];
-                collegesWind[i]=[];
-                collegesTemp[i].push({"value": item.climateData.fall.meanTemp});
-                collegesTemp[i].push({"value": item.climateData.winter.meanTemp});
-                collegesTemp[i].push({"value": item.climateData.spring.meanTemp});
-                collegesTemp[i].push({"value": item.climateData.summer.meanTemp});
-                collegesSnowfall[i].push({"value": item.climateData.fall.avgSnowfall});
-                collegesSnowfall[i].push({"value": item.climateData.winter.avgSnowfall});
-                collegesSnowfall[i].push({"value": item.climateData.spring.avgSnowfall});
-                collegesSnowfall[i].push({"value": item.climateData.summer.avgSnowfall});
-                collegesRainfall[i].push({"value": item.climateData.fall.avgRainfall});
-                collegesRainfall[i].push({"value": item.climateData.winter.avgRainfall});
-                collegesRainfall[i].push({"value": item.climateData.spring.avgRainfall});
-                collegesRainfall[i].push({"value": item.climateData.summer.avgRainfall});
-                collegesWind[i].push({"value": item.climateData.fall.avgWind});
-                collegesWind[i].push({"value": item.climateData.winter.avgWind});
-                collegesWind[i].push({"value": item.climateData.spring.avgWind});
-                collegesWind[i].push({"value": item.climateData.summer.avgWind});
-             }
-    
-            
-            
-            var dataSourceVariable={
+                collegesTemp[i] = [];
+                collegesSnowfall[i] = [];
+                collegesRainfall[i] = [];
+                collegesWind[i] = [];
+                collegesTemp[i].push({
+                    "value": item.climateData.fall.meanTemp
+                });
+                collegesTemp[i].push({
+                    "value": item.climateData.winter.meanTemp
+                });
+                collegesTemp[i].push({
+                    "value": item.climateData.spring.meanTemp
+                });
+                collegesTemp[i].push({
+                    "value": item.climateData.summer.meanTemp
+                });
+                collegesSnowfall[i].push({
+                    "value": item.climateData.fall.avgSnowfall
+                });
+                collegesSnowfall[i].push({
+                    "value": item.climateData.winter.avgSnowfall
+                });
+                collegesSnowfall[i].push({
+                    "value": item.climateData.spring.avgSnowfall
+                });
+                collegesSnowfall[i].push({
+                    "value": item.climateData.summer.avgSnowfall
+                });
+                collegesRainfall[i].push({
+                    "value": item.climateData.fall.avgRainfall
+                });
+                collegesRainfall[i].push({
+                    "value": item.climateData.winter.avgRainfall
+                });
+                collegesRainfall[i].push({
+                    "value": item.climateData.spring.avgRainfall
+                });
+                collegesRainfall[i].push({
+                    "value": item.climateData.summer.avgRainfall
+                });
+                collegesWind[i].push({
+                    "value": item.climateData.fall.avgWind
+                });
+                collegesWind[i].push({
+                    "value": item.climateData.winter.avgWind
+                });
+                collegesWind[i].push({
+                    "value": item.climateData.spring.avgWind
+                });
+                collegesWind[i].push({
+                    "value": item.climateData.summer.avgWind
+                });
+            }
+
+
+
+            var dataSourceVariable = {
                 "chart": {
                     "caption": "Mean Temperature",
                     "subcaption": "in Fahrenheits",
@@ -330,16 +362,16 @@
                 },
                 "categories": [{
                     "category": [{
-                        "label": "Fall"
+                            "label": "Fall"
                     },
-                    {
-                        "label": "Winter"
+                        {
+                            "label": "Winter"
                     },
-                    {
-                        "label": "Spring"
+                        {
+                            "label": "Spring"
                     },
-                    {
-                        "label": "Summer"
+                        {
+                            "label": "Summer"
                     }
                     ]
                 }],
@@ -353,22 +385,22 @@
                 dataSourceVariable.dataset.push({
                     "seriesname": item.universityName,
                     data
-            });
+                });
             }
-            
+
 
             FusionCharts.ready(function () {
                 var salesChart = new FusionCharts({
-                type: 'MSColumn2D',
-                renderAt: 'weather-container',
-                width: '600',
-                height: '400',
-                dataFormat: 'json',
-                dataSource: dataSourceVariable
-})
-    .render();              
-});
-        var dataSourceVariable2={
+                        type: 'MSColumn2D',
+                        renderAt: 'weather-container',
+                        width: '600',
+                        height: '400',
+                        dataFormat: 'json',
+                        dataSource: dataSourceVariable
+                    })
+                    .render();
+            });
+            var dataSourceVariable2 = {
                 "chart": {
                     "caption": "Average Snowfall",
                     "subcaption": "in Inches",
@@ -388,16 +420,16 @@
                 },
                 "categories": [{
                     "category": [{
-                        "label": "Fall"
+                            "label": "Fall"
                     },
-                    {
-                        "label": "Winter"
+                        {
+                            "label": "Winter"
                     },
-                    {
-                        "label": "Spring"
+                        {
+                            "label": "Spring"
                     },
-                    {
-                        "label": "Summer"
+                        {
+                            "label": "Summer"
                     }
                     ]
                 }],
@@ -410,21 +442,21 @@
                 dataSourceVariable2.dataset.push({
                     "seriesname": item.universityName,
                     data
-            });
+                });
             }
-            
+
             FusionCharts.ready(function () {
                 var salesChart = new FusionCharts({
-                type: 'MSColumn2D',
-                renderAt: 'snowfall-container',
-                width: '600',
-                height: '400',
-                dataFormat: 'json',
-                dataSource: dataSourceVariable2
-})
-    .render();              
-});
-            var dataSourceVariable3={
+                        type: 'MSColumn2D',
+                        renderAt: 'snowfall-container',
+                        width: '600',
+                        height: '400',
+                        dataFormat: 'json',
+                        dataSource: dataSourceVariable2
+                    })
+                    .render();
+            });
+            var dataSourceVariable3 = {
                 "chart": {
                     "caption": "Average Rainfall",
                     "subcaption": "in Inches",
@@ -444,16 +476,16 @@
                 },
                 "categories": [{
                     "category": [{
-                        "label": "Fall"
+                            "label": "Fall"
                     },
-                    {
-                        "label": "Winter"
+                        {
+                            "label": "Winter"
                     },
-                    {
-                        "label": "Spring"
+                        {
+                            "label": "Spring"
                     },
-                    {
-                        "label": "Summer"
+                        {
+                            "label": "Summer"
                     }
                     ]
                 }],
@@ -466,20 +498,20 @@
                 dataSourceVariable3.dataset.push({
                     "seriesname": item.universityName,
                     data
-            });
+                });
             }
             FusionCharts.ready(function () {
                 var salesChart = new FusionCharts({
-                type: 'MSColumn2D',
-                renderAt: 'rainfall-container',
-                width: '600',
-                height: '400',
-                dataFormat: 'json',
-                dataSource: dataSourceVariable3
-})
-    .render();              
-});
-            var dataSourceVariable4={
+                        type: 'MSColumn2D',
+                        renderAt: 'rainfall-container',
+                        width: '600',
+                        height: '400',
+                        dataFormat: 'json',
+                        dataSource: dataSourceVariable3
+                    })
+                    .render();
+            });
+            var dataSourceVariable4 = {
                 "chart": {
                     "caption": "Average Wind",
                     "subcaption": "in Inches",
@@ -499,16 +531,16 @@
                 },
                 "categories": [{
                     "category": [{
-                        "label": "Fall"
+                            "label": "Fall"
                     },
-                    {
-                        "label": "Winter"
+                        {
+                            "label": "Winter"
                     },
-                    {
-                        "label": "Spring"
+                        {
+                            "label": "Spring"
                     },
-                    {
-                        "label": "Summer"
+                        {
+                            "label": "Summer"
                     }
                     ]
                 }],
@@ -521,19 +553,19 @@
                 dataSourceVariable4.dataset.push({
                     "seriesname": item.universityName,
                     data
-            });
+                });
             }
             FusionCharts.ready(function () {
                 var salesChart = new FusionCharts({
-                type: 'MSColumn2D',
-                renderAt: 'wind-container',
-                width: '600',
-                height: '400',
-                dataFormat: 'json',
-                dataSource: dataSourceVariable4
-})
-    .render();              
-});
+                        type: 'MSColumn2D',
+                        renderAt: 'wind-container',
+                        width: '600',
+                        height: '400',
+                        dataFormat: 'json',
+                        dataSource: dataSourceVariable4
+                    })
+                    .render();
+            });
         }
 
         function renderCharts() {
@@ -607,34 +639,38 @@
                     size: parseInt(vm.popularUnivList[i][year].admissionsTotal),
                     c: i + 1,
                     name: vm.popularUnivList[i].universityName,
-                    alias:vm.popularUnivList[i].alias
-                        
+                    alias: vm.popularUnivList[i].alias
+
                 };
-                if(bubbleData[i].alias==undefined || bubbleData[i].alias=="NA"){
+                if (bubbleData[i].alias == undefined || bubbleData[i].alias == "NA") {
                     bubbleData[i].alias = bubbleData[i].name;
-                }else{
-                    var shortName=[]
+                } else {
+                    var shortName = []
                     var minLength;
-                    shortName=bubbleData[i].alias.split("|");
-                    shortName = shortName.filter(function(str) {return /\S/.test(str);});
+                    shortName = bubbleData[i].alias.split("|");
+                    shortName = shortName.filter(function (str) {
+                        return /\S/.test(str);
+                    });
                     shortName.map(Function.prototype.call, String.prototype.trim);
-                    minLength=(Math.min.apply(Math, shortName.map(function(str) { return str.length; })));
-                    
+                    minLength = (Math.min.apply(Math, shortName.map(function (str) {
+                        return str.length;
+                    })));
+
                     bubbleData[i].alias = shortName.slice().sort((a, b) => b.length - a.length).pop();
                 }
-                
+
             }
             crimeDataVisualization(vm.comparisonList, vm.yearFilter);
             weatherDataVisuzalization(vm.comparisonList, vm.yearFilter);
             renderBubbleChart(bubbleData);
-            
+
         }
 
         init();
 
         function init() {
             vm.initializeSliders();
-                        
+
             if (UniversitySearchService.cleanUniversityList.length > 0) {
                 vm.universityList = UniversitySearchService.cleanUniversityList;
                 formUnivNameList();
@@ -654,7 +690,6 @@
         }
 
 
-
         /****************************** Bubble chart **********************************/
 
         function renderBubbleChart(data) {
@@ -672,20 +707,20 @@
                 .append("g")
                 .attr("transform", "translate(" + margin + "," + margin + ")");
 
-            if(data.length==1){
-               
+            if (data.length == 1) {
+
                 var x = d3.scale.linear()
                     .domain([d3.max(data, function (d) {
                         return d.x;
-                    })-100, d3.max(data, function (d) {
+                    }) - 100, d3.max(data, function (d) {
                         return d.x;
-                    })*.5])
+                    }) * .5])
                     .range([0, width]);
 
                 var y = d3.scale.linear()
                     .domain([d3.max(data, function (d) {
                         return d.y;
-                    })-10, d3.max(data, function (d) {
+                    }) - 10, d3.max(data, function (d) {
                         return d.y;
                     })])
                     .range([height, 20]);
@@ -701,16 +736,15 @@
                         return d.size;
                     })])
                     .range([1, .5]);
-               } 
-            else{
+            } else {
                 var x = d3.scale.linear()
                     .domain([d3.min(data, function (d) {
                         return d.x;
-                    })-((d3.max(data, function (d) {
+                    }) - ((d3.max(data, function (d) {
                         return d.x;
-                    })-d3.min(data, function (d) {
+                    }) - d3.min(data, function (d) {
                         return d.x;
-                    }))/width), d3.max(data, function (d) {
+                    })) / width), d3.max(data, function (d) {
                         return d.x;
                     })])
                     .range([0, width]);
@@ -718,11 +752,11 @@
                 var y = d3.scale.linear()
                     .domain([d3.min(data, function (d) {
                         return d.y;
-                    })-((d3.max(data, function (d) {
+                    }) - ((d3.max(data, function (d) {
                         return d.y;
-                    })-d3.min(data, function (d) {
+                    }) - d3.min(data, function (d) {
                         return d.y;
-                    }))/10), d3.max(data, function (d) {
+                    })) / 10), d3.max(data, function (d) {
                         return d.y;
                     })])
                     .range([height, 20]);
@@ -772,15 +806,15 @@
                 .attr("dy", ".71em")
                 .style("text-anchor", "end")
                 .text(labelX);
-            
+
             var node = svg.append("g")
-                       .attr("class", "node")
-                       .selectAll("circle")
-                       .data(data)
-                       .enter()
-                       // Add one g element for each data node here.
-                       .append("g");
-            
+                .attr("class", "node")
+                .selectAll("circle")
+                .data(data)
+                .enter()
+                // Add one g element for each data node here.
+                .append("g");
+
             node.append("circle")
                 .attr("cx", width / 2)
                 .attr("cy", height / 2)
@@ -803,17 +837,29 @@
                     fadeOut();
                 })
                 .transition()
-                .delay(function (d, i) {return x(d.x) - y(d.y);})
+                .delay(function (d, i) {
+                    return x(d.x) - y(d.y);
+                })
                 .duration(500)
-                .attr("cx", function (d) {return x(d.x);})
-                .attr("cy", function (d) {return y(d.y);})
+                .attr("cx", function (d) {
+                    return x(d.x);
+                })
+                .attr("cy", function (d) {
+                    return y(d.y);
+                })
                 .ease("bounce");
 
-         node.append("text")
-             .attr("text-anchor", "middle")
-             .attr("dx", function (d) { return x(d.x); })
-             .attr("dy", function (d) { return y(d.y); })
-             .text(function(d) {return d.alias;});
+            node.append("text")
+                .attr("text-anchor", "middle")
+                .attr("dx", function (d) {
+                    return x(d.x);
+                })
+                .attr("dy", function (d) {
+                    return y(d.y);
+                })
+                .text(function (d) {
+                    return d.alias;
+                });
 
             function fade(c, opacity, bubble) {
                 div.transition()
@@ -824,54 +870,34 @@
                     .style("top", (d3.event.pageY) + "px");
                 svg.selectAll("circle,text")
                     .filter(function (d) {
-                    if(d!=undefined)
-                        return d.c != c;
+                        if (d != undefined)
+                            return d.c != c;
                     })
                     .transition()
 
-                .style("opacity", opacity);
+                    .style("opacity", opacity);
             }
 
             function fadeOut() {
                 svg.selectAll("circle,text").transition().style("opacity", function (d) {
-                    if(d!=undefined)
+                    if (d != undefined)
                         opacity(d.size);
                 });
             }
         }
-        
-        
+
+
         /****** Code for search bar *******/
-        
-        function formUnivNameList(){
-            for(var i = 0; i < vm.universityList.length; i++){
+
+        function formUnivNameList() {
+            for (var i = 0; i < vm.universityList.length; i++) {
                 vm.univList.push({
-                    unitId : vm.universityList[i].unitId,
-                    universityName : vm.universityList[i].universityName
+                    unitId: vm.universityList[i].unitId,
+                    universityName: vm.universityList[i].universityName
                 })
             }
         }
-        
-        /*if (UNIVERSITY_LIST.length == 0) {
-            $http.get('JSON/data.json').then(function (data) {
-                for (var i = 0; i < data.data.length; i++) {
-                    UNIVERSITY_LIST.push({
-                        unitId: data.data[i].unitId,
-                        universityName: data.data[i].universityName
-                    })
-                    if (i == data.data.length - 1) {
-                        vm.univList = UNIVERSITY_LIST;
-                        vm.dataLoaded = true;
-                    }
-                }
 
-            })
-        } else {
-            vm.univList = UNIVERSITY_LIST;
-            vm.dataLoaded = true;
-        }*/
-        
-        
         function selectUniversity($item, $model, $label) {
             UniversitySearchService.fetchUnivData($item).then(function (data) {
                 vm.compareList.push(data.data.Item);
@@ -884,14 +910,14 @@
         function removeUniversity(index) {
             vm.compareList.splice(index, 1);
             vm.universityList = vm.compareList;
-            if(vm.compareList.length>0){    
+            if (vm.compareList.length > 0) {
                 vm.manualSearch = true;
                 filterUniversities();
-            }else{
+            } else {
                 vm.universityList = [];
                 vm.manualSearch = false;
                 init();
-            }               
-        } 
+            }
+        }
     }
 })();
