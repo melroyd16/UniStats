@@ -12,10 +12,10 @@
         var vm = this;
         vm.yearFilter = "2015";
         vm.yearOptions = ["2012", "2013", "2014", "2015"];
-        vm.xAxisFilter = "priceInStateOnCampus";
-        vm.xAxisOptions = [];
-        vm.yAxisFilter = "sfr";
-        vm.yAxisOptions = [];
+        vm.xAxisFilter = "Total Applicants";
+        vm.xAxisOptions = ["Total Applicants","Enrolled Men",  "Enrolled Women", "Price instate", "Price outstate"];
+        vm.yAxisFilter = "Percent Admitted";
+        vm.yAxisOptions = ["Percent Admitted", "Student to Faculty Ratio","Total Professor Count", "Federal Grant Awarded (%)", "Expenses on Research"];
         vm.filterUniversities = filterUniversities;
         vm.initializeSliders = initializeSliders;
         vm.renderCharts = renderCharts;
@@ -36,6 +36,8 @@
         vm.selectUniversity = selectUniversity;
         vm.removeUniversity = removeUniversity;
         vm.manualSearch = false;
+        vm.xAxisObject =  {"Total Applicants": "applicantsTotal","Enrolled Men": "enrolledMen",  "Enrolled Women":"enrolledWomen", "Price instate": "priceInStateOnCampus","Price outstate": "priceOutStateOnCampus"};
+        vm.yAxisObject ={"Percent Admitted": "percentAdmittedTotal","Student to Faculty Ratio":"sfr","Total Professor Count": "professorCountTotal", "Federal Grant Awarded (%)": "percentAwardedFederalGrant","Expenses on Research":"expensesResearch"};
 
         function initializeSliders() {
             vm.minTempSlider = {
@@ -87,12 +89,13 @@
                 }
             }
 
-            for (var key in vm.filteredUniversities[0][detailsParameter]) {
-                if (vm.filteredUniversities[0][detailsParameter].hasOwnProperty(key)) {
-                    vm.xAxisOptions.push(key);
-                    vm.yAxisOptions.push(key);
-                }
-            }
+//            for (var key in vm.filteredUniversities[0][detailsParameter]) {
+//                if (vm.filteredUniversities[0][detailsParameter].hasOwnProperty(key)) {
+//                    vm.xAxisOptions.push(key);
+//                    vm.yAxisOptions.push(key);
+//                }
+//            }
+            
 
         }
 
@@ -634,8 +637,8 @@
             bubbleData = [];
             for (var i = 0; i < vm.popularUnivList.length; i++) {
                 bubbleData[i] = {
-                    x: parseInt(vm.popularUnivList[i][year][vm.xAxisFilter]),
-                    y: parseInt(vm.popularUnivList[i][year][vm.yAxisFilter]),
+                    x: parseInt(vm.popularUnivList[i][year][vm.xAxisObject[vm.xAxisFilter]]),
+                    y: parseInt(vm.popularUnivList[i][year][vm.yAxisObject[vm.yAxisFilter]]),
                     size: parseInt(vm.popularUnivList[i][year].admissionsTotal),
                     c: i + 1,
                     name: vm.popularUnivList[i].universityName,
