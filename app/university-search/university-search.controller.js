@@ -13,9 +13,9 @@
         vm.yearFilter = "2015";
         vm.yearOptions = ["2012", "2013", "2014", "2015"];
         vm.xAxisFilter = "Total Applicants";
-        vm.xAxisOptions = ["Total Applicants","Enrolled Men",  "Enrolled Women", "Price instate", "Price outstate"];
+        vm.xAxisOptions =  {"Total Applicants": "applicantsTotal","Enrolled Men": "enrolledMen",  "Enrolled Women":"enrolledWomen", "Price instate": "priceInStateOnCampus","Price outstate": "priceOutStateOnCampus"};
         vm.yAxisFilter = "Percent Admitted";
-        vm.yAxisOptions = ["Percent Admitted", "Student to Faculty Ratio","Total Professor Count", "Federal Grant Awarded (%)", "Expenses on Research"];
+        vm.yAxisOptions ={"Percent Admitted": "percentAdmittedTotal","Student to Faculty Ratio":"sfr","Total Professor Count": "professorCountTotal", "Federal Grant Awarded (%)": "percentAwardedFederalGrant","Expenses on Research":"expensesResearch"};
         vm.filterUniversities = filterUniversities;
         vm.initializeSliders = initializeSliders;
         vm.renderCharts = renderCharts;
@@ -40,8 +40,7 @@
         vm.weatherParameters = ["Mean Temperature","Average Snowfall","Average Rainfall","Average Wind"];
         vm.crimeDataVisualization=crimeDataVisualization;
         vm.weatherDataVisuzalization=weatherDataVisuzalization;
-        vm.xAxisObject =  {"Total Applicants": "applicantsTotal","Enrolled Men": "enrolledMen",  "Enrolled Women":"enrolledWomen", "Price instate": "priceInStateOnCampus","Price outstate": "priceOutStateOnCampus"};
-        vm.yAxisObject ={"Percent Admitted": "percentAdmittedTotal","Student to Faculty Ratio":"sfr","Total Professor Count": "professorCountTotal", "Federal Grant Awarded (%)": "percentAwardedFederalGrant","Expenses on Research":"expensesResearch"};
+        
 
         function initializeSliders() {
             vm.minTempSlider = {
@@ -644,8 +643,8 @@
             bubbleData = [];
             for (var i = 0; i < vm.popularUnivList.length; i++) {
                 bubbleData[i] = {
-                    x: parseInt(vm.popularUnivList[i][year][vm.xAxisObject[vm.xAxisFilter]]),
-                    y: parseInt(vm.popularUnivList[i][year][vm.yAxisObject[vm.yAxisFilter]]),
+                    x: parseInt(vm.popularUnivList[i][year][vm.xAxisOptions[vm.xAxisFilter]]),
+                    y: parseInt(vm.popularUnivList[i][year][vm.yAxisOptions[vm.yAxisFilter]]),
                     size: parseInt(vm.popularUnivList[i][year].admissionsTotal),
                     c: i + 1,
                     name: vm.popularUnivList[i].universityName,

@@ -93,9 +93,9 @@
                         
                       <div class="form-group">
                         <label style="margin-left:20px">X</label>
-                        <select style="width:200px" class="form-control" ng-options="axis for axis in univSCtrl.xAxisOptions" ng-model="univSCtrl.xAxisFilter" ng-change="univSCtrl.filterUniversities()"/>
+                        <select style="width:200px" class="form-control" ng-options="k as k for (k, v) in univSCtrl.xAxisOptions" ng-model="univSCtrl.xAxisFilter" ng-change="univSCtrl.filterUniversities()"/>
                         <label style="margin-left:10px">Y</label>
-                        <select style="width:200px" class="form-control" ng-options="axis for axis in univSCtrl.yAxisOptions" ng-model="univSCtrl.yAxisFilter" ng-change="univSCtrl.filterUniversities()"/>
+                        <select style="width:200px" class="form-control" ng-options="k as k for (k, v) in univSCtrl.yAxisOptions" ng-model="univSCtrl.yAxisFilter" ng-change="univSCtrl.filterUniversities()"/>
                     </div>
                     
                 </form>
