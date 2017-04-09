@@ -36,6 +36,10 @@
         vm.selectUniversity = selectUniversity;
         vm.removeUniversity = removeUniversity;
         vm.manualSearch = false;
+        vm.weatherParameter = "Mean Temperature";
+        vm.weatherParameters = ["Mean Temperature","Average Snowfall","Average Rainfall","Average Wind"];
+        vm.crimeDataVisualization=crimeDataVisualization;
+        vm.weatherDataVisuzalization=weatherDataVisuzalization;
         vm.xAxisObject =  {"Total Applicants": "applicantsTotal","Enrolled Men": "enrolledMen",  "Enrolled Women":"enrolledWomen", "Price instate": "priceInStateOnCampus","Price outstate": "priceOutStateOnCampus"};
         vm.yAxisObject ={"Percent Admitted": "percentAdmittedTotal","Student to Faculty Ratio":"sfr","Total Professor Count": "professorCountTotal", "Federal Grant Awarded (%)": "percentAwardedFederalGrant","Expenses on Research":"expensesResearch"};
 
@@ -275,8 +279,8 @@
 
         }
 
-        function weatherDataVisuzalization(compareData, dataYear) {
-            console.log("Alan");
+        function weatherDataVisuzalization(compareData,dataYear) {
+            console.log(vm.weatherParameter);
             var maxTemp = [];
             var minTemp = [];
             var meanTemp = [];
@@ -358,7 +362,6 @@
                     "divlinealpha": "50",
                     "plotfillalpha": "80",
                     "drawCrossLine": "1",
-                    "crossLineColor": "#cc3300",
                     "crossLineAlpha": "100",
                     "paletteColors": "#0075c2,#f26544,#9ca089",
                     "theme": "zune"
@@ -391,7 +394,7 @@
                 });
             }
 
-
+            if(vm.weatherParameter=="Mean Temperature"){
             FusionCharts.ready(function () {
                 var salesChart = new FusionCharts({
                         type: 'MSColumn2D',
@@ -403,6 +406,7 @@
                     })
                     .render();
             });
+            }
             var dataSourceVariable2 = {
                 "chart": {
                     "caption": "Average Snowfall",
@@ -416,7 +420,6 @@
                     "divlinealpha": "50",
                     "plotfillalpha": "80",
                     "drawCrossLine": "1",
-                    "crossLineColor": "#cc3300",
                     "crossLineAlpha": "100",
                     "paletteColors": "#0075c2,#f26544,#9ca089",
                     "theme": "zune"
@@ -448,10 +451,11 @@
                 });
             }
 
+            if(vm.weatherParameter=="Average Snowfall"){
             FusionCharts.ready(function () {
                 var salesChart = new FusionCharts({
                         type: 'MSColumn2D',
-                        renderAt: 'snowfall-container',
+                        renderAt: 'weather-container',
                         width: '600',
                         height: '400',
                         dataFormat: 'json',
@@ -459,6 +463,7 @@
                     })
                     .render();
             });
+            }
             var dataSourceVariable3 = {
                 "chart": {
                     "caption": "Average Rainfall",
@@ -472,7 +477,6 @@
                     "divlinealpha": "50",
                     "plotfillalpha": "80",
                     "drawCrossLine": "1",
-                    "crossLineColor": "#cc3300",
                     "crossLineAlpha": "100",
                     "paletteColors": "#0075c2,#f26544,#9ca089",
                     "theme": "zune"
@@ -503,10 +507,11 @@
                     data
                 });
             }
+            if(vm.weatherParameter=="Average Rainfall"){
             FusionCharts.ready(function () {
                 var salesChart = new FusionCharts({
                         type: 'MSColumn2D',
-                        renderAt: 'rainfall-container',
+                        renderAt: 'weather-container',
                         width: '600',
                         height: '400',
                         dataFormat: 'json',
@@ -514,6 +519,7 @@
                     })
                     .render();
             });
+            }
             var dataSourceVariable4 = {
                 "chart": {
                     "caption": "Average Wind",
@@ -527,7 +533,6 @@
                     "divlinealpha": "50",
                     "plotfillalpha": "80",
                     "drawCrossLine": "1",
-                    "crossLineColor": "#cc3300",
                     "crossLineAlpha": "100",
                     "paletteColors": "#0075c2,#f26544,#9ca089",
                     "theme": "zune"
@@ -558,10 +563,11 @@
                     data
                 });
             }
+            if(vm.weatherParameter=="Average Wind"){
             FusionCharts.ready(function () {
                 var salesChart = new FusionCharts({
                         type: 'MSColumn2D',
-                        renderAt: 'wind-container',
+                        renderAt: 'weather-container',
                         width: '600',
                         height: '400',
                         dataFormat: 'json',
@@ -569,6 +575,7 @@
                     })
                     .render();
             });
+            }
         }
 
         function renderCharts() {
