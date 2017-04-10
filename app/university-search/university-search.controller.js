@@ -78,11 +78,23 @@
                 j = 0;
             vm.maxUniversityCount = 0;
             var detailsParameter = vm.yearFilter + "Details";
+            console.log(vm.universityList[0].climateData);
             for (var i = 0; i < vm.universityList.length; i++) {
-                if ((parseInt(vm.universityList[i][detailsParameter].priceInStateOffCampus) >= vm.inStateSlider.min &&
+                if (vm.universityList[i].climateData !== undefined &&
+                    (parseInt(vm.universityList[i][detailsParameter].priceInStateOffCampus) >= vm.inStateSlider.min &&
                         parseInt(vm.universityList[i][detailsParameter].priceInStateOffCampus) <= vm.inStateSlider.max &&
                         parseInt(vm.universityList[i][detailsParameter].priceOutStateOnCampus) >= vm.outStateSlider.min &&
                         parseInt(vm.universityList[i][detailsParameter].priceOutStateOnCampus) <= vm.outStateSlider.max &&
+                        parseInt(vm.universityList[i].climateData.annual.meanTemp) >= vm.meanTempSlider.min &&
+                        parseInt(vm.universityList[i].climateData.annual.meanTemp) <= vm.meanTempSlider.max &&
+                        parseInt(vm.universityList[i].climateData.annual.maxTemp) >= vm.maxTempSlider.min &&
+                        parseInt(vm.universityList[i].climateData.annual.maxTemp) <= vm.maxTempSlider.max &&
+                        parseInt(vm.universityList[i].climateData.annual.minTemp) >= vm.minTempSlider.min &&
+                        parseInt(vm.universityList[i].climateData.annual.minTemp) <= vm.minTempSlider.max &&
+                        parseInt(vm.universityList[i].climateData.annual.avgSnowfall) >= vm.snowfallSlider.min &&
+                        parseInt(vm.universityList[i].climateData.annual.avgSnowfall) <= vm.snowfallSlider.max &&
+                        parseInt(vm.universityList[i].climateData.annual.avgRainfall) >= vm.rainfallSlider.min &&
+                        parseInt(vm.universityList[i].climateData.annual.avgRainfall) <= vm.rainfallSlider.max &&
                         satisfiesState(vm.universityList[i].stateCode)) || vm.manualSearch) {
                     vm.filteredUniversities.push(vm.universityList[i]);
                 }
