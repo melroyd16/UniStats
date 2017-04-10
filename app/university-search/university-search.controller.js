@@ -468,7 +468,7 @@
                 "chart": {
                     "caption": "Average Rainfall",
                     "subcaption": "in Inches",
-                    "yaxismaxvalue": "20",
+                    "yaxismaxvalue": "15",
                     "decimals": "2",
                     "numberprefix": "",
                     "numbersuffix": "",
