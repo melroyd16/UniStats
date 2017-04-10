@@ -106,14 +106,6 @@
                 }
             }
 
-//            for (var key in vm.filteredUniversities[0][detailsParameter]) {
-//                if (vm.filteredUniversities[0][detailsParameter].hasOwnProperty(key)) {
-//                    vm.xAxisOptions.push(key);
-//                    vm.yAxisOptions.push(key);
-//                }
-//            }
-            
-
         }
 
         function removeState(index) {
@@ -663,7 +655,7 @@
                     dataFormat: 'json',
                     dataSource: {
                         "chart": {
-                            "caption": "University Comparison",
+                            "caption": "University Comparison (Total Admission Count)",
                             "plotgradientcolor": "",
                             "bgcolor": "FFFFFF",
                             "showalternatehgridcolor": "0",
