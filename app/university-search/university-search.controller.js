@@ -575,7 +575,6 @@
             }
         }
 
-        var lineChart;
         
         vm.compareUniversity = function(){
             
@@ -585,7 +584,6 @@
             
             console.log(vm.univComparisonParameter)
             for (var i = 0; i < vm.popularUnivList.length; i++) {
-                /****** Line Chart Code STARTS************/
                 if(maxVal< parseInt(vm.popularUnivList[i]['2012Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
                     maxVal =  parseInt(vm.popularUnivList[i]['2012Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
                 }
@@ -624,11 +622,8 @@
                                             {"value" : parseInt(vm.popularUnivList[i]['2015Details'][vm.univComparisonParameters[vm.univComparisonParameter]])}]};
                 
             
-                /****** Line Chart Code ENDS ************/
             }
-            //lineChart.render();
             renderLineChart(lineChartData);
-            console.log(vm.univComparisonParameter)
         }
         
         function renderCharts() {
@@ -696,10 +691,6 @@
             d3.select('#chartID').remove();
             var year = vm.yearFilter + "Details";
             bubbleData = [];
-            var univData=[];
-            lineChartData = [];
-            maxVal=0;
-            minVal = Number.MAX_SAFE_INTEGER;
             
             for (var i = 0; i < vm.popularUnivList.length; i++) {
                 bubbleData[i] = {
@@ -711,47 +702,6 @@
                     alias: vm.popularUnivList[i].alias
 
                 };
-
-//                /****** Line Chart Code STARTS************/
-//                if(maxVal< parseInt(vm.popularUnivList[i]['2012Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
-//                    maxVal =  parseInt(vm.popularUnivList[i]['2012Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
-//                }
-//                if(maxVal< parseInt(vm.popularUnivList[i]['2013Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
-//                    maxVal =  parseInt(vm.popularUnivList[i]['2013Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
-//                }
-//                if(maxVal< parseInt(vm.popularUnivList[i]['2014Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
-//                    maxVal =  parseInt(vm.popularUnivList[i]['2014Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
-//                }
-//                if(maxVal <  parseInt(vm.popularUnivList[i]['2015Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
-//                    
-//                    maxVal =  parseInt(vm.popularUnivList[i]['2015Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
-//                }
-//                
-//                
-//                if(minVal> parseInt(vm.popularUnivList[i]['2012Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
-//                    minVal =  parseInt(vm.popularUnivList[i]['2012Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
-//                }
-//                if(minVal> parseInt(vm.popularUnivList[i]['2013Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
-//                    minVal =  parseInt(vm.popularUnivList[i]['2013Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
-//                }
-//                if(minVal> parseInt(vm.popularUnivList[i]['2014Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
-//                    minVal =  parseInt(vm.popularUnivList[i]['2014Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
-//                }
-//                if(minVal >  parseInt(vm.popularUnivList[i]['2015Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
-//                    
-//                    minVal =  parseInt(vm.popularUnivList[i]['2015Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
-//                }
-//                
-//                
-//                
-//                lineChartData[i] = {"seriesname":vm.popularUnivList[i].universityName,
-//                                     "data":[{"value" : parseInt(vm.popularUnivList[i]['2012Details'][vm.univComparisonParameters[vm.univComparisonParameter]])},
-//                                            {"value" : parseInt(vm.popularUnivList[i]['2013Details'][vm.univComparisonParameters[vm.univComparisonParameter]])},
-//                                            {"value" : parseInt(vm.popularUnivList[i]['2014Details'][vm.univComparisonParameters[vm.univComparisonParameter]])},
-//                                            {"value" : parseInt(vm.popularUnivList[i]['2015Details'][vm.univComparisonParameters[vm.univComparisonParameter]])}]};
-//                
-//            
-//                /****** Line Chart Code ENDS ************/
                 
                 if (bubbleData[i].alias == undefined || bubbleData[i].alias == "NA") {
                     bubbleData[i].alias = bubbleData[i].name;
@@ -1011,7 +961,7 @@
         function renderLineChart(data){
             
             FusionCharts.ready(function () {
-                    lineChart = new FusionCharts({
+                    var lineChart = new FusionCharts({
                     type: 'msline',
                     renderAt: 'line-chart-container',
                     width: '90%',
@@ -1019,7 +969,7 @@
                     dataFormat: 'json',
                     dataSource: {
                         "chart": {
-                            "caption": "University Comparison ( "+vm.univComparisonParameter+" Count)",
+                            "caption": "University Comparison ("+vm.univComparisonParameter+")",
                             "plotgradientcolor": "",
                             "bgcolor": "FFFFFF",
                             "showalternatehgridcolor": "0",
