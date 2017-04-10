@@ -111,13 +111,14 @@
              <div class="chart col-xs-6" style="margin-top:-20px">
             </div>
         </div>
-    </div>
-        <table>
-        <tr>        
-        <td><div id="crime-container"></div></td>
-        <td><select ng-model="univSCtrl.weatherParameter" ng-options="x for x in univSCtrl.weatherParameters" ng-change="univSCtrl.weatherDataVisuzalization(univSCtrl.comparisonList,univSCtrl.yearFilter,univSCtrl.weatherParameter)"></select><div id="weather-container"></div></td>
-        </tr>
-        </table>       
+        <div class="row">
+            <div id="crime-container" class="col-xs-6"></div>
+            <div class="col-xs-6">
+                <select class="form-control" ng-model="univSCtrl.weatherParameter" ng-options="x for x in univSCtrl.weatherParameters" ng-change="univSCtrl.weatherDataVisuzalization(univSCtrl.comparisonList,univSCtrl.yearFilter,univSCtrl.weatherParameter)"></select>
+                <div id="weather-container"></div>
+            </div>
+        </div>
+    </div>      
 </div>
 
 
