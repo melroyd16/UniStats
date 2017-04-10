@@ -42,8 +42,11 @@
         vm.crimeDataVisualization=crimeDataVisualization;
         vm.weatherDataVisuzalization=weatherDataVisuzalization;
         var maxVal=0,minVal=Number.MAX_SAFE_INTEGER;
+        vm.univComparisonParameter = "Total Admissions";
+        vm.univComparisonParameters = {"Total Admissions": "admissionsTotal","Total Applicants": "applicantsTotal","Price instate": "priceInStateOnCampus","Price outstate": "priceOutStateOnCampus","Percent Admitted": "percentAdmittedTotal","Student to Faculty Ratio":"sfr", "Federal Grant Awarded (%)": "percentAwardedFederalGrant","Expenses on Research":"expensesResearch"};
         
-
+        vm.renderLineChart = renderLineChart;
+        
         function initializeSliders() {
             vm.minTempSlider = {
                 min: 0,
@@ -572,6 +575,62 @@
             }
         }
 
+        var lineChart;
+        
+        vm.compareUniversity = function(){
+            
+            lineChartData=[];
+            maxVal=0;
+            minVal=Number.MAX_SAFE_INTEGER;
+            
+            console.log(vm.univComparisonParameter)
+            for (var i = 0; i < vm.popularUnivList.length; i++) {
+                /****** Line Chart Code STARTS************/
+                if(maxVal< parseInt(vm.popularUnivList[i]['2012Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
+                    maxVal =  parseInt(vm.popularUnivList[i]['2012Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
+                }
+                if(maxVal< parseInt(vm.popularUnivList[i]['2013Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
+                    maxVal =  parseInt(vm.popularUnivList[i]['2013Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
+                }
+                if(maxVal< parseInt(vm.popularUnivList[i]['2014Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
+                    maxVal =  parseInt(vm.popularUnivList[i]['2014Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
+                }
+                if(maxVal <  parseInt(vm.popularUnivList[i]['2015Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
+                    
+                    maxVal =  parseInt(vm.popularUnivList[i]['2015Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
+                }
+                
+                
+                if(minVal> parseInt(vm.popularUnivList[i]['2012Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
+                    minVal =  parseInt(vm.popularUnivList[i]['2012Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
+                }
+                if(minVal> parseInt(vm.popularUnivList[i]['2013Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
+                    minVal =  parseInt(vm.popularUnivList[i]['2013Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
+                }
+                if(minVal> parseInt(vm.popularUnivList[i]['2014Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
+                    minVal =  parseInt(vm.popularUnivList[i]['2014Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
+                }
+                if(minVal >  parseInt(vm.popularUnivList[i]['2015Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
+                    
+                    minVal =  parseInt(vm.popularUnivList[i]['2015Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
+                }
+                
+                
+                
+                lineChartData[i] = {"seriesname":vm.popularUnivList[i].universityName,
+                                     "data":[{"value" : parseInt(vm.popularUnivList[i]['2012Details'][vm.univComparisonParameters[vm.univComparisonParameter]])},
+                                            {"value" : parseInt(vm.popularUnivList[i]['2013Details'][vm.univComparisonParameters[vm.univComparisonParameter]])},
+                                            {"value" : parseInt(vm.popularUnivList[i]['2014Details'][vm.univComparisonParameters[vm.univComparisonParameter]])},
+                                            {"value" : parseInt(vm.popularUnivList[i]['2015Details'][vm.univComparisonParameters[vm.univComparisonParameter]])}]};
+                
+            
+                /****** Line Chart Code ENDS ************/
+            }
+            //lineChart.render();
+            renderLineChart(lineChartData);
+            console.log(vm.univComparisonParameter)
+        }
+        
         function renderCharts() {
 
             FusionCharts.ready(function () {
@@ -633,65 +692,6 @@
                 salesMap.render();
             });
 
-            /****** Line Chart Code Starts ************/
-            FusionCharts.ready(function () {
-                 var lineChart = new FusionCharts({
-                    type: 'msline',
-                    renderAt: 'line-chart-container',
-                    width: '90%',
-                    height: '500',
-                    dataFormat: 'json',
-                    dataSource: {
-                        "chart": {
-                            "caption": "University Comparison (Total Admission Count)",
-                            "plotgradientcolor": "",
-                            "bgcolor": "FFFFFF",
-                            "showalternatehgridcolor": "0",
-                            "divlinecolor": "CCCCCC",
-                            "showvalues": "0",
-                            "showcanvasborder": "0",
-                            "canvasborderalpha": "0",
-                            "canvasbordercolor": "CCCCCC",
-                            "canvasborderthickness": "1",
-                            "yaxismaxvalue": maxVal,
-                            "yaxisminvalue": minVal,
-                            "captionpadding": "30",
-                            "linethickness": "3",
-                            "yaxisvaluespadding": "15",
-                            "legendshadow": "0",
-                            "legendPosition": "right",
-                            "legendborderalpha": "0",
-                            "palettecolors": "#f8bd19,#008ee4,#33bdda,#e44a00,#6baa01,#583e78,#9b59b6,#3498db,#34495e,#2ecc71",
-                            "showborder": "0"
-                        },
-                        "categories": [
-                            {
-                                "category": [
-                                    {
-                                        "label": "2012",
-                                        "stepSkipped": false
-                                    },
-                                    {
-                                        "label": "2013",
-                                        "stepSkipped": false
-                                    },
-                                    {
-                                        "label": "2014",
-                                        "stepSkipped": false
-                                    },
-                                    {
-                                        "label": "2015",
-                                        "stepSkipped": false
-                                    }
-                                ]
-                            }
-                        ],
-                        "dataset":lineChartData
-                    }
-                });
-                lineChart.render();
-            });
-            /****** Line Chart Code ENDS ************/
             
             d3.select('#chartID').remove();
             var year = vm.yearFilter + "Details";
@@ -712,46 +712,46 @@
 
                 };
 
-                /****** Line Chart Code STARTS************/
-                if(maxVal< parseInt(vm.popularUnivList[i]['2012Details'].admissionsTotal)){
-                    maxVal =  parseInt(vm.popularUnivList[i]['2012Details'].admissionsTotal)
-                }
-                if(maxVal< parseInt(vm.popularUnivList[i]['2013Details'].admissionsTotal)){
-                    maxVal =  parseInt(vm.popularUnivList[i]['2013Details'].admissionsTotal)
-                }
-                if(maxVal< parseInt(vm.popularUnivList[i]['2014Details'].admissionsTotal)){
-                    maxVal =  parseInt(vm.popularUnivList[i]['2014Details'].admissionsTotal)
-                }
-                if(maxVal <  parseInt(vm.popularUnivList[i]['2015Details'].admissionsTotal)){
-                    
-                    maxVal =  parseInt(vm.popularUnivList[i]['2015Details'].admissionsTotal)
-                }
-                
-                
-                if(minVal> parseInt(vm.popularUnivList[i]['2012Details'].admissionsTotal)){
-                    minVal =  parseInt(vm.popularUnivList[i]['2012Details'].admissionsTotal)
-                }
-                if(minVal> parseInt(vm.popularUnivList[i]['2013Details'].admissionsTotal)){
-                    minVal =  parseInt(vm.popularUnivList[i]['2013Details'].admissionsTotal)
-                }
-                if(minVal> parseInt(vm.popularUnivList[i]['2014Details'].admissionsTotal)){
-                    minVal =  parseInt(vm.popularUnivList[i]['2014Details'].admissionsTotal)
-                }
-                if(minVal >  parseInt(vm.popularUnivList[i]['2015Details'].admissionsTotal)){
-                    
-                    minVal =  parseInt(vm.popularUnivList[i]['2015Details'].admissionsTotal)
-                }
-                
-                
-                
-                lineChartData[i] = {"seriesname":vm.popularUnivList[i].universityName,
-                                     "data":[{"value" : parseInt(vm.popularUnivList[i]['2012Details'].admissionsTotal)},
-                                            {"value" : parseInt(vm.popularUnivList[i]['2013Details'].admissionsTotal)},
-                                            {"value" : parseInt(vm.popularUnivList[i]['2014Details'].admissionsTotal)},
-                                            {"value" : parseInt(vm.popularUnivList[i]['2015Details'].admissionsTotal)}]};
-                
-            
-                /****** Line Chart Code ENDS ************/
+//                /****** Line Chart Code STARTS************/
+//                if(maxVal< parseInt(vm.popularUnivList[i]['2012Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
+//                    maxVal =  parseInt(vm.popularUnivList[i]['2012Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
+//                }
+//                if(maxVal< parseInt(vm.popularUnivList[i]['2013Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
+//                    maxVal =  parseInt(vm.popularUnivList[i]['2013Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
+//                }
+//                if(maxVal< parseInt(vm.popularUnivList[i]['2014Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
+//                    maxVal =  parseInt(vm.popularUnivList[i]['2014Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
+//                }
+//                if(maxVal <  parseInt(vm.popularUnivList[i]['2015Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
+//                    
+//                    maxVal =  parseInt(vm.popularUnivList[i]['2015Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
+//                }
+//                
+//                
+//                if(minVal> parseInt(vm.popularUnivList[i]['2012Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
+//                    minVal =  parseInt(vm.popularUnivList[i]['2012Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
+//                }
+//                if(minVal> parseInt(vm.popularUnivList[i]['2013Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
+//                    minVal =  parseInt(vm.popularUnivList[i]['2013Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
+//                }
+//                if(minVal> parseInt(vm.popularUnivList[i]['2014Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
+//                    minVal =  parseInt(vm.popularUnivList[i]['2014Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
+//                }
+//                if(minVal >  parseInt(vm.popularUnivList[i]['2015Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
+//                    
+//                    minVal =  parseInt(vm.popularUnivList[i]['2015Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
+//                }
+//                
+//                
+//                
+//                lineChartData[i] = {"seriesname":vm.popularUnivList[i].universityName,
+//                                     "data":[{"value" : parseInt(vm.popularUnivList[i]['2012Details'][vm.univComparisonParameters[vm.univComparisonParameter]])},
+//                                            {"value" : parseInt(vm.popularUnivList[i]['2013Details'][vm.univComparisonParameters[vm.univComparisonParameter]])},
+//                                            {"value" : parseInt(vm.popularUnivList[i]['2014Details'][vm.univComparisonParameters[vm.univComparisonParameter]])},
+//                                            {"value" : parseInt(vm.popularUnivList[i]['2015Details'][vm.univComparisonParameters[vm.univComparisonParameter]])}]};
+//                
+//            
+//                /****** Line Chart Code ENDS ************/
                 
                 if (bubbleData[i].alias == undefined || bubbleData[i].alias == "NA") {
                     bubbleData[i].alias = bubbleData[i].name;
@@ -775,6 +775,7 @@
             crimeDataVisualization(vm.comparisonList, vm.yearFilter);
             weatherDataVisuzalization(vm.comparisonList, vm.yearFilter);
             renderBubbleChart(bubbleData);
+            vm.compareUniversity();
 
         }
 
@@ -1006,6 +1007,67 @@
             }
         }
 
+        /****** Line Chart Code ************/
+        function renderLineChart(data){
+            
+            FusionCharts.ready(function () {
+                    lineChart = new FusionCharts({
+                    type: 'msline',
+                    renderAt: 'line-chart-container',
+                    width: '90%',
+                    height: '500',
+                    dataFormat: 'json',
+                    dataSource: {
+                        "chart": {
+                            "caption": "University Comparison ( "+vm.univComparisonParameter+" Count)",
+                            "plotgradientcolor": "",
+                            "bgcolor": "FFFFFF",
+                            "showalternatehgridcolor": "0",
+                            "divlinecolor": "CCCCCC",
+                            "showvalues": "0",
+                            "showcanvasborder": "0",
+                            "canvasborderalpha": "0",
+                            "canvasbordercolor": "CCCCCC",
+                            "canvasborderthickness": "1",
+                            "yaxismaxvalue": maxVal,
+                            "yaxisminvalue": minVal,
+                            "captionpadding": "30",
+                            "linethickness": "3",
+                            "yaxisvaluespadding": "15",
+                            "legendshadow": "0",
+                            "legendPosition": "right",
+                            "legendborderalpha": "0",
+                            "palettecolors": "#f8bd19,#008ee4,#33bdda,#e44a00,#6baa01,#583e78,#9b59b6,#3498db,#34495e,#2ecc71",
+                            "showborder": "0"
+                        },
+                        "categories": [
+                            {
+                                "category": [
+                                    {
+                                        "label": "2012",
+                                        "stepSkipped": false
+                                    },
+                                    {
+                                        "label": "2013",
+                                        "stepSkipped": false
+                                    },
+                                    {
+                                        "label": "2014",
+                                        "stepSkipped": false
+                                    },
+                                    {
+                                        "label": "2015",
+                                        "stepSkipped": false
+                                    }
+                                ]
+                            }
+                        ],
+                        "dataset":data
+                    }
+                });
+                lineChart.render();
+            });
+        }
 
         /****** Code for search bar *******/
 

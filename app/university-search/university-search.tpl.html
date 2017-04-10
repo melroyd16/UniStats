@@ -111,6 +111,9 @@
              <div class="chart col-xs-6" style="margin-top:-20px">
             </div>
         </div>
+        <div class="row" style="text-align: center">
+            <select ng-model="univSCtrl.univComparisonParameter" ng-options="k as k for (k, v) in univSCtrl.univComparisonParameters" ng-change="univSCtrl.compareUniversity()"></select>
+        </div>
         <div class="row">
             <div id="line-chart-container">
             </div>
