@@ -8,8 +8,8 @@
         $urlRouterProvider.otherwise("/home")
         $stateProvider.state('home', {
             url:'/home',
-            templateUrl: 'app/home/home.tpl.html',
-            controller: 'HomeCtrl as homeCtrl'
+            templateUrl: 'app/university-search/university-search.tpl.html',
+            controller: 'UniversitySearchCtrl as univSCtrl'
         }).state('university-search',{
             url:'/university-search',
             templateUrl: 'app/university-search/university-search.tpl.html',

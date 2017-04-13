@@ -83,7 +83,6 @@
                 j = 0;
             vm.maxUniversityCount = 0;
             var detailsParameter = vm.yearFilter + "Details";
-            console.log(vm.universityList[0].climateData);
             for (var i = 0; i < vm.universityList.length; i++) {
                 if (vm.universityList[i].climateData !== undefined &&
                     (parseInt(vm.universityList[i][detailsParameter].priceInStateOffCampus) >= vm.inStateSlider.min &&
@@ -176,6 +175,7 @@
             vm.filteredUniversities.sort(SortByEnrollment);
             vm.popularUnivList = $filter('limitTo')(vm.filteredUniversities, 10);
             vm.comparisonList = $filter('limitTo')(vm.filteredUniversities, 3);
+            console.log(vm.comparisonList);
             vm.renderCharts();
         }
 
@@ -279,7 +279,7 @@
                     type: 'scrollstackedcolumn2d',
                     renderAt: 'crime-container',
                     width: '500',
-                    height: '350',
+                    height: '400',
                     dataFormat: 'json',
                     dataSource: dataSourceVariable
                 }).render(renderAtVariable);
@@ -289,7 +289,6 @@
         }
 
         function weatherDataVisuzalization(compareData,dataYear) {
-            console.log(vm.weatherParameter);
             var maxTemp = [];
             var minTemp = [];
             var meanTemp = [];
@@ -593,8 +592,6 @@
             lineChartData=[];
             maxVal=0;
             minVal=Number.MAX_SAFE_INTEGER;
-            
-            console.log(vm.univComparisonParameter)
             for (var i = 0; i < vm.popularUnivList.length; i++) {
                 if(maxVal< parseInt(vm.popularUnivList[i]['2012Details'][vm.univComparisonParameters[vm.univComparisonParameter]])){
                     maxVal =  parseInt(vm.popularUnivList[i]['2012Details'][vm.univComparisonParameters[vm.univComparisonParameter]])
@@ -812,7 +809,7 @@
                     .domain([0, d3.max(data, function (d) {
                         return d.size;
                     })])
-                    .range([1, 50]);
+                    .range([10, 50]);
 
                 var opacity = d3.scale.sqrt()
                     .domain([0, d3.max(data, function (d) {
@@ -850,7 +847,7 @@
                     }), d3.max(data, function (d) {
                         return d.size;
                     })])
-                    .range([1, 50]);
+                    .range([10, 50]);
 
                 var opacity = d3.scale.sqrt()
                     .domain([d3.min(data, function (d) {
@@ -976,8 +973,8 @@
                     var lineChart = new FusionCharts({
                     type: 'msline',
                     renderAt: 'line-chart-container',
-                    width: '90%',
-                    height: '500',
+                    width: '100%',
+                    height: '400',
                     dataFormat: 'json',
                     dataSource: {
                         "chart": {
