@@ -705,7 +705,7 @@
                 bubbleData[i] = {
                     x: parseInt(vm.popularUnivList[i][year][vm.xAxisOptions[vm.xAxisFilter]]),
                     y: parseInt(vm.popularUnivList[i][year][vm.yAxisOptions[vm.yAxisFilter]]),
-                    size: parseInt(vm.popularUnivList[i][year].admissionsTotal),
+                    size: parseInt(vm.popularUnivList[i][year].totalEnrollment),
                     c: i + 1,
                     name: vm.popularUnivList[i].universityName,
                     alias: vm.popularUnivList[i].alias
